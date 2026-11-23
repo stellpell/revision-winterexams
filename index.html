@@ -389,13 +389,51 @@ let currentBreakMs=isBreak?elapsed:0;$('currentBreak').textContent=formatClock(c
 let done=state.tasks.filter(t=>t.done).length,all=state.tasks.length;$('completedCount').textContent=`${done} / ${all}`;$('doneMeter').style.width=(all?done/all*100:0)+'%';$('studyCount').textContent=String(state.tasks.filter(t=>!t.done&&t.kind==='study').length);$('breakCount').textContent=String(state.tasks.filter(t=>!t.done&&t.kind==='break').length);$('totalHours').textContent=(s/3600000).toFixed(1)+' h';
 }
 function notify(msg){let el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.classList.remove('show'),2500)}
-function fit(){if(today()!==state.date){notify('Choose today to fit remaining blocks.');return}let now=new Date(),anchor=Math.ceil(minutesTime(now)/5)*5;state.start=hm(anchor);let available=Math.max(0,END_HOUR*60-anchor-15),pending=state.tasks.filter(t=>!t.done);let total=pending.reduce((a,t)=>a+t.minutes,0);if(total<=available){save();renderAll();notify('Remaining plan aligned to now.');return}let minimum=pending.reduce((a,t)=>a+(t.kind==='break'?10:15),0);if(available<minimum){notify('Too many blocks to fit; remove or shorten some tasks.');save();renderAll();return}let spare=available-minimum;let weights=pending.map(t=>Math.max(0,t.minutes-(t.kind==='break'?10:15))),sum=weights.reduce((a,b)=>a+b,0);pending.forEach((t,i)=>{t.minutes=(t.kind==='break'?10:15)+Math.floor(spare*(weights[i]/(sum||1)))});let diff=available-pending.reduce((a,t)=>a+t.minutes,0);for(let i=0;diff>0&&pending.length;i=(i+1)%pending.length,diff--)pending[i].minutes+=1;save();renderAll();notify('Remaining plan fitted before 21:00 ✨')}
+function scheduleRemaining(resize=false){
+ if(today()!==state.date){notify('Choose today to replan unfinished blocks.');return}
+ normaliseSchedule();
+ const done=state.tasks.filter(t=>t.done),pending=state.tasks.filter(t=>!t.done);
+ if(!pending.length){notify('No unfinished blocks.');return}
+ let cursor=Math.ceil(minutesTime(new Date())/5)*5;
+ for(const t of done)cursor=Math.max(cursor,t.startOverride+t.minutes);
+ const room=END_HOUR*60-cursor;
+ if(room<=0){notify('No room left before the planned stop time.');return}
+ let durations=pending.map(t=>t.minutes),total=durations.reduce((a,b)=>a+b,0);
+ if(total>room && !resize){notify('Remaining blocks do not fit. Use Fit remaining plan or shorten some blocks.');return}
+ if(total>room){
+  const mins=pending.map(t=>t.kind==='break'?5:10);
+  const required=mins.reduce((a,b)=>a+b,0);
+  if(required>room){notify('Too many blocks to fit. Remove some blocks first.');return}
+  const weights=durations.map((d,i)=>Math.max(0,d-mins[i])),sum=weights.reduce((a,b)=>a+b,0);
+  durations=durations.map((d,i)=>mins[i]+Math.floor((room-required)*(weights[i]/(sum||1))));
+  let leftover=room-durations.reduce((a,b)=>a+b,0);
+  for(let i=0;leftover>0;i=(i+1)%durations.length,leftover--)durations[i]++;
+ }
+ if(state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null}
+ for(let i=0;i<pending.length;i++){pending[i].minutes=durations[i];pending[i].startOverride=cursor;cursor+=durations[i]}
+ state.tasks.sort((a,b)=>a.startOverride-b.startOverride);
+ state.start=hm(state.tasks[0].startOverride);
+ save();renderAll();
+ notify(resize?'Remaining blocks fitted without overlaps.':'Remaining blocks shifted without overlaps.');
+}
+function fit(){scheduleRemaining(true)}
 $('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
-$('startTime').addEventListener('change',e=>{state.start=e.target.value||'08:00';save();renderAll()});$('focusEnd').addEventListener('change',e=>{const t=selected();if(t)focusEndEdit(t.id,e.target.value)});$('replanNow').addEventListener('click',()=>{state.start=hm(Math.min(20*60+55,Math.ceil(minutesTime(new Date())/5)*5));save();renderAll();notify('Upcoming blocks now start from the current time')});$('fitToDeadline').addEventListener('click',fit);$('addStudy').addEventListener('click',()=>add('study'));$('addBreak').addEventListener('click',()=>add('break'));
+$('startTime').addEventListener('change',e=>{
+ const value=e.target.value;
+ if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){renderAll();return}
+ normaliseSchedule();
+ const first=state.tasks[0]?.startOverride??parseHm(state.start),shift=parseHm(value)-first;
+ if(state.tasks.some(t=>t.startOverride+shift<0||t.startOverride+t.minutes+shift>1439)){
+  notify('That start time would move blocks outside the day.');renderAll();return;
+ }
+ for(const t of state.tasks)t.startOverride+=shift;
+ state.start=value;save();renderAll();
+});$('focusEnd').addEventListener('change',e=>{const t=selected();if(t)focusEndEdit(t.id,e.target.value)});$('replanNow').addEventListener('click',()=>scheduleRemaining(false));$('fitToDeadline').addEventListener('click',fit);$('addStudy').addEventListener('click',()=>add('study'));$('addBreak').addEventListener('click',()=>add('break'));
 $('clearDay').addEventListener('click',()=>{if(!confirm('Clear all tasks, recorded study time, breaks and notes for '+datePretty(state.date)+'? This cannot be undone without a backup.'))return;if(state.mode!=='idle')settle();app.days[state.date]=defaultState(state.date);state=app.days[state.date];save();renderAll();notify('A fresh start for this day!')});
 $('taskList').addEventListener('change',e=>{let root=e.target.closest('[data-id]');if(!root)return;let id=root.dataset.id,t=taskById(id),a=e.target.dataset.action;if(!t)return;if(a==='done'){completeTask(id,e.target.checked)}else if(a==='name'){t.name=e.target.value.trim()||'Untitled task';save();renderAll()}else if(a==='notes'){t.notes=e.target.value;save();renderAll()}else if(a==='subject'){if(state.mode==='study'&&state.activeId===id){settle();state.clockStart=Date.now()}const previous=t.subject;t.subject=e.target.value;const credited=t.spent||0;if(credited>0&&previous!==t.subject){state.subjectMs[previous]=Math.max(0,(state.subjectMs[previous]||0)-credited);state.subjectMs[t.subject]=(state.subjectMs[t.subject]||0)+credited}save();renderAll()}else if(a==='minutes'){changeDuration(id,e.target.value)}else if(a==='start'){focusStartEdit(id,e.target.value)}else if(a==='end'){focusEndEdit(id,e.target.value)}});
 $('taskList').addEventListener('click',e=>{let btn=e.target.closest('button[data-action]');if(!btn)return;let root=btn.closest('[data-id]');if(!root)return;let id=root.dataset.id;switch(btn.dataset.action){case 'activate':activate(id);break;case 'log':countManualTime(id);break;case 'unlog':countManualTime(id,true);break;case 'auto':{const ix=state.tasks.findIndex(t=>t.id===id),t=taskById(id);
- if(ix>=0&&t){const p=planTimes(true).times;const start=ix===0?parseHm(state.start):p[state.tasks[ix-1].id].end;editScheduleWindow(id,start,start+t.minutes)}
+ if(ix>=0&&t){const p=planTimes(true).times;const start=ix===0?parseHm(state.start):p[state.tasks[ix-1].id].end;
+  editScheduleWindow(id,start,start+t.minutes)}
  break}case 'up':move(id,-1);break;case 'down':move(id,1);break;case 'delete':remove(id);break}});
 $('errorLog').addEventListener('input',e=>{state.log=e.target.value;save()});
 $('themeButton').addEventListener('click',()=>{let theme=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=theme;try{localStorage.setItem('cm-dashboard-theme',theme)}catch(e){}updateThemeUI()});updateThemeUI();

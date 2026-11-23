@@ -3,214 +3,437 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#121d2e">
-<title>Classical Mechanics · Revision</title>
+<meta name="theme-color" content="#101826">
+<title>Winter exams · revision</title>
 <style>
-:root{
-  color-scheme:light;
-  --bg:#f6f5f1;--surface:#fffefa;--ink:#222b35;--muted:#69717a;--line:#dadfdf;
-  --soft:#f1f3f1;--accent:#667f71;--accent-contrast:#fff;--warm:#b78161;
-  --shadow:0 14px 38px rgba(27,48,46,.055);
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#0c1420;--surface:#152132;--ink:#f6f0e9;--muted:#b6becb;--line:#35445a;
-  --soft:#1d2b3e;--accent:#accdb8;--accent-contrast:#13261d;--warm:#e4b388;
-  --shadow:0 18px 44px rgba(0,0,0,.17);
-}
+
+:root{color-scheme:light;--bg:#f6f3ee;--ink:#4e3e35;--ink2:#7d6a61;--muted:#a28d82;--stroke:#e6d9ce;--paper:rgba(255,252,248,.92);--paper2:rgba(255,250,245,.96);--accent:#c97e75;--accentHover:#b66963;--soft:#f7efe8;--soft2:#f2e5d7;--green:#5d8a71;--greenSoft:#edf5ef;--purple:#b38aa0;--orange:#c48763;--hero:linear-gradient(134deg,rgba(255,255,252,.95),rgba(247,242,234,.96) 52%,rgba(250,231,214,.97));--shadow:0 18px 42px rgba(120,87,66,.10);--body:radial-gradient(circle at 14% 16%,rgba(255,247,232,.96),transparent 26%),radial-gradient(circle at 82% 12%,rgba(255,222,188,.58),transparent 26%),radial-gradient(circle at 55% 0%,rgba(232,240,248,.65),transparent 24%),linear-gradient(180deg,#f7f8fb 0%,#f8f5ef 42%,#f2ece4 100%);--decor1:radial-gradient(circle at 12% 10%,rgba(255,255,255,.98) 0 2px,transparent 2.9px),radial-gradient(circle at 26% 22%,rgba(255,255,255,.92) 0 2.2px,transparent 3px),radial-gradient(circle at 42% 11%,rgba(255,255,255,.94) 0 1.8px,transparent 2.8px),radial-gradient(circle at 66% 16%,rgba(255,243,225,.95) 0 4px,transparent 6px),radial-gradient(circle at 79% 26%,rgba(255,249,241,.96) 0 2.4px,transparent 3.6px),radial-gradient(circle at 88% 12%,rgba(255,236,211,.88) 0 6px,transparent 10px),radial-gradient(circle at 18% 82%,rgba(255,249,241,.86) 0 4px,transparent 7px),radial-gradient(circle at 71% 74%,rgba(255,243,225,.82) 0 5px,transparent 9px);--decor2:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 36%),radial-gradient(circle at 50% 100%,rgba(255,252,247,.7),transparent 36%)}
+:root[data-theme=dark]{color-scheme:dark;--bg:#101826;--ink:#f7efe8;--ink2:#d2c7bf;--muted:#aeb3c1;--stroke:#42506a;--paper:rgba(21,31,46,.92);--paper2:rgba(28,39,58,.96);--accent:#e2b477;--accentHover:#f0cb98;--soft:#1d2940;--soft2:#25314a;--green:#a7cfb4;--greenSoft:#2e4339;--purple:#d7b8d8;--orange:#f0c18f;--hero:linear-gradient(134deg,rgba(18,29,45,.96),rgba(25,37,55,.96) 58%,rgba(39,49,71,.97));--shadow:0 20px 50px rgba(0,0,0,.34);--body:radial-gradient(circle at 20% 18%,rgba(51,79,114,.35),transparent 28%),radial-gradient(circle at 82% 20%,rgba(236,190,110,.12),transparent 25%),radial-gradient(circle at 50% -10%,rgba(127,149,186,.28),transparent 26%),linear-gradient(180deg,#09111b 0%,#111b29 48%,#182334 100%);--decor1:radial-gradient(circle at 9% 12%,rgba(255,237,197,.95) 0 4px,transparent 6px),radial-gradient(circle at 17% 18%,rgba(255,247,232,.9) 0 2px,transparent 3px),radial-gradient(circle at 26% 9%,rgba(255,210,140,.94) 0 5px,transparent 7px),radial-gradient(circle at 38% 16%,rgba(255,246,225,.92) 0 2.2px,transparent 3.2px),radial-gradient(circle at 52% 12%,rgba(255,219,157,.9) 0 4px,transparent 6px),radial-gradient(circle at 64% 21%,rgba(255,245,226,.9) 0 2px,transparent 3px),radial-gradient(circle at 75% 13%,rgba(255,208,126,.95) 0 5px,transparent 7px),radial-gradient(circle at 86% 18%,rgba(255,247,232,.88) 0 2.1px,transparent 3.1px),radial-gradient(circle at 94% 11%,rgba(255,215,142,.88) 0 4px,transparent 6px),radial-gradient(circle at 19% 72%,rgba(255,215,142,.14) 0 30px,transparent 70px),radial-gradient(circle at 82% 78%,rgba(255,215,142,.12) 0 38px,transparent 78px);--decor2:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 34%),radial-gradient(circle at 50% 100%,rgba(239,201,138,.1),transparent 35%)}
+
 *{box-sizing:border-box}
-html{min-height:100%;background:var(--bg)}
-body{margin:0;min-height:100vh;color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);line-height:1.45}
-button,input{font:inherit}
+html{min-height:100%;scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--body);background-attachment:fixed;background-size:cover;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+body::before{content:"";pointer-events:none;position:fixed;inset:0;z-index:0;background:var(--decor1);opacity:.75;mix-blend-mode:screen}
+body::after{content:"";pointer-events:none;position:fixed;inset:0;z-index:0;background:var(--decor2);opacity:.9}
+button,input,textarea{font:inherit}
 button{cursor:pointer}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-button:disabled{cursor:default;opacity:.65}
-.shell{width:min(1140px,calc(100% - 36px));margin:0 auto;padding:32px 0 62px}
-.head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:26px}
-.brand{display:flex;align-items:center;gap:12px;font-size:.9rem;font-weight:760;letter-spacing:.015em}
-.mark{display:grid;place-items:center;width:39px;height:39px;border:1px solid var(--line);border-radius:12px;font-size:1.2rem;color:var(--accent)}
-.theme-button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:9px 13px;border-radius:10px;font-size:.8rem;font-weight:650}
-.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);gap:20px;align-items:start}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow);padding:28px}
-.section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.overline{font-size:.71rem;color:var(--muted);font-weight:750;letter-spacing:.14em;text-transform:uppercase}
-.live{font-size:.74rem;color:var(--muted)}
-.activity{padding:46px 0 44px}
-h1{font-size:clamp(2.9rem,6vw,5rem);font-weight:780;letter-spacing:-.058em;line-height:1.02;margin:12px 0 27px}
-.countdown{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap}
-.count-number{font-size:clamp(4.1rem,9vw,6.8rem);font-weight:750;letter-spacing:-.07em;line-height:.9;font-variant-numeric:tabular-nums}
-.count-label{font-size:1.02rem;color:var(--muted);max-width:245px;line-height:1.45}
-.countdown.no-count .count-number{display:none}
-.countdown.no-count .count-label{font-size:1.1rem;max-width:none}
-.rule{height:1px;background:var(--line);margin:0 0 27px}
-h2{font-size:1.14rem;line-height:1.25;font-weight:750;letter-spacing:-.018em;margin:0}
-.schedule{list-style:none;margin:17px 0 0;padding:0;display:grid;gap:9px}
-.schedule li{display:grid;grid-template-columns:112px 1fr auto;align-items:center;column-gap:13px;padding:15px 15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
-.schedule li.is-now{background:var(--soft);border-color:var(--accent)}
-.schedule li.is-past{opacity:.65}
-.schedule time{font-size:.81rem;color:var(--muted);font-weight:680;font-variant-numeric:tabular-nums}
-.schedule strong{font-size:.92rem;font-weight:690}
-.schedule small{color:var(--muted);font-size:.74rem}
-.schedule .is-now small{color:var(--accent);font-weight:750}
-.todo-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.todo-count{font-size:.77rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
-.add-form{display:flex;gap:8px;margin-top:23px}
-.add-form input{flex:1;min-width:0;padding:12px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;font-size:.88rem}
-.add-form input::placeholder{color:var(--muted)}
-.add-form button{background:var(--accent);color:var(--accent-contrast);border:0;border-radius:10px;padding:0 17px;font-size:.86rem;font-weight:750}
-.todo-list{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:6px}
-.todo-list li{display:flex;align-items:center;gap:10px;padding:11px 3px;border-bottom:1px solid var(--line)}
-.todo-list li:last-child{border-bottom:0}
-.todo-check{width:18px;height:18px;accent-color:var(--accent);flex:none;cursor:pointer}
-.todo-text{flex:1;min-width:0;background:transparent;border:1px solid transparent;color:var(--ink);padding:6px 4px;border-radius:6px;font-size:.88rem}
-.todo-text:hover,.todo-text:focus{border-color:var(--line)}
-.todo-list li.done .todo-text{text-decoration:line-through;color:var(--muted)}
-.remove-task{flex:none;background:transparent;border:0;color:var(--muted);padding:5px 9px;border-radius:8px;font-size:1.17rem;line-height:1}
-.remove-task:hover{background:var(--soft);color:var(--ink)}
-.empty{margin:23px 0 0;color:var(--muted);font-size:.84rem}
+button:disabled{cursor:default;opacity:.5}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{position:relative;z-index:1;width:min(1180px,calc(100% - 32px));margin:auto;padding:23px 0 62px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 22px}
+.brand{display:flex;align-items:center;gap:11px;text-transform:uppercase;letter-spacing:.13em;font-size:.72rem;font-weight:820}
+.brand-logo{width:54px;height:54px;display:grid;place-items:center;border:1px solid var(--stroke);background:var(--paper2);box-shadow:var(--shadow);border-radius:17px;font-size:1.8rem}
+.btn{background:var(--paper2);color:var(--ink);border:1px solid var(--stroke);border-radius:11px;font-size:.83rem;font-weight:750;padding:10px 14px}
+.btn:hover:not(:disabled){filter:brightness(1.05)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fffaf7}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme=dark] .btn.primary{color:#292533}
+:root[data-theme=dark] .btn.green{color:#1c2b23}
+.btn.small{font-size:.73rem;padding:8px 11px}
+.btn.plain{background:transparent}
+.hero{padding:14px 0 24px}
+.hero h1{font-size:clamp(2.55rem,5.2vw,4.2rem);font-weight:850;letter-spacing:-.055em;line-height:1.04;margin:0}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.tagline{margin:13px 0 0;color:var(--ink2);font-size:.93rem}
+.eyebrow{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--orange)}
+.panel{background:var(--paper);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--shadow);padding:23px}
+h2{margin:0;font-size:1.19rem;letter-spacing:-.025em}
+p{line-height:1.5}
+.muted{color:var(--ink2);font-size:.83rem}
+.crumb{display:inline-flex;margin:2px 0 10px}
+.overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.exam-card{background:var(--paper);border:1px solid var(--stroke);box-shadow:var(--shadow);border-radius:17px;text-align:left;color:var(--ink);min-height:158px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .15s,border-color .15s}
+.exam-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.exam-icon{font-size:1.65rem}
+.exam-card strong{font-size:1.08rem;line-height:1.2}
+.exam-card small{color:var(--ink2);font-size:.77rem}
+.exam-card .open-label{font-size:.75rem;font-weight:790;color:var(--accent);margin-top:auto}
+.study-grid{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(300px,1fr);align-items:start;gap:17px}
+.stack{display:grid;gap:16px}
+.focus{padding:29px;background:var(--hero);border:1px solid var(--stroke);border-radius:23px;box-shadow:var(--shadow)}
+.focus h2{font-size:clamp(2.6rem,5vw,4.1rem);font-weight:850;letter-spacing:-.06em;margin:12px 0 4px;line-height:1.05}
+.count-area{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin:18px 0 23px}
+.count-num{font-variant-numeric:tabular-nums;font-size:clamp(3.3rem,7.4vw,5.7rem);font-weight:850;letter-spacing:-.08em;line-height:1}
+.count-text{font-size:.88rem;color:var(--ink2);max-width:215px}
+.count-area.finished .count-num{display:none}
+.count-area.finished .count-text{font-size:1.01rem;max-width:none}
+.progress-track{height:9px;border-radius:15px;background:var(--soft2);overflow:hidden;margin:14px 0 12px}
+.progress-fill{background:linear-gradient(90deg,#b9778a,#ed9c83);width:0;height:100%;border-radius:15px}
+.session-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:23px}
+.session-actions .btn{padding:13px 18px;font-size:.95rem}
+.status{display:flex;align-items:center;gap:7px;color:var(--ink2);font-size:.8rem;margin:14px 0 0}
+.status-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.status.is-study .status-dot{background:var(--green)}
+.status.is-break .status-dot{background:var(--orange)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat{background:var(--paper);border:1px solid var(--stroke);border-radius:17px;padding:16px 19px;box-shadow:var(--shadow)}
+.stat strong{display:block;font-size:1.75rem;letter-spacing:-.04em;font-variant-numeric:tabular-nums;margin-top:7px}
+.stat small{font-size:.74rem;color:var(--ink2)}
+.schedule{display:grid;gap:10px;margin:19px 0 0}
+.slot{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:12px;padding:13px;border-radius:13px;background:var(--paper2);border:1px solid var(--stroke)}
+.slot.now{border-color:var(--accent);background:var(--soft)}
+.slot.past{opacity:.64}
+.slot time{color:var(--ink2);font-size:.77rem;font-weight:770;font-variant-numeric:tabular-nums}
+.slot strong{font-size:.89rem}
+.slot small{color:var(--orange);font-size:.72rem;font-weight:770}
+.todo-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tally{font-size:.78rem;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.todo-form{display:flex;gap:8px;margin-top:17px}
+.todo-form input{min-width:0;flex:1;border:1px solid var(--stroke);border-radius:11px;padding:11px;background:var(--paper2);color:var(--ink);font-size:.86rem}
+.todo-form button{padding:9px 12px}
+.todo-list{margin:15px 0 0;padding:0;list-style:none}
+.todo-item{display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--stroke);padding:9px 0}
+.todo-item:last-child{border-bottom:0}
+.todo-item input[type=checkbox]{width:17px;height:17px;accent-color:var(--green);flex:none}
+.todo-item input[type=text]{width:100%;min-width:0;border:1px solid transparent;border-radius:7px;padding:7px 4px;background:transparent;color:var(--ink);font-size:.85rem}
+.todo-item input[type=text]:focus,.todo-item input[type=text]:hover{border-color:var(--stroke)}
+.todo-item.done input[type=text]{text-decoration:line-through;color:var(--muted)}
+.remove{background:transparent;border:0;color:var(--muted);font-size:1.15rem;padding:6px;line-height:1}
+.remove:hover{color:var(--ink)}
+details{border-top:1px solid var(--stroke);margin-top:20px;padding-top:15px}
+summary{color:var(--ink2);font-size:.81rem;font-weight:750;cursor:pointer}
+.controls-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:13px}
+.minutes-input{width:78px;padding:9px 8px;border-radius:9px;border:1px solid var(--stroke);background:var(--paper2);color:var(--ink)}
+.detail-note{font-size:.75rem;color:var(--ink2);margin:10px 0 0}
+.manage-line{display:flex;gap:8px;align-items:center;margin-top:10px}
+.manage-line input{min-width:0;flex:1;background:var(--paper2);color:var(--ink);border:1px solid var(--stroke);border-radius:9px;padding:9px;font-size:.8rem}
+.manage-line input[type=date]{max-width:146px}
 .sr-only{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.shell{width:min(660px,calc(100% - 26px));padding-top:21px}.panel{padding:22px}.activity{padding:33px 0 38px}}
-@media(max-width:420px){.brand{font-size:.79rem}.head{gap:7px}.theme-button{font-size:.72rem;padding:8px}.schedule li{grid-template-columns:97px 1fr auto;padding:13px 10px;gap:7px}.schedule time{font-size:.73rem}.schedule strong{font-size:.84rem}.count-label{font-size:.9rem}}
+.footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.72rem}
+[hidden]{display:none!important}
+@media(max-width:850px){.overview{grid-template-columns:repeat(2,minmax(0,1fr))}.study-grid{grid-template-columns:1fr}.wrap{width:min(680px,calc(100% - 28px))}.focus{padding:25px}}
+@media(max-width:470px){.overview{grid-template-columns:1fr}.hero h1{font-size:2.75rem}.focus{padding:20px}.panel{padding:19px}.slot{grid-template-columns:94px 1fr auto;gap:7px;padding:11px 9px}.slot time{font-size:.72rem}.slot strong{font-size:.83rem}.stats{gap:8px}.stat{padding:13px}.brand{font-size:.66rem}.brand-logo{width:46px;height:46px}.count-num{font-size:4rem}.session-actions .btn{padding:11px 14px}}
 </style>
 </head>
 <body>
-<div class="shell">
-<header class="head">
- <div class="brand"><span class="mark" id="themeIcon" aria-hidden="true">❄</span><span>Classical Mechanics</span></div>
- <button class="theme-button" type="button" id="themeToggle">Dark mode</button>
-</header>
-<main class="layout">
- <section class="panel" aria-labelledby="activityTitle">
-  <div class="section-heading"><span class="overline">Today</span><span class="live" id="currentTime"></span></div>
-  <div class="activity">
-   <span class="overline">Current activity</span>
-   <h1 id="activityTitle">Revise</h1>
-   <div class="countdown" id="countdown" role="timer" aria-live="off">
-    <strong class="count-number" id="minutesLeft">—</strong>
-    <span class="count-label" id="countdownLabel">minutes until run break</span>
-   </div>
+<div class="wrap">
+ <header>
+   <div class="brand"><span class="brand-logo" id="brandLogo" aria-hidden="true">❄</span><span id="brandText">Winter exams<br>revision dashboard</span></div>
+   <button class="btn small" id="themeButton" type="button">Dark mode</button>
+ </header>
+ <section id="homeView">
+  <div class="hero"><span class="eyebrow">Winter exams</span><h1>Winter exams <em>revision dashboard</em></h1><p class="tagline">ngl physics is kinda cool</p></div>
+  <div class="panel"><h2>Your subjects</h2><p class="muted">Select a subject to open its study page.</p><div class="overview" id="examCards"></div>
+   <details><summary>Edit subjects</summary><div id="examEditor"></div><form id="addSubjectForm" class="controls-row"><label for="newSubjectName" class="sr-only">New subject name</label><input type="text" id="newSubjectName" placeholder="Subject name" maxlength="70" required><label for="newSubjectDate" class="sr-only">Exam date</label><input type="date" id="newSubjectDate"><button class="btn small" type="submit">Add subject</button></form></details>
   </div>
-  <div class="rule"></div>
-  <h2>Schedule</h2>
-  <ul class="schedule" id="schedule">
-   <li data-slot="run"><time datetime="14:30">14:30–15:00</time><strong>Run</strong><small>Break</small></li>
-   <li data-slot="dinner"><time datetime="18:30">18:30–19:00</time><strong>Dinner</strong><small>Break</small></li>
-   <li data-slot="problems"><time datetime="19:00">19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></li>
-  </ul>
  </section>
- <aside class="panel" aria-labelledby="todoHeading">
-  <div class="todo-head"><h2 id="todoHeading">To-do</h2><span class="todo-count" id="taskCount">0 / 0 done</span></div>
-  <form class="add-form" id="todoForm">
-   <label for="taskInput" class="sr-only">Add a task</label>
-   <input id="taskInput" type="text" maxlength="120" placeholder="Add a task" autocomplete="off" required>
-   <button type="submit">Add</button>
-  </form>
-  <ul class="todo-list" id="todoList"></ul>
-  <p class="empty" id="emptyMessage">No tasks added yet.</p>
- </aside>
-</main>
+ <section id="studyView" hidden>
+  <button type="button" class="btn small plain crumb" id="backToExams">← All exams</button>
+  <div class="hero"><h1 id="subjectTitle">Classical Mechanics <em>revision plan</em></h1><p class="tagline">ngl physics is kinda cool</p></div>
+  <div class="study-grid">
+   <main class="stack">
+    <section class="focus" aria-labelledby="activityHeading">
+     <span class="eyebrow">Current focus</span>
+     <h2 id="activityHeading">Revise</h2>
+     <div class="count-area" id="countArea" role="timer" aria-live="off"><strong class="count-num" id="minutesLeft">—</strong><span class="count-text" id="countLabel">minutes until run break</span></div>
+     <div class="progress-track" role="progressbar" aria-label="Time until next scheduled activity" aria-valuemin="0" aria-valuemax="100" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
+     <div class="session-actions"><button type="button" class="btn green" id="studyButton">Start studying</button><button type="button" class="btn primary" id="breakButton">Take a break</button></div>
+     <p class="status" id="trackingStatus"><span class="status-dot" aria-hidden="true"></span><span id="trackingMessage">Timer stopped · study time is recorded when you start tracking.</span></p>
+    </section>
+    <section class="stats" aria-label="Recorded time"><div class="stat"><span class="eyebrow">Studied today</span><strong id="studyTotal">0h 00m</strong><small>Recorded study time</small></div><div class="stat"><span class="eyebrow">Break time</span><strong id="breakTotal">0h 00m</strong><small>Recorded breaks</small></div></section>
+    <section class="panel"><h2>Today's schedule</h2><p class="muted">Only the fixed breaks and exam-problem session.</p>
+     <div class="schedule" id="schedule">
+      <div class="slot" data-slot="run"><time>14:30–15:00</time><strong>Run break</strong><small>Break</small></div>
+      <div class="slot" data-slot="dinner"><time>18:30–19:00</time><strong>Dinner break</strong><small>Break</small></div>
+      <div class="slot" data-slot="problems"><time>19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></div>
+     </div>
+     <details><summary>Adjust recorded time</summary><div class="controls-row"><label for="adjustMinutes" class="muted">Minutes</label><input id="adjustMinutes" class="minutes-input" type="number" min="1" max="360" step="1" value="10"><button class="btn small" id="addStudy" type="button">+ Study</button><button class="btn small" id="removeStudy" type="button">− Study</button><button class="btn small" id="addBreak" type="button">+ Break</button><button class="btn small" id="removeBreak" type="button">− Break</button></div><p class="detail-note">Use this to correct missed or extra minutes. It doesn't change the schedule.</p></details>
+    </section>
+   </main>
+   <aside class="stack">
+    <section class="panel"><div class="todo-head"><h2>To-do</h2><span class="tally" id="todoCount">0 / 0 done</span></div>
+     <form class="todo-form" id="todoForm"><label for="todoInput" class="sr-only">Add task</label><input type="text" id="todoInput" maxlength="120" placeholder="Add a task" autocomplete="off" required><button type="submit" class="btn primary">Add</button></form>
+     <ul id="todoList" class="todo-list"></ul><p class="muted" id="emptyTodo">No tasks yet.</p>
+    </section>
+    <div class="panel"><details style="margin-top:0;padding-top:0;border:0"><summary>Backup & restore</summary><div class="controls-row"><button class="btn small" type="button" id="exportButton">Save backup</button><label class="btn small" for="importFile" style="cursor:pointer">Restore backup</label><input id="importFile" type="file" accept=".json,application/json" hidden></div><p class="detail-note">Progress is saved in this browser. Your earlier dashboard data is kept separately.</p></details></div>
+   </aside>
+  </div>
+ </section>
+ <footer class="footer">Progress is saved in this browser</footer>
 </div>
 <script>
-(() => {
+(function(){
 'use strict';
-const LIST_KEY = 'revision-simple-checklist-v1';
-const THEME_KEY = 'cm-dashboard-theme';
-const $ = id => document.getElementById(id);
-const STARTS = { run:14*60+30, endRun:15*60, dinner:18*60+30, endDinner:19*60, endProblems:21*60 };
-function getTimeState(now) {
- const current=now.getHours()*60+now.getMinutes()+now.getSeconds()/60+now.getMilliseconds()/60000;
- const minutesTo = target => Math.max(0,Math.ceil(target-current));
- if(current<STARTS.run) return {title:'Revise',remaining:minutesTo(STARTS.run),label:'minutes until run break',now:null};
- if(current<STARTS.endRun) return {title:'Break',remaining:minutesTo(STARTS.endRun),label:'minutes left in run break',now:'run'};
- if(current<STARTS.dinner) return {title:'Revise',remaining:minutesTo(STARTS.dinner),label:'minutes until dinner break',now:null};
- if(current<STARTS.endDinner) return {title:'Break',remaining:minutesTo(STARTS.endDinner),label:'minutes left in dinner break',now:'dinner'};
- if(current<STARTS.endProblems) return {title:'Exam problems',remaining:minutesTo(STARTS.endProblems),label:'minutes left for exam problems',now:'problems'};
- return {title:'Done',remaining:null,label:'Schedule finished for today',now:null};
+var KEY='revision-studio-simple-v3';
+var OLD_KEY='revision-winterexams-dashboard-v1';
+var OLD_LIST_KEY='revision-simple-checklist-v1';
+var THEME_KEY='cm-dashboard-theme';
+var DEFAULT_SUBJECTS=[
+{id:'classical',name:'Classical Mechanics',icon:'⚙️',exam:'2026-11-24'},
+{id:'space',name:'Space Technology I',icon:'🛰️',exam:'2026-12-10'},
+{id:'quantum',name:'Quantum Mechanics I',icon:'⚛️',exam:'2026-12-15'},
+{id:'astro',name:'Astrophysics II',icon:'🌌',exam:'2026-12-22'},
+{id:'medicine',name:'Introduction to Medicine',icon:'🩺',exam:'2027-01-06'}
+];
+var $=function(id){return document.getElementById(id)};
+var storageRead=function(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(err){return null}};
+function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dayTime(d){return d.getHours()*60+d.getMinutes()+d.getSeconds()/60+d.getMilliseconds()/60000}
+function sessionKey(subject,day){return day+'|'+subject}
+function stampEnd(day){var bits=day.split('-').map(Number);return new Date(bits[0],bits[1]-1,bits[2],21,0,0,0).getTime()}
+function formatMinutes(ms){var x=Math.max(0,Math.floor(ms/60000));return Math.floor(x/60)+'h '+String(x%60).padStart(2,'0')+'m'}
+function safeNumber(value){return Number.isFinite(Number(value))?Math.max(0,Number(value)):0}
+function uniq(){return String(Date.now())+'-'+Math.random().toString(36).slice(2)}
+function normalizeTasks(tasks){
+ if(!Array.isArray(tasks))return [];
+ return tasks.filter(function(t){return t&&typeof t.text==='string'&&t.text.trim()}).slice(0,250).map(function(t){return{id:String(t.id||uniq()),text:t.text.slice(0,120),done:!!t.done}});
 }
-function updateSchedule(){
- const now=new Date();
- const status=getTimeState(now);
- $('activityTitle').textContent=status.title;
- $('minutesLeft').textContent=status.remaining===null?'':String(status.remaining);
- $('countdownLabel').textContent=status.label;
- $('countdown').classList.toggle('no-count',status.remaining===null);
- $('currentTime').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
- const elapsed=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
- for(const [key,start,end] of [['run',STARTS.run,STARTS.endRun],['dinner',STARTS.dinner,STARTS.endDinner],['problems',STARTS.endDinner,STARTS.endProblems]]){
-  const node=document.querySelector('[data-slot="'+key+'"]');
-  if(!node)continue;
-  node.classList.toggle('is-now',status.now===key);
-  node.classList.toggle('is-past',elapsed>=end);
-  const tag=node.querySelector('small');
-  if(tag)tag.textContent=status.now===key?'Now':key==='problems'?'Focus':'Break';
+function importLegacy(){
+ var old=storageRead(OLD_KEY),result={version:3,subjects:DEFAULT_SUBJECTS.map(function(s){return Object.assign({},s)}),days:{},lists:{}};
+ if(old && Array.isArray(old.subjects)){
+  var subs=old.subjects.filter(function(s){return s&&s.id&&s.name}).slice(0,25);
+  if(subs.length)result.subjects=subs.map(function(s){return{id:String(s.id),name:String(s.name),exam:String(s.exam||''),icon:String(s.icon||'📖')}});
  }
-}
-function readTasks(){
- try{
-  const value=JSON.parse(localStorage.getItem(LIST_KEY)||'[]');
-  if(!Array.isArray(value))return [];
-  return value.filter(x=>x && typeof x.text==='string' && x.text.trim()).map(x=>({
-   id:String(x.id||String(Date.now())+Math.random().toString(36).slice(2)),
-   text:x.text.slice(0,120),done:!!x.done
-  })).slice(0,200);
- }catch(e){return []}
-}
-let tasks=readTasks();
-function saveTasks(){
- try{localStorage.setItem(LIST_KEY,JSON.stringify(tasks))}catch(e){}
-}
-function renderTasks(){
- const list=$('todoList');
- list.replaceChildren();
- for(const task of tasks){
-  const item=document.createElement('li');
-  item.dataset.id=task.id;
-  if(task.done)item.classList.add('done');
-  const checkbox=document.createElement('input');
-  checkbox.type='checkbox';checkbox.className='todo-check';checkbox.checked=task.done;
-  checkbox.setAttribute('aria-label','Mark '+task.text+' complete');
-  const text=document.createElement('input');
-  text.type='text';text.className='todo-text';text.value=task.text;text.maxLength=120;
-  text.setAttribute('aria-label','Edit to-do task');
-  const remove=document.createElement('button');
-  remove.type='button';remove.className='remove-task';remove.textContent='×';
-  remove.setAttribute('aria-label','Remove '+task.text);
-  checkbox.addEventListener('change',()=>{
-   task.done=checkbox.checked;item.classList.toggle('done',task.done);saveTasks();updateCount();
+ if(old && old.days){
+  Object.entries(old.days).forEach(function(entry){
+   var date=entry[0],oldDay=entry[1];if(!oldDay || !/^\d{4}-\d\d-\d\d$/.test(date))return;
+   result.subjects.forEach(function(sub){
+    var recorded=oldDay.subjectMs&&oldDay.subjectMs[sub.id];
+    if(recorded===undefined && sub.id==='classical')recorded=oldDay.studied;
+    var study=safeNumber(recorded);
+    var breaks=sub.id==='classical'?safeNumber(oldDay.breaks)+(Array.isArray(oldDay.tasks)?oldDay.tasks.reduce(function(sum,t){return sum+(t.kind==='break'?safeNumber(t.breakLogged):0)},0):0):0;
+    if(!study&&!breaks)return;
+    var mode='idle',clockStart=null;
+    var active=oldDay.tasks&&oldDay.tasks.find(function(t){return t.id===oldDay.activeId});
+    var start=safeNumber(oldDay.clockStart),now=Date.now();
+    if(date===dateKey(new Date()) && (oldDay.mode==='study'||oldDay.mode==='break') && start>new Date().setHours(0,0,0,0) && start<=now && now-start<5*3600000 && (!active || active.subject===sub.id)){
+     mode=oldDay.mode;clockStart=start;
+    }
+    result.days[sessionKey(sub.id,date)]={studiedMs:study,breakMs:breaks,mode:mode,clockStart:clockStart};
+   });
   });
-  text.addEventListener('input',()=>{task.text=text.value.slice(0,120);saveTasks()});
-  text.addEventListener('blur',()=>{if(!task.text.trim()){tasks=tasks.filter(t=>t.id!==task.id);renderTasks();saveTasks()}});
-  remove.addEventListener('click',()=>{tasks=tasks.filter(t=>t.id!==task.id);saveTasks();renderTasks()});
-  item.append(checkbox,text,remove);
-  list.append(item);
  }
- $('emptyMessage').hidden=tasks.length!==0;
- updateCount();
+ var minimal=storageRead(OLD_LIST_KEY);
+ if(Array.isArray(minimal))result.lists.classical=normalizeTasks(minimal);
+ return result;
 }
-function updateCount(){
- const done=tasks.filter(t=>t.done).length;
- $('taskCount').textContent=done+' / '+tasks.length+' done';
+function validData(x){return x&&x.version===3&&Array.isArray(x.subjects)&&x.days&&x.lists}
+var data=validData(storageRead(KEY))?storageRead(KEY):importLegacy();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(err){}}
+function currentDate(){return dateKey(new Date())}
+function currentSubject(){var match=location.hash.match(/^#\/exam\/([^/?#]+)/);if(!match)return null;var id;try{id=decodeURIComponent(match[1])}catch(err){return null}return data.subjects.find(function(s){return s.id===id})||null}
+function getDay(sub,date){var key=sessionKey(sub,date);if(!data.days[key])data.days[key]={studiedMs:0,breakMs:0,mode:'idle',clockStart:null};return data.days[key]}
+function timeSinceStarted(day,date,now){
+ if(!day.clockStart||day.mode==='idle')return 0;
+ return Math.max(0,Math.min(now,stampEnd(date))-day.clockStart);
 }
-$('todoForm').addEventListener('submit',event=>{
- event.preventDefault();
- const input=$('taskInput'),name=input.value.trim();
- if(!name)return;
- tasks.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),text:name.slice(0,120),done:false});
- input.value='';saveTasks();renderTasks();input.focus();
+function settle(day,date,now){
+ var ms=timeSinceStarted(day,date,now);
+ if(day.mode==='study')day.studiedMs=safeNumber(day.studiedMs)+ms;
+ if(day.mode==='break')day.breakMs=safeNumber(day.breakMs)+ms;
+ day.clockStart=null;
+ return ms;
+}
+function resolveOldDays(now){
+ var today=currentDate();
+ Object.entries(data.days).forEach(function(entry){
+  var parts=entry[0].split('|'),date=parts[0],day=entry[1];
+  if(!day||!day.mode||day.mode==='idle')return;
+  if(date!==today || now>=stampEnd(date)){settle(day,date,now);day.mode='idle'}
+ });
+}
+resolveOldDays(Date.now());
+save();
+var shownSubject=null;
+function statusFor(now){
+ var m=dayTime(now),ceil=function(n){return Math.max(0,Math.ceil(n-m))};
+ if(m<870)return {name:'Revise',left:ceil(870),description:'minutes until run break',from:480,to:870,active:null};
+ if(m<900)return {name:'Break',left:ceil(900),description:'minutes left in run break',from:870,to:900,active:'run'};
+ if(m<1110)return {name:'Revise',left:ceil(1110),description:'minutes until dinner break',from:900,to:1110,active:null};
+ if(m<1140)return {name:'Break',left:ceil(1140),description:'minutes left in dinner break',from:1110,to:1140,active:'dinner'};
+ if(m<1260)return {name:'Exam problems',left:ceil(1260),description:'minutes left for exam problems',from:1140,to:1260,active:'problems'};
+ return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
+}
+function updateSession(mode){
+ if(!shownSubject)return;
+ var now=Date.now(),date=currentDate(),day=getDay(shownSubject.id,date);
+ if(now>=stampEnd(date)){settle(day,date,now);day.mode='idle';save();renderStudy();return}
+ if(day.mode!=='idle')settle(day,date,now);
+ day.mode=mode;day.clockStart=mode==='idle'?null:now;
+ save();renderStudy();
+}
+function editMinutes(which,sign){
+ if(!shownSubject)return;
+ var number=Number($('adjustMinutes').value);
+ if(!Number.isInteger(number)||number<1||number>360){$('adjustMinutes').focus();return}
+ var date=currentDate(),day=getDay(shownSubject.id,date),now=Date.now();
+ if(day.mode!=='idle')settle(day,date,now);
+ var field=which==='study'?'studiedMs':'breakMs';
+ day[field]=Math.max(0,safeNumber(day[field])+sign*number*60000);
+ if(day.mode!=='idle')day.clockStart=now;
+ save();renderStudy();
+}
+function renderCountdown(now){
+ var status=statusFor(now),c=$('countArea');
+ $('activityHeading').textContent=status.name;
+ $('minutesLeft').textContent=status.left===null?'':String(status.left);
+ $('countLabel').textContent=status.description;
+ c.classList.toggle('finished',status.left===null);
+ var progress=status.to===status.from?100:Math.max(0,Math.min(100,(dayTime(now)-status.from)/(status.to-status.from)*100));
+ $('progressFill').style.width=progress+'%';
+ $('progressTrack').setAttribute('aria-valuenow',String(Math.round(progress)));
+ $('progressTrack').setAttribute('aria-valuetext',status.left===null?'Schedule finished':String(status.left)+' minutes left');
+ ['run','dinner','problems'].forEach(function(id){
+  var node=document.querySelector('[data-slot="'+id+'"]');
+  if(!node)return;
+  var end=id==='run'?900:id==='dinner'?1140:1260;
+  node.classList.toggle('now',status.active===id);
+  node.classList.toggle('past',dayTime(now)>=end);
+  var badge=node.querySelector('small');
+  if(badge)badge.textContent=status.active===id?'Now':id==='problems'?'Focus':'Break';
+ });
+}
+function renderTotals(now){
+ if(!shownSubject)return;
+ var date=currentDate(),day=getDay(shownSubject.id,date);
+ var live=timeSinceStarted(day,date,now.getTime());
+ var study=safeNumber(day.studiedMs)+(day.mode==='study'?live:0),rest=safeNumber(day.breakMs)+(day.mode==='break'?live:0);
+ $('studyTotal').textContent=formatMinutes(study);
+ $('breakTotal').textContent=formatMinutes(rest);
+ $('trackingStatus').classList.toggle('is-study',day.mode==='study');
+ $('trackingStatus').classList.toggle('is-break',day.mode==='break');
+ $('trackingMessage').textContent=day.mode==='study'?'Study timer running':day.mode==='break'?'Break timer running':'Timer stopped · press Start studying to record time';
+ $('studyButton').textContent=day.mode==='study'?'Pause studying':day.mode==='break'?'Resume studying':'Start studying';
+ $('breakButton').textContent=day.mode==='break'?'Stop break':'Take a break';
+ var canStart=now.getTime()<stampEnd(date);
+ $('studyButton').disabled=!canStart&&day.mode==='idle';
+ $('breakButton').disabled=!canStart&&day.mode==='idle';
+}
+function renderStudy(){
+ if(!shownSubject)return;
+ var now=new Date();
+ resolveOldDays(now.getTime());
+ renderCountdown(now);
+ renderTotals(now);
+ save();
+}
+function tick(){
+ var s=currentSubject();
+ if((s&&s.id)!==(shownSubject&&shownSubject.id)){
+  renderRoute();return;
+ }
+ if(shownSubject)renderStudy();
+}
+function renderCards(){
+ var root=$('examCards');root.replaceChildren();
+ data.subjects.forEach(function(s){
+  var card=document.createElement('button');card.type='button';card.className='exam-card';
+  var icon=document.createElement('span');icon.className='exam-icon';icon.textContent=s.icon||'📖';
+  var name=document.createElement('strong');name.textContent=s.name;
+  var when=document.createElement('small');
+  if(/^\d{4}-\d\d-\d\d$/.test(s.exam||'')){var bits=s.exam.split('-').map(Number);when.textContent=new Date(bits[0],bits[1]-1,bits[2]).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
+  var link=document.createElement('span');link.className='open-label';link.textContent='Open study space';
+  card.append(icon,name,when,link);
+  card.addEventListener('click',function(){location.hash='#/exam/'+encodeURIComponent(s.id)});
+  root.append(card);
+ });
+}
+function renderSubjectManager(){
+ var root=$('examEditor');root.replaceChildren();
+ data.subjects.forEach(function(s){
+  var row=document.createElement('div');row.className='manage-line';
+  var name=document.createElement('input');name.type='text';name.value=s.name;name.maxLength=70;name.setAttribute('aria-label','Subject name');
+  var date=document.createElement('input');date.type='date';date.value=s.exam||'';date.setAttribute('aria-label','Exam date');
+  name.addEventListener('change',function(){s.name=name.value.trim()||s.name;save();renderCards()});
+  date.addEventListener('change',function(){s.exam=date.value;save();renderCards()});
+  row.append(name,date);root.append(row);
+ });
+}
+function renderRoute(){
+ var previous=shownSubject,next=currentSubject();
+ if(previous&&(!next||previous.id!==next.id)){
+  var old=getDay(previous.id,currentDate());
+  if(old.mode!=='idle'){settle(old,currentDate(),Date.now());old.mode='idle';save()}
+ }
+ shownSubject=next;
+ $('homeView').hidden=!!next;
+ $('studyView').hidden=!next;
+ $('brandText').innerHTML=next?escapeHtml(next.name)+'<br>revision plan':'winter exams<br>revision dashboard';
+ if(!next){document.title='Winter exams · Revision dashboard';renderCards();renderSubjectManager();return}
+ document.title=next.name+' · Revision plan';
+ $('subjectTitle').textContent=next.name+' revision plan';
+ renderTodo();
+ renderStudy();
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function tasksFor(sub){if(!data.lists[sub])data.lists[sub]=[];return data.lists[sub]}
+function renderTodo(){
+ var list=$('todoList');list.replaceChildren();
+ if(!shownSubject)return;
+ var tasks=tasksFor(shownSubject.id);
+ tasks.forEach(function(t){
+  var row=document.createElement('li');row.className='todo-item';
+  row.classList.toggle('done',t.done);
+  var check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','Complete '+t.text);
+  var input=document.createElement('input');input.type='text';input.value=t.text;input.maxLength=120;input.setAttribute('aria-label','Edit task');
+  var remove=document.createElement('button');remove.type='button';remove.className='remove';remove.textContent='×';remove.setAttribute('aria-label','Remove '+t.text);
+  check.addEventListener('change',function(){t.done=check.checked;row.classList.toggle('done',t.done);save();renderTodoCount()});
+  input.addEventListener('change',function(){t.text=input.value.trim()||t.text;save();input.value=t.text});
+  remove.addEventListener('click',function(){data.lists[shownSubject.id]=tasksFor(shownSubject.id).filter(function(x){return x.id!==t.id});save();renderTodo()});
+  row.append(check,input,remove);list.append(row);
+ });
+ $('emptyTodo').hidden=tasks.length>0;
+ renderTodoCount();
+}
+function renderTodoCount(){
+ if(!shownSubject)return;var list=tasksFor(shownSubject.id);
+ $('todoCount').textContent=list.filter(function(t){return t.done}).length+' / '+list.length+' done';
+}
+function setTheme(value){
+ var theme=value==='dark'?'dark':'light';document.documentElement.dataset.theme=theme;
+ $('brandLogo').textContent=theme==='dark'?'🎄':'❄';
+ $('themeButton').textContent=theme==='dark'?'Light mode':'Dark mode';
+ try{localStorage.setItem(THEME_KEY,theme)}catch(err){}
+}
+$('themeButton').addEventListener('click',function(){setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
+$('backToExams').addEventListener('click',function(){location.hash='#/'});
+$('studyButton').addEventListener('click',function(){
+ if(!shownSubject)return;
+ var d=getDay(shownSubject.id,currentDate());
+ updateSession(d.mode==='study'?'idle':'study');
 });
-function setTheme(theme){
- const mode=theme==='dark'?'dark':'light';
- document.documentElement.dataset.theme=mode;
- $('themeIcon').textContent=mode==='dark'?'✦':'❄';
- $('themeToggle').textContent=mode==='dark'?'Light mode':'Dark mode';
- try{localStorage.setItem(THEME_KEY,mode)}catch(e){}
-}
-try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(e){setTheme('light')}
-$('themeToggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
-renderTasks();
-updateSchedule();
-setInterval(updateSchedule,10000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateSchedule()});
+$('breakButton').addEventListener('click',function(){
+ if(!shownSubject)return;
+ var d=getDay(shownSubject.id,currentDate());
+ updateSession(d.mode==='break'?'idle':'break');
+});
+$('addStudy').addEventListener('click',function(){editMinutes('study',1)});
+$('removeStudy').addEventListener('click',function(){editMinutes('study',-1)});
+$('addBreak').addEventListener('click',function(){editMinutes('break',1)});
+$('removeBreak').addEventListener('click',function(){editMinutes('break',-1)});
+$('todoForm').addEventListener('submit',function(e){
+ e.preventDefault();if(!shownSubject)return;
+ var input=$('todoInput'),text=input.value.trim();
+ if(!text)return;
+ var list=tasksFor(shownSubject.id);
+ list.push({id:uniq(),text:text.slice(0,120),done:false});input.value='';save();renderTodo();input.focus();
+});
+$('addSubjectForm').addEventListener('submit',function(e){
+ e.preventDefault();var name=$('newSubjectName').value.trim();if(!name)return;
+ var id='custom-'+uniq(),exam=$('newSubjectDate').value||'';
+ data.subjects.push({id:id,name:name.slice(0,70),icon:'📖',exam:exam});
+ $('newSubjectName').value='';$('newSubjectDate').value='';save();renderCards();renderSubjectManager();
+});
+$('exportButton').addEventListener('click',function(){
+ save();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
+ var a=document.createElement('a');a.href=url;a.download='winter-revision-backup.json';document.body.append(a);a.click();a.remove();
+ setTimeout(function(){URL.revokeObjectURL(url)},2000);
+});
+$('importFile').addEventListener('change',async function(e){
+ var file=e.target.files&&e.target.files[0];if(!file)return;
+ try{
+  var parsed=JSON.parse(await file.text());
+  if(!validData(parsed)){alert('This is not a valid backup for this version.');return}
+  if(!confirm('Replace the current checklist and recorded time with this backup?'))return;
+  data=parsed;save();renderRoute();
+ }catch(err){alert('Could not read the backup.')}
+ e.target.value='';
+});
+window.addEventListener('hashchange',renderRoute);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)tick()});
+try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(err){setTheme('light')}
+renderRoute();
+setInterval(tick,10000);
 })();
 </script>
 </body>

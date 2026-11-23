@@ -56,7 +56,6 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 .actual-study-start-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:9px 0 5px}
 .actual-study-start-controls input{min-height:40px;border:1px solid var(--stroke);background:var(--paper);color:var(--ink);padding:5px 9px;border-radius:9px;font:inherit}
 .actual-study-start p{margin-top:8px}
-.clock24{width:87px;max-width:110px;font-variant-numeric:tabular-nums;font-size:.92rem;letter-spacing:.015em;text-align:center}
 </style>
 </head>
 <body>
@@ -79,10 +78,10 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
  <div><span class="eyebrow">YOUR STUDY PLAN</span><h2 id="subjectFocusTitle">Today's study plan</h2><p class="little" id="subjectFocusDate">Your tasks for today</p></div>
  <div class="subject-actions"><button class="btn tiny" type="button" id="backToExams">← All exams</button><button class="btn tiny primary" type="button" id="goToEditor">Edit plan ↓</button></div>
 </div>
-<section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><strong id="focusProgress" aria-live="off">Minutes left: 0</strong></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="text" inputmode="numeric" autocomplete="off" spellcheck="false" class="clock24" id="focusEnd" aria-label="Current task planned end in 24-hour HH:MM" placeholder="HH:MM" maxlength="5"/><span id="focusEndHint" class="little">Enter 24-hour time (HH:MM), e.g. 12:10.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times don't start the timer. Enter when you actually began studying continuously. This works even when your timer is already running.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
+<section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><strong id="focusProgress" aria-live="off">Minutes left: 0</strong></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="time" id="focusEnd" aria-label="Current task planned end"/><span id="focusEndHint" class="little">You can change this at any time.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times don't start the timer. Enter when you actually began studying continuously. This works even when your timer is already running.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
 <section class="panel" id="planOverviewPanel"><div class="panel-head"><div><h2 id="planOverviewTitle">Plan at a glance</h2><p>Your current schedule at a glance. If you want to change anything, use the editor underneath.</p></div><span class="chip" id="planOverviewEnd">Ends —</span></div><div id="planViewList" class="plan-preview" aria-live="off"></div><p class="little" id="planOverviewSummary">—</p></section>
 <section class="panel"><h2>Breaks</h2><p class="muted">Press <b>Take a break</b> whenever you stop working. Study time stops immediately, and break time starts. Press <b>Resume studying</b> when you return.</p><h3 class="scheduled-break-title">Scheduled breaks</h3><p class="little">Planned breaks appear here automatically. For a past break you took without using the break timer, press <b>Count as taken</b>. If you already timed that break, don't count it again.</p><div id="scheduledBreaks" class="scheduled-breaks"></div><div class="break-hero"><div class="eyebrow">Current break timer</div><strong id="currentBreak">00:00</strong><p id="breakDescription">No break running right now.</p></div><div class="focus-actions"><button class="btn primary" id="sideBreak" type="button">Take a break</button><button class="btn" id="sideResume" type="button">▶ Resume studying</button></div><div class="end-box">Rest is part of the plan. There is no need to make up every minute of a break.</div></section>
-<section class="panel" id="planPanel"><div class="panel-head"><div><h2>Edit your plan</h2><p>Click any task name or goal to rewrite it. Edit start, end or duration. Overlapping minutes are removed from other blocks; a study block may be split around a break. Use ↑ ↓ to reorder tasks.</p></div><div class="panel-controls"><button class="btn tiny" id="addSuggested" type="button">✧ Suggest blocks</button><button class="btn tiny" id="addStudy" type="button">＋ Study task</button><button class="btn tiny" id="addBreak" type="button">＋ Break</button></div></div><div class="schedule-start"><label for="startTime"><b>Shift entire schedule to start at (HH:MM)</b></label><input type="text" inputmode="numeric" autocomplete="off" spellcheck="false" class="clock24" id="startTime" maxlength="5" placeholder="HH:MM"/><button class="btn tiny" id="replanNow" type="button">↻ Replan from now</button><span class="endpill" id="planEnd">Plan ends —</span></div><div class="manual-time"><strong>Forgot to press Start?</strong><p class="little">Edit a study block’s <b>Start</b> and <b>End</b> below, then press <b>Count as studied</b>. That time is added to “Studied today”. If you correct the times later, press it again to update the entry. Already-recorded timer minutes won’t be counted twice.</p></div><div id="taskList" class="list" aria-live="off"></div><div class="tally"><span id="doneTally">0 / 0 complete</span><strong id="planSummary">—</strong></div><div class="end-box" id="fitStatus">Your plan is flexible; 21:00 is your stopping time.</div><div class="focus-actions"><button class="btn tiny" id="fitToDeadline" type="button">✨ Fit remaining plan before 21:00</button><button class="btn tiny danger" id="clearDay" type="button">↺ Clear this day</button><button class="btn tiny" id="exportButton" type="button">↓ Save backup</button><label class="btn tiny" for="importInput" style="cursor:pointer">↑ Restore backup</label><input id="importInput" type="file" accept=".json,application/json" hidden/></div><p class="little" style="margin:8px 0 0">Your plans and timers are saved in this browser on this website. Use Save backup regularly; your progress is not synced between devices.</p></section>
+<section class="panel" id="planPanel"><div class="panel-head"><div><h2>Edit your plan</h2><p>Click any task name or goal to rewrite it. Edit start, end or duration. Overlapping minutes are removed from other blocks; a study block may be split around a break. Use ↑ ↓ to reorder tasks.</p></div><div class="panel-controls"><button class="btn tiny" id="addSuggested" type="button">✧ Suggest blocks</button><button class="btn tiny" id="addStudy" type="button">＋ Study task</button><button class="btn tiny" id="addBreak" type="button">＋ Break</button></div></div><div class="schedule-start"><label for="startTime"><b>Next task starts at</b></label><input type="time" id="startTime"/><button class="btn tiny" id="replanNow" type="button">↻ Replan from now</button><span class="endpill" id="planEnd">Plan ends —</span></div><div class="manual-time"><strong>Forgot to press Start?</strong><p class="little">Edit a study block’s <b>Start</b> and <b>End</b> below, then press <b>Count as studied</b>. That time is added to “Studied today”. If you correct the times later, press it again to update the entry. Already-recorded timer minutes won’t be counted twice.</p></div><div id="taskList" class="list" aria-live="off"></div><div class="tally"><span id="doneTally">0 / 0 complete</span><strong id="planSummary">—</strong></div><div class="end-box" id="fitStatus">Your plan is flexible; 21:00 is your stopping time.</div><div class="focus-actions"><button class="btn tiny" id="fitToDeadline" type="button">✨ Fit remaining plan before 21:00</button><button class="btn tiny danger" id="clearDay" type="button">↺ Clear this day</button><button class="btn tiny" id="exportButton" type="button">↓ Save backup</button><label class="btn tiny" for="importInput" style="cursor:pointer">↑ Restore backup</label><input id="importInput" type="file" accept=".json,application/json" hidden/></div><p class="little" style="margin:8px 0 0">Your plans and timers are saved in this browser on this website. Use Save backup regularly; your progress is not synced between devices.</p></section>
 </main><aside class="right">
 
 <section class="panel"><div class="eyebrow">THIS DAY</div><h2>Day’s progress</h2><div class="mini-stat"><span>Completed blocks</span><strong id="completedCount">0 / 0</strong></div><div class="mini-stat"><span>Study blocks remaining</span><strong id="studyCount">—</strong></div><div class="mini-stat"><span>Planned breaks remaining</span><strong id="breakCount">—</strong></div><div class="mini-stat"><span>Real focus time</span><strong id="totalHours">0.0 h</strong></div><div class="meter"><div id="doneMeter"></div></div><p class="little">The progress bar is based on completed blocks, not perfection or how long you sit at your desk.</p></section>
@@ -98,8 +97,8 @@ const LEGACY_KEY='cm-study-studio-2026-11-23-v1';
 const LEGACY_DATE='2026-11-23';
 // One-time fresh start requested on 23 November. Never reimport the old day automatically.
 const FRESH_START_KEY='revision-winterexams-2026-11-23-fresh-start-v1';
-const LAGRANGIAN_TIME_REPAIR_KEY='revision-winterexams-lagrangian-1120-1210-repair-v1';
 const NOV23_SCHEDULE_KEY='revision-winterexams-nov23-exact-schedule-v2';
+const SAFE_TIME_REPAIR_KEY='revision-winterexams-classical-1120-1210-safe-restore-v2';
 const NOV23_PLAN=[["08:00","08:30","study","Plan the day","Set priorities and organise materials."],["08:30","09:50","break","Break","Scheduled break."],["09:50","11:20","study","Fix website","Website work."],["11:20","11:50","study","Repeat Lagrangian and Hamiltonian Mechanics","Review Euler–Lagrange equations, generalized momentum, Legendre transform and Hamilton equations."],["11:50","12:40","study","Exercise question from 2026 exercises on Lagrangian","Attempt a Lagrangian problem independently, then review the solution."],["12:40","13:20","break","Lunch break",""],["13:20","14:15","study","Central forces and effective potential","Work on a 2026 exercise, including equilibrium and stability."],["14:15","14:30","break","Break",""],["14:30","15:30","study","Hamiltonian mechanics — practice problem","Derive canonical momenta and Hamilton's equations independently."],["15:30","15:45","break","Break",""],["15:45","16:45","study","Timed past exam problem","Try a past exam question under timed conditions, without hints."],["16:45","17:15","study","Check solutions and error log","Correct mistakes and write down the key methods."],["17:15","18:00","break","Dinner break",""],["18:00","19:00","study","Redo difficult problems","Redo two difficult questions without reading the solution."],["19:00","19:15","break","Break",""],["19:15","19:50","study","Formula recall and methods","Recall core equations, conditions and standard solution steps."],["19:50","20:00","study","Organise notes and finish","Write a short methods checklist and stop."]];
 const SUBJECT_DEFAULTS=[
 {id:'classical',name:'Classical Mechanics',icon:'⚙️',exam:'2026-11-24',time:'15:00',topics:['Lagrangians & constraints','Central forces & effective potential','Hamiltonian mechanics','Normal modes','Relativity & rigid bodies','Timed exam problems']},
@@ -274,32 +273,21 @@ function trimScheduleAround(tasks,id,start,end){
 }
 function editScheduleWindow(id,start,end){
  if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end>1439||start>=end||end-start>600){
-  notify('Invalid time window. Use 24-hour HH:MM, with the end later than the start.');renderAll();return false;
+  notify('Choose a valid start and end within the same day (maximum 10 hours).');renderAll();return false;
  }
- const old=planTimes(true).times[id],task=taskById(id);
- if(!task||!old)return false;
- if((Math.abs(start-old.start)>120||Math.abs(end-old.end)>120)&&
-  !confirm('Change "'+task.name+'" from '+hm(old.start)+'–'+hm(old.end)+' to '+hm(start)+'–'+hm(end)+'? Other overlapping blocks will be shortened.')){
-  renderAll();return false;
- }
+ // Preserve active study/break tracking when the edited interval still contains
+ // the active block. Edits previously stopped the timer without warning.
  const wasRunning=state.mode!=='idle',oldMode=state.mode,oldActive=state.activeId;
  if(wasRunning)settle();
- const originalTasks=state.tasks.map(t=>({...t})),originalStart=state.start;
- try{
-  normaliseSchedule();
-  state.tasks=trimScheduleAround(state.tasks,id,start,end);
-  state.start=hm(state.tasks[0]?.startOverride??start);
- }catch(err){
-  state.tasks=originalTasks;state.start=originalStart;
-  if(wasRunning){state.mode=oldMode;state.activeId=oldActive;state.clockStart=Date.now()}
-  save();renderAll();notify('Could not apply that change. The original schedule was kept.');return false;
- }
- const activeSurvives=!!state.tasks.find(t=>t.id===oldActive&&!t.done);
+ normaliseSchedule();
+ state.tasks=trimScheduleAround(state.tasks,id,start,end);
+ state.start=hm(state.tasks[0]?.startOverride??start);
+ const activeSurvives=!!state.tasks.find(t=>t.id===oldActive && !t.done);
  if(wasRunning&&activeSurvives){
   state.activeId=oldActive;state.mode=oldMode;state.clockStart=Date.now();
  }else if(wasRunning){
   state.mode='idle';state.clockStart=null;state.activeId=null;
- }else if(!state.tasks.some(t=>t.id===state.activeId))state.activeId=null;
+ }else if(!state.tasks.some(t=>t.id===state.activeId)){state.activeId=null}
  save();renderAll();return true;
 }
 const shortHour=n=>n>=24*60?`${hm(n%1440)} +${Math.floor(n/1440)}d`:hm(n);
@@ -395,7 +383,7 @@ function add(kind){
  state.tasks.push(t);save();renderAll();
  document.querySelector(`[data-id="${t.id}"] .task-name`)?.focus();
 }
-function renderList(){let {times,end}=planTimes(),allTimes=planTimes(true).times;for(const t of state.tasks)if(t.done)times[t.id]=allTimes[t.id];let picked=selected();$('taskList').innerHTML=filteredTasks().map((t)=>{let i=state.tasks.findIndex(x=>x.id===t.id);let p=times[t.id];let start=p?shortHour(p.start):'Done',finish=p?shortHour(p.end):'✓';let current=state.mode!=='idle'&&state.activeId===t.id;return `<div class="task ${t.kind==='break'?'breaktask':''} ${t.done?'done':''} ${current?'istoday':''}" data-id="${esc(t.id)}"><div class="task-time"><span>${esc(start)}</span><span class="task-clockend">${esc(finish)}</span></div><div class="task-body"><div class="task-top"><input type="checkbox" aria-label="Mark ${esc(t.name)} complete" data-action="done" ${t.done?'checked':''}/><div class="task-main"><input class="task-name" type="text" aria-label="Task title" maxlength="200" value="${esc(t.name)}" data-action="name"/><input class="task-description" type="text" aria-label="Task goal" maxlength="800" value="${esc(t.notes)}" placeholder="Your goal for this block (optional)" data-action="notes"/></div></div><div class="task-lower">${app.selectedSubject==='all'? `<label>Subject <select data-action="subject" aria-label="Subject for ${esc(t.name)}">${app.subjects.map(s=>`<option value="${esc(s.id)}" ${t.subject===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>`:''}<label>Start <input type="text" inputmode="numeric" spellcheck="false" class="clock24" maxlength="5" placeholder="HH:MM" data-action="start" aria-label="Start time for ${esc(t.name)} in 24-hour HH:MM" value="${p?hm(p.start%1440):''}" ${!p?'disabled':''}/></label><label>End <input type="text" inputmode="numeric" spellcheck="false" class="clock24" maxlength="5" placeholder="HH:MM" data-action="end" aria-label="End time for ${esc(t.name)} in 24-hour HH:MM" value="${p?hm(p.end%1440):''}" ${!p?'disabled':''}/></label><label>Minutes <input type="number" min="1" max="600" step="1" data-action="minutes" value="${t.minutes}"/></label>${t.startOverride!==null?'<button type="button" class="reset-time" data-action="auto" title="Follow the preceding block automatically">↺ Auto start</button>':''}${t.kind==='study'?`<button type="button" class="log-action" data-action="log">${t.manualLogged?'Update logged time':'Count as studied'}</button>${t.manualLogged?`<span class="logged">${formatLong(t.manualLogged)} logged</span><button type="button" data-action="unlog" aria-label="Remove manually counted study time">Undo log</button>`:''}`:''}<button type="button" data-action="activate" class="${current?'active':''}">${current?'● Active':t.kind==='break'?'☕ Start break':'▶ Focus'}</button><button type="button" data-action="up" aria-label="Move task up" ${i===0?'disabled':''}>↑</button><button type="button" data-action="down" aria-label="Move task down" ${i===state.tasks.length-1?'disabled':''}>↓</button><button type="button" data-action="delete" class="delete" aria-label="Delete task">×</button></div></div></div>`}).join('')||'<p class="muted">A blank page for a fresh study day. Choose an exam subject, then add a study task or suggested blocks in the editor below.</p>';
+function renderList(){let {times,end}=planTimes(),allTimes=planTimes(true).times;for(const t of state.tasks)if(t.done)times[t.id]=allTimes[t.id];let picked=selected();$('taskList').innerHTML=filteredTasks().map((t)=>{let i=state.tasks.findIndex(x=>x.id===t.id);let p=times[t.id];let start=p?shortHour(p.start):'Done',finish=p?shortHour(p.end):'✓';let current=state.mode!=='idle'&&state.activeId===t.id;return `<div class="task ${t.kind==='break'?'breaktask':''} ${t.done?'done':''} ${current?'istoday':''}" data-id="${esc(t.id)}"><div class="task-time"><span>${esc(start)}</span><span class="task-clockend">${esc(finish)}</span></div><div class="task-body"><div class="task-top"><input type="checkbox" aria-label="Mark ${esc(t.name)} complete" data-action="done" ${t.done?'checked':''}/><div class="task-main"><input class="task-name" type="text" aria-label="Task title" maxlength="200" value="${esc(t.name)}" data-action="name"/><input class="task-description" type="text" aria-label="Task goal" maxlength="800" value="${esc(t.notes)}" placeholder="Your goal for this block (optional)" data-action="notes"/></div></div><div class="task-lower">${app.selectedSubject==='all'? `<label>Subject <select data-action="subject" aria-label="Subject for ${esc(t.name)}">${app.subjects.map(s=>`<option value="${esc(s.id)}" ${t.subject===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>`:''}<label>Start <input type="time" data-action="start" aria-label="Start time for ${esc(t.name)}" value="${p?hm(p.start%1440):''}" ${!p?'disabled':''}/></label><label>End <input type="time" data-action="end" aria-label="End time for ${esc(t.name)}" value="${p?hm(p.end%1440):''}" ${!p?'disabled':''}/></label><label>Minutes <input type="number" min="1" max="600" step="1" data-action="minutes" value="${t.minutes}"/></label>${t.startOverride!==null?'<button type="button" class="reset-time" data-action="auto" title="Follow the preceding block automatically">↺ Auto start</button>':''}${t.kind==='study'?`<button type="button" class="log-action" data-action="log">${t.manualLogged?'Update logged time':'Count as studied'}</button>${t.manualLogged?`<span class="logged">${formatLong(t.manualLogged)} logged</span><button type="button" data-action="unlog" aria-label="Remove manually counted study time">Undo log</button>`:''}`:''}<button type="button" data-action="activate" class="${current?'active':''}">${current?'● Active':t.kind==='break'?'☕ Start break':'▶ Focus'}</button><button type="button" data-action="up" aria-label="Move task up" ${i===0?'disabled':''}>↑</button><button type="button" data-action="down" aria-label="Move task down" ${i===state.tasks.length-1?'disabled':''}>↓</button><button type="button" data-action="delete" class="delete" aria-label="Delete task">×</button></div></div></div>`}).join('')||'<p class="muted">A blank page for a fresh study day. Choose an exam subject, then add a study task or suggested blocks in the editor below.</p>';
 $('planEnd').textContent='Plan ends '+shortHour(end);
 $('doneTally').textContent=`${state.tasks.filter(t=>t.done).length} / ${state.tasks.length} complete`;
 let unfinished=state.tasks.filter(t=>!t.done),studyM=unfinished.filter(t=>t.kind==='study').reduce((a,t)=>a+t.minutes,0),breakM=unfinished.filter(t=>t.kind==='break').reduce((a,t)=>a+t.minutes,0);
@@ -529,14 +517,9 @@ $('scheduledBreaks').addEventListener('click',e=>{
 $('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
 $('startTime').addEventListener('change',e=>{
  const value=e.target.value;
- if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Enter HH:MM using the 24-hour clock.');renderAll();return}
- const first=state.tasks[0]?planTimes(true).times[state.tasks[0].id]?.start:parseHm(state.start);
- if(state.tasks.length&&parseHm(value)!==first&&
-    !confirm('Shift every task in this day from '+hm(first)+' to '+value+'? This changes the entire schedule.')){
-  renderAll();return;
- }
+ if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){renderAll();return}
  normaliseSchedule();
- const shift=parseHm(value)-(state.tasks[0]?.startOverride??parseHm(state.start));
+ const first=state.tasks[0]?.startOverride??parseHm(state.start),shift=parseHm(value)-first;
  if(state.tasks.some(t=>t.startOverride+shift<0||t.startOverride+t.minutes+shift>1439)){
   notify('That start time would move blocks outside the day.');renderAll();return;
  }
@@ -577,34 +560,41 @@ $('examEditor').addEventListener('change',e=>{const id=e.target.dataset.exam,sub
 $('newExamButton').addEventListener('click',()=>{let name=$('newExamName').value.trim(),date=$('newExamDate').value;if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(date)){notify('Add a subject name and exam date.');return}let id='subject-'+uid();app.subjects.push({id,name:name.slice(0,80),exam:date,time:'',icon:'📖',topics:[]});$('newExamName').value='';$('newExamDate').value='';app.selectedSubject=id;save();renderAll();notify('Subject added!')});
 // Save session immediately on tab close. The real-time timestamp also lets the timer survive a reload.
 window.addEventListener('pagehide',save);
-// One-time correction for the precise time window reported in the screenshot.
-// Preserve task identity, logged study time, the active timer and other dates.
-function repairLagrangianTime(){
- const key=LAGRANGIAN_TIME_REPAIR_KEY,day=app.days[LEGACY_DATE];
+// Minimal one-time correction of just the reported Classical Mechanics block.
+// This does not reset the existing timer, study totals or unrelated days.
+function restoreLagrangianSlot(){
+ if(today()!==LEGACY_DATE)return;
+ const day=app.days[LEGACY_DATE];
  if(!day||!Array.isArray(day.tasks))return;
- try{if(localStorage.getItem(key)==='done')return}catch(e){return}
- const target=day.tasks.find(t=>t.id===day.activeId&&t.subject==='classical'&&t.name==='Repeat Lagrangian and Hamiltonian Mechanics')||
-  day.tasks.find(t=>t.subject==='classical'&&t.name==='Repeat Lagrangian and Hamiltonian Mechanics');
+ try{if(localStorage.getItem(SAFE_TIME_REPAIR_KEY)==='done')return}catch(e){return}
+ const target=day.tasks.find(t=>t.id===day.activeId && t.subject==='classical' && t.name==='Repeat Lagrangian and Hamiltonian Mechanics')||
+              day.tasks.find(t=>t.subject==='classical' && t.name==='Repeat Lagrangian and Hamiltonian Mechanics');
  if(!target)return;
  try{
-  localStorage.setItem(key+'-backup',JSON.stringify(day));
-  const raw=day.tasks.map(t=>({...t}));
-  // Resolve any missing starts using the current plan; existing explicit times win.
-  let cursor=parseHm(day.start);
-  for(const t of raw){
-   if(!Number.isInteger(t.startOverride))t.startOverride=cursor;
-   cursor=t.startOverride+t.minutes;
+  // If the correct time is already present, do not modify the user's plan.
+  if(target.startOverride===680 && target.minutes===50){
+    localStorage.setItem(SAFE_TIME_REPAIR_KEY,'done');return;
   }
-  const fixed=trimScheduleAround(raw,target.id,11*60+20,12*60+10);
+  const original=JSON.stringify(day);
+  localStorage.setItem(SAFE_TIME_REPAIR_KEY+'-backup',original);
+  let cursor=parseHm(day.start);
+  const intervals=day.tasks.map(t=>{
+   const start=Number.isInteger(t.startOverride)?t.startOverride:cursor;
+   cursor=start+t.minutes;
+   return {...t,startOverride:start};
+  });
+  const fixed=trimScheduleAround(intervals,target.id,680,730);
+  // Keep only a valid, chronological, collision-free result.
+  if(!fixed.length||!fixed.some(t=>t.id===target.id && t.startOverride===680 && t.minutes===50))throw Error('Time correction invalid');
+  if(fixed.some((t,i)=>i>0 && fixed[i-1].startOverride+fixed[i-1].minutes>t.startOverride))throw Error('Overlap');
   day.tasks=fixed;day.start=hm(fixed[0].startOverride);
-  // Do not touch day.studied, subjectMs, mode, clockStart or spent.
   if(state.date===LEGACY_DATE)state=day;
   app.days[LEGACY_DATE]=day;
   localStorage.setItem(KEY,JSON.stringify(app));
-  localStorage.setItem(key,'done');
- }catch(e){console.warn('Schedule correction could not be applied',e)}
+  localStorage.setItem(SAFE_TIME_REPAIR_KEY,'done');
+ }catch(e){console.warn('No changes made to the schedule',e)}
 }
-repairLagrangianTime();
+restoreLagrangianSlot();
 normaliseSchedule();
 if(!state.activeId)state.activeId=nextTask()?.id||null;
 save();window.addEventListener('hashchange',()=>{applyRoute();window.scrollTo(0,0)});applyRoute();setInterval(renderClock,1000);

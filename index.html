@@ -74,7 +74,7 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
  <div><span class="eyebrow">YOUR STUDY PLAN</span><h2 id="subjectFocusTitle">Today's study plan</h2><p class="little" id="subjectFocusDate">Your tasks for today</p></div>
  <div class="subject-actions"><button class="btn tiny" type="button" id="backToExams">← All exams</button><button class="btn tiny primary" type="button" id="goToEditor">Edit plan ↓</button></div>
 </div>
-<section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><span id="focusProgress">0% of planned time</span></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="time" id="focusEnd" aria-label="Current task planned end"/><span id="focusEndHint" class="little">You can change this at any time.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times do not start the timer. Enter when you actually began to count the missing minutes and start the timer now.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
+<section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><span id="focusProgress">0% of planned time</span></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="time" id="focusEnd" aria-label="Current task planned end"/><span id="focusEndHint" class="little">You can change this at any time.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times don't start the timer. Enter when you actually began studying continuously. This works even when your timer is already running.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
 <section class="panel" id="planOverviewPanel"><div class="panel-head"><div><h2 id="planOverviewTitle">Plan at a glance</h2><p>Your current schedule at a glance. If you want to change anything, use the editor underneath.</p></div><span class="chip" id="planOverviewEnd">Ends —</span></div><div id="planViewList" class="plan-preview" aria-live="off"></div><p class="little" id="planOverviewSummary">—</p></section>
 <section class="panel"><h2>Breaks</h2><p class="muted">Press <b>Take a break</b> whenever you stop working. Study time stops immediately, and break time starts. Press <b>Resume studying</b> when you return.</p><h3 class="scheduled-break-title">Scheduled breaks</h3><div id="scheduledBreaks" class="scheduled-breaks"></div><div class="break-hero"><div class="eyebrow">Current break timer</div><strong id="currentBreak">00:00</strong><p id="breakDescription">No break running right now.</p></div><div class="focus-actions"><button class="btn primary" id="sideBreak" type="button">Take a break</button><button class="btn" id="sideResume" type="button">▶ Resume studying</button></div><div class="end-box">Rest is part of the plan. There is no need to make up every minute of a break.</div></section>
 <section class="panel" id="planPanel"><div class="panel-head"><div><h2>Edit your plan</h2><p>Click any task name or goal to rewrite it. Edit start, end or duration. Overlapping minutes are removed from other blocks; a study block may be split around a break. Use ↑ ↓ to reorder tasks.</p></div><div class="panel-controls"><button class="btn tiny" id="addSuggested" type="button">✧ Suggest blocks</button><button class="btn tiny" id="addStudy" type="button">＋ Study task</button><button class="btn tiny" id="addBreak" type="button">＋ Break</button></div></div><div class="schedule-start"><label for="startTime"><b>Next task starts at</b></label><input type="time" id="startTime"/><button class="btn tiny" id="replanNow" type="button">↻ Replan from now</button><span class="endpill" id="planEnd">Plan ends —</span></div><div class="manual-time"><strong>Forgot to press Start?</strong><p class="little">Edit a study block’s <b>Start</b> and <b>End</b> below, then press <b>Count as studied</b>. That time is added to “Studied today”. If you correct the times later, press it again to update the entry. Already-recorded timer minutes won’t be counted twice.</p></div><div id="taskList" class="list" aria-live="off"></div><div class="tally"><span id="doneTally">0 / 0 complete</span><strong id="planSummary">—</strong></div><div class="end-box" id="fitStatus">Your plan is flexible; 21:00 is your stopping time.</div><div class="focus-actions"><button class="btn tiny" id="fitToDeadline" type="button">✨ Fit remaining plan before 21:00</button><button class="btn tiny danger" id="clearDay" type="button">↺ Clear this day</button><button class="btn tiny" id="exportButton" type="button">↓ Save backup</button><label class="btn tiny" for="importInput" style="cursor:pointer">↑ Restore backup</label><input id="importInput" type="file" accept=".json,application/json" hidden/></div><p class="little" style="margin:8px 0 0">Your plans and timers are saved in this browser on this website. Use Save backup regularly; your progress is not synced between devices.</p></section>
@@ -353,11 +353,13 @@ function renderFocus(){let t=selected();let p=t?planTimes().times[t.id]:null;let
 $('focusDuration').textContent=t?`Planned: ${t.minutes} min`:'No active study tasks';$('focusUntil').textContent=p?`Plan until: ${shortHour(p.end)}`:'Plan until: —';$('focusEnd').value=p?hm(p.end%1440):'';$('focusEnd').disabled=!p;
 $('mainStart').textContent=state.mode==='study'?'● Studying now':state.mode==='break'?'▶ Resume studying':'▶ Start studying';$('mainStart').disabled=!t;$('breakButton').disabled=state.mode!=='study';$('finishButton').disabled=!t; $('sideBreak').disabled=state.mode!=='study';$('sideResume').disabled=state.mode!=='break'||!t;
  const backfill=$('countFromActualStart'),input=$('actualStudyStart');
- backfill.disabled=!t||state.mode!=='idle'||state.date!==today();
- input.disabled=backfill.disabled;
+ // Corrections must remain clickable even if the timer is already running.
+ // If something cannot be corrected, explain why on click rather than silently disabling the control.
+ backfill.disabled=false;
+ input.disabled=false;
  if(t&&input!==document.activeElement){
   const p=planTimes(true).times[t.id];
-  if(p)input.value=hm(Math.min(p.start,Math.floor(minutesTime(new Date()))));
+  if(p&&!input.value)input.value=hm(Math.min(p.start,Math.floor(minutesTime(new Date()))));
  }
 }
 function datePretty(date){const [y,m,d]=date.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
@@ -438,15 +440,17 @@ function scheduleRemaining(resize=false){
 }
 function fit(){scheduleRemaining(true)}
 $('countFromActualStart').addEventListener('click',()=>{
- if(state.date!==today()||state.mode!=='idle'){notify('Stop the timer before correcting the start time.');return}
+ if(state.date!==today()){notify('Select Today in the date selector to correct today’s study time.');return}
+ if(state.mode==='break'){notify('Resume studying first, then correct your start time.');return}
  const t=selected(),value=$('actualStudyStart').value;
- if(!t||!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Choose a valid actual start time.');return}
+ if(!t){notify('Choose a study task in the plan first.');return}
+ if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Enter a valid actual start time.');return}
  const now=Date.now(),stamp=new Date();const [h,m]=value.split(':').map(Number);
  stamp.setHours(h,m,0,0);
  const started=stamp.getTime();
- if(started>now||started<new Date().setHours(0,0,0,0)){notify('Choose an earlier time today.');return}
- // Make the tracked block at least as long as the actual time since the supplied start.
- // Existing timed minutes remain credited; no extra minutes are counted twice.
+ if(started>now||started<new Date().setHours(0,0,0,0)){notify('Choose an earlier start time today.');return}
+ // Settle the running timer before calculating what is missing; never credit its minutes twice.
+ if(state.mode==='study'){settle();state.mode='idle';state.clockStart=null}
  const actualMs=now-started,credited=Math.max(0,Number(t.spent)||0);
  const added=Math.max(0,actualMs-credited);
  t.spent=credited+added;
@@ -455,7 +459,7 @@ $('countFromActualStart').addEventListener('click',()=>{
  state.subjectMs[subject]=Math.max(0,Number(state.subjectMs[subject])||0)+added;
  state.activeId=t.id;state.mode='study';state.clockStart=now;
  save();renderAll();
- notify('Tracked time corrected. Study timer running.');
+ notify(added>0?'Missing minutes added. Study timer is running.':'Study timer is running; no missing minutes to add.');
 });
 $('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
 $('startTime').addEventListener('change',e=>{

@@ -297,8 +297,7 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
             <div class="slot" data-slot="morning"><time>08:30–09:50</time><strong>Morning break</strong><small>Break</small></div>
             <div class="slot" data-slot="exerciseMorning"><time>09:50–13:30</time><strong>Exercise problems</strong><small>Focus</small></div>
             <div class="slot" data-slot="concept"><time>13:30–14:30</time><strong>Concept test</strong><small>Focus</small></div>
-            <div class="slot" data-slot="run"><time>14:30–15:00</time><strong>Run break</strong><small>Break</small></div>
-            <div class="slot" data-slot="revise"><time>15:00–16:00</time><strong>Revise</strong><small>Focus</small></div>
+            <div class="slot" data-slot="run"><time>14:30–16:00</time><strong>Run break</strong><small>Break</small></div>
             <div class="slot" data-slot="exerciseAfternoon"><time>16:00–18:30</time><strong>Exercise problems</strong><small>Focus</small></div>
             <div class="slot" data-slot="dinner"><time>18:30–19:00</time><strong>Dinner break</strong><small>Break</small></div>
             <div class="slot" data-slot="problems"><time>19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></div>
@@ -413,8 +412,7 @@ function statusFor(now){
  if(m<590)return {name:'Break',left:ceil(590),description:'minutes left in morning break',from:510,to:590,active:'morning'};
  if(m<810)return {name:'Exercise problems',left:ceil(810),description:'minutes until concept test',from:590,to:810,active:'exerciseMorning'};
  if(m<870)return {name:'Concept test',left:ceil(870),description:'minutes until run break',from:810,to:870,active:'concept'};
- if(m<900)return {name:'Break',left:ceil(900),description:'minutes left in run break',from:870,to:900,active:'run'};
- if(m<960)return {name:'Revise',left:ceil(960),description:'minutes until exercise problems',from:900,to:960,active:'revise'};
+ if(m<960)return {name:'Break',left:ceil(960),description:'minutes left in run break',from:870,to:960,active:'run'};
  if(m<1110)return {name:'Exercise problems',left:ceil(1110),description:'minutes until dinner break',from:960,to:1110,active:'exerciseAfternoon'};
  if(m<1140)return {name:'Break',left:ceil(1140),description:'minutes left in dinner break',from:1110,to:1140,active:'dinner'};
  if(m<1260)return {name:'Exam problems',left:ceil(1260),description:'minutes left for exam problems',from:1140,to:1260,active:'problems'};
@@ -450,7 +448,7 @@ function renderCountdown(now){
  $('progressFill').style.width=progress+'%';
  $('progressTrack').setAttribute('aria-valuenow',String(Math.round(progress)));
  $('progressTrack').setAttribute('aria-valuetext',status.left===null?'Schedule finished':String(status.left)+' minutes left');
- var slotKinds={planning:[510,'Plan'],morning:[590,'Break'],exerciseMorning:[810,'Focus'],concept:[870,'Focus'],run:[900,'Break'],revise:[960,'Focus'],exerciseAfternoon:[1110,'Focus'],dinner:[1140,'Break'],problems:[1260,'Focus']};
+ var slotKinds={planning:[510,'Plan'],morning:[590,'Break'],exerciseMorning:[810,'Focus'],concept:[870,'Focus'],run:[960,'Break'],exerciseAfternoon:[1110,'Focus'],dinner:[1140,'Break'],problems:[1260,'Focus']};
  Object.entries(slotKinds).forEach(function(entry){
   var id=entry[0],end=entry[1][0],type=entry[1][1];
   var node=document.querySelector('[data-slot="'+id+'"]');

@@ -1,634 +1,216 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="color-scheme" content="light dark"/>
-<title>Winter exams · revision dashboard</title>
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('cm-dashboard-theme')||'light'}catch(e){document.documentElement.dataset.theme='light'}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#121d2e">
+<title>Classical Mechanics · Revision</title>
 <style>
-:root{color-scheme:light;--bg:#f6f3ee;--ink:#4e3e35;--ink2:#7d6a61;--muted:#a28d82;--stroke:#e6d9ce;--paper:rgba(255,252,248,.92);--paper2:rgba(255,250,245,.96);--accent:#c97e75;--accentHover:#b66963;--soft:#f7efe8;--soft2:#f2e5d7;--green:#5d8a71;--greenSoft:#edf5ef;--purple:#b38aa0;--orange:#c48763;--hero:linear-gradient(134deg,rgba(255,255,252,.95),rgba(247,242,234,.96) 52%,rgba(250,231,214,.97));--shadow:0 18px 42px rgba(120,87,66,.10);--body:radial-gradient(circle at 14% 16%,rgba(255,247,232,.96),transparent 26%),radial-gradient(circle at 82% 12%,rgba(255,222,188,.58),transparent 26%),radial-gradient(circle at 55% 0%,rgba(232,240,248,.65),transparent 24%),linear-gradient(180deg,#f7f8fb 0%,#f8f5ef 42%,#f2ece4 100%);--decor1:radial-gradient(circle at 12% 10%,rgba(255,255,255,.98) 0 2px,transparent 2.9px),radial-gradient(circle at 26% 22%,rgba(255,255,255,.92) 0 2.2px,transparent 3px),radial-gradient(circle at 42% 11%,rgba(255,255,255,.94) 0 1.8px,transparent 2.8px),radial-gradient(circle at 66% 16%,rgba(255,243,225,.95) 0 4px,transparent 6px),radial-gradient(circle at 79% 26%,rgba(255,249,241,.96) 0 2.4px,transparent 3.6px),radial-gradient(circle at 88% 12%,rgba(255,236,211,.88) 0 6px,transparent 10px),radial-gradient(circle at 18% 82%,rgba(255,249,241,.86) 0 4px,transparent 7px),radial-gradient(circle at 71% 74%,rgba(255,243,225,.82) 0 5px,transparent 9px);--decor2:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 36%),radial-gradient(circle at 50% 100%,rgba(255,252,247,.7),transparent 36%)}
-:root[data-theme=dark]{color-scheme:dark;--bg:#101826;--ink:#f7efe8;--ink2:#d2c7bf;--muted:#aeb3c1;--stroke:#42506a;--paper:rgba(21,31,46,.92);--paper2:rgba(28,39,58,.96);--accent:#e2b477;--accentHover:#f0cb98;--soft:#1d2940;--soft2:#25314a;--green:#a7cfb4;--greenSoft:#2e4339;--purple:#d7b8d8;--orange:#f0c18f;--hero:linear-gradient(134deg,rgba(18,29,45,.96),rgba(25,37,55,.96) 58%,rgba(39,49,71,.97));--shadow:0 20px 50px rgba(0,0,0,.34);--body:radial-gradient(circle at 20% 18%,rgba(51,79,114,.35),transparent 28%),radial-gradient(circle at 82% 20%,rgba(236,190,110,.12),transparent 25%),radial-gradient(circle at 50% -10%,rgba(127,149,186,.28),transparent 26%),linear-gradient(180deg,#09111b 0%,#111b29 48%,#182334 100%);--decor1:radial-gradient(circle at 9% 12%,rgba(255,237,197,.95) 0 4px,transparent 6px),radial-gradient(circle at 17% 18%,rgba(255,247,232,.9) 0 2px,transparent 3px),radial-gradient(circle at 26% 9%,rgba(255,210,140,.94) 0 5px,transparent 7px),radial-gradient(circle at 38% 16%,rgba(255,246,225,.92) 0 2.2px,transparent 3.2px),radial-gradient(circle at 52% 12%,rgba(255,219,157,.9) 0 4px,transparent 6px),radial-gradient(circle at 64% 21%,rgba(255,245,226,.9) 0 2px,transparent 3px),radial-gradient(circle at 75% 13%,rgba(255,208,126,.95) 0 5px,transparent 7px),radial-gradient(circle at 86% 18%,rgba(255,247,232,.88) 0 2.1px,transparent 3.1px),radial-gradient(circle at 94% 11%,rgba(255,215,142,.88) 0 4px,transparent 6px),radial-gradient(circle at 19% 72%,rgba(255,215,142,.14) 0 30px,transparent 70px),radial-gradient(circle at 82% 78%,rgba(255,215,142,.12) 0 38px,transparent 78px);--decor2:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 34%),radial-gradient(circle at 50% 100%,rgba(239,201,138,.1),transparent 35%)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--body);background-position:center;background-size:cover;background-attachment:fixed;min-height:100vh;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}button:disabled{cursor:not-allowed;opacity:.4}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:var(--decor1);opacity:.72;mix-blend-mode:screen;z-index:0}body::after{content:"";position:fixed;inset:0;pointer-events:none;background:var(--decor2);opacity:.92;z-index:0}.wrap{position:relative;z-index:1;width:min(1240px,100%);margin:auto;padding:24px 22px 72px}header{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;margin-bottom:17px}.brand{display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.14em;font-size:.74rem;font-weight:850}.brand-logo{width:60px;height:60px;display:grid;place-items:center;border:1px solid var(--stroke);border-radius:20px;background:var(--paper2);box-shadow:var(--shadow);font-size:2rem}.headright{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.smallcaps{font-size:.73rem;font-weight:760;letter-spacing:.06em;color:var(--ink2)}.btn{border:1px solid var(--stroke);background:var(--paper2);color:var(--ink);border-radius:11px;padding:10px 13px;font-weight:760;font-size:.84rem;transition:transform .15s,background .15s}.btn:hover{transform:translateY(-1px)}.btn.primary{background:var(--accent);color:#fffdf9;border-color:var(--accent)}:root[data-theme=dark] .btn.primary{color:#27283d}.btn.green{background:var(--green);color:#fff;border-color:var(--green)}:root[data-theme=dark] .btn.green{color:#26372f}.btn.quiet{background:transparent}.btn.tiny{padding:7px 9px;font-size:.73rem}.btn.danger{color:var(--orange)}
-h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;margin:0;font-weight:850}h1 em{font-style:normal;color:var(--accent)}.tagline{margin:13px 0 0;color:var(--ink2);font-size:.95rem;max-width:640px}.hero{display:flex;justify-content:space-between;align-items:center;gap:25px;padding:22px 0 25px}.hero-stamp{min-width:230px;border:1px solid var(--stroke);background:var(--paper);padding:17px 19px;border-radius:18px;box-shadow:var(--shadow)}.hero-stamp strong{font-size:1.7rem;display:block;letter-spacing:-.04em}.hero-stamp p{margin:3px 0 0;font-size:.77rem;color:var(--ink2)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 20px}.stat{background:var(--paper);border:1px solid var(--stroke);box-shadow:var(--shadow);border-radius:18px;padding:17px 18px;min-width:0}.stat .eyebrow{font-size:.75rem;color:var(--ink2);font-weight:780}.stat strong{display:block;font-size:clamp(1.5rem,2.65vw,2.13rem);line-height:1.4;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}.stat small{color:var(--muted);font-size:.72rem}.stat.accent{background:var(--hero)}
-.manual-time{margin:0 0 15px;padding:12px 14px;border:1px solid var(--stroke);background:var(--soft);border-radius:12px}
-.manual-time strong{font-size:.84rem}
-.manual-time p{margin:5px 0 0}
-.task-lower .logged{color:var(--green);font-weight:750}
-.task-lower button.log-action{border-color:var(--green);color:var(--green);background:var(--greenSoft)}
-.task-lower button.reset-time{font-size:.67rem}
-
-.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(315px,.84fr);align-items:start;gap:20px}.left,.right{display:flex;flex-direction:column;gap:18px;min-width:0}.panel,.focus{background:var(--paper);border:1px solid var(--stroke);border-radius:20px;box-shadow:var(--shadow)}.panel{padding:20px}.focus{background:var(--hero);padding:24px}.eyebrow{font-size:.69rem;font-weight:830;letter-spacing:.15em;text-transform:uppercase;color:var(--orange)}h2{font-size:1.25rem;letter-spacing:-.025em;margin:0 0 7px}h3{font-size:.89rem;margin:0}.focus-name{font-size:clamp(1.55rem,2.5vw,2.05rem);line-height:1.14;letter-spacing:-.04em;margin:9px 0}.focus-note{font-size:.82rem;color:var(--ink2);margin:0 0 13px;line-height:1.6}.focus-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}.chip{border-radius:9px;border:1px solid var(--stroke);background:var(--paper2);padding:7px 10px;font-size:.75rem;color:var(--ink2);font-weight:700}.progress-outer{margin-top:16px;background:#eecbc8;height:11px;border-radius:20px;overflow:hidden}.progress-inner{height:100%;border-radius:20px;background:linear-gradient(90deg,#b76f81,#ed9c83);width:0%;transition:width .2s}:root[data-theme=dark] .progress-outer{background:#5a5263}.progress-bottom{display:flex;justify-content:space-between;gap:12px;color:var(--ink2);font-size:.72rem;margin-top:6px}.statusline{color:var(--ink2);font-size:.77rem;margin-top:11px}.statusline b{color:var(--ink)}.focus-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:15px 0 5px}.end-edit{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:16px;font-size:.77rem;font-weight:740;color:var(--ink2)}input[type=time],input[type=number],input[type=text],textarea{color:var(--ink);border:1px solid var(--stroke);border-radius:9px;background:var(--paper2);padding:9px 10px;min-width:0}input[type=time]{max-width:142px}input[type=number]{width:77px}textarea{width:100%;min-height:80px;resize:vertical}.little{font-size:.75rem;color:var(--ink2);line-height:1.54}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap;margin-bottom:13px}.panel-head p{font-size:.77rem;color:var(--ink2);line-height:1.5;margin:5px 0 0}.panel-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.schedule-start{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0 14px;padding:11px 12px;background:var(--soft);border:1px solid var(--stroke);border-radius:12px;font-size:.78rem;color:var(--ink2)}.schedule-start b{color:var(--ink)}.schedule-start input{width:126px}.schedule-start .endpill{margin-left:auto;font-weight:760;color:var(--ink)}.list{display:flex;flex-direction:column;gap:10px}.plan-preview{display:flex;flex-direction:column;gap:10px}.peek{display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:12px;align-items:start;padding:13px 14px;border:1px solid var(--stroke);border-radius:14px;background:var(--paper2)}.peek.isbreak{background:var(--soft)}.peek.done{opacity:.72}.peek-time{font-size:.74rem;font-weight:820;color:var(--ink2);display:flex;gap:7px;align-items:center;white-space:nowrap}.peek-main{min-width:0}.peek-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.peek-top strong{font-size:.92rem}.peek-note{font-size:.77rem;color:var(--ink2);margin-top:3px;line-height:1.45}.peek-right{font-size:.74rem;font-weight:780;color:var(--ink2);white-space:nowrap}.kindpill{border:1px solid var(--stroke);border-radius:999px;padding:3px 8px;font-size:.67rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:var(--paper)}
-.task{display:grid;grid-template-columns:70px minmax(0,1fr);gap:12px;padding:14px;border:1px solid var(--stroke);border-radius:14px;background:var(--paper2)}.task.breaktask{background:var(--soft)}.task.istoday{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.task.done{opacity:.70}.task-time{font-size:.71rem;color:var(--ink2);font-weight:750;line-height:1.42;padding-top:4px;font-variant-numeric:tabular-nums}.task-time span{display:block}.task-time .task-clockend{color:var(--ink)}.task-body{min-width:0}.task-top{display:flex;align-items:flex-start;gap:9px}.task-top input[type=checkbox]{margin:8px 0 0;width:17px;height:17px;flex:none;accent-color:var(--green)}.task-main{min-width:0;flex:1}.task-name{width:100%;font-size:.9rem;font-weight:780;letter-spacing:-.01em}.task-description{width:100%;margin-top:7px;font-size:.74rem}.task-lower{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:9px 0 0 26px}.task-lower label{font-size:.71rem;color:var(--ink2);display:flex;gap:5px;align-items:center;font-weight:750}.task-lower input{font-size:.76rem;padding:6px 7px}.task-lower input[type=time]{width:105px}.task-lower input[type=number]{width:65px}.task-lower button{border:1px solid var(--stroke);background:var(--paper);color:var(--ink2);border-radius:8px;padding:6px 8px;font-size:.7rem;font-weight:760}.task-lower button:hover{background:var(--soft2)}.task-lower .delete{color:var(--orange)}.task-lower .active{color:var(--green);border-color:var(--green)}.tally{margin-top:12px;font-size:.74rem;color:var(--ink2);display:flex;justify-content:space-between;gap:12px}.tally strong{color:var(--ink)}
-.mini-stat{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--stroke);padding:10px 0;font-size:.83rem;gap:10px}.mini-stat:last-of-type{border-bottom:none}.mini-stat strong{font-variant-numeric:tabular-nums}.mini-stat span{color:var(--ink2)}.rule{border:none;border-top:1px solid var(--stroke);margin:17px 0}.meter{height:9px;background:var(--soft2);border-radius:99px;overflow:hidden;margin-top:13px}.meter>div{height:100%;background:linear-gradient(90deg,var(--green),#a6c8a7);width:0%;border-radius:99px}.break-hero{background:var(--soft);padding:14px;border-radius:14px;border:1px solid var(--stroke);margin:10px 0}.break-hero strong{font-size:1.65rem;letter-spacing:-.045em;font-variant-numeric:tabular-nums}.break-hero p{font-size:.75rem;color:var(--ink2);margin:3px 0 0}.tip-list{margin:12px 0 0;padding-left:19px;font-size:.78rem;color:var(--ink2);line-height:1.64}.tip-list li{margin:5px 0}.tip-list b{color:var(--ink)}.muted{font-size:.77rem;color:var(--ink2)}.end-box{padding:11px 12px;border:1px solid var(--stroke);border-radius:12px;background:var(--soft);color:var(--ink2);font-size:.76rem;margin-top:13px}.end-box.over{border-color:var(--orange);color:var(--orange)}.warn{display:none;padding:10px 13px;border:1px solid var(--orange);border-radius:11px;margin-bottom:16px;background:var(--paper2);font-size:.8rem}.warn.show{display:block}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,15px);background:var(--ink);color:var(--paper2);padding:10px 15px;border-radius:11px;font-size:.8rem;font-weight:720;opacity:0;transition:opacity .18s,transform .18s;z-index:5;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}footer{text-align:center;color:var(--muted);font-size:.74rem;margin-top:25px}.corner{display:inline-flex;gap:6px;align-items:center}
-@media(max-width:1050px){.layout{grid-template-columns:1fr}.right{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}@media(max-width:690px){.wrap{padding:15px 13px 46px}header{margin-bottom:10px}.brand-logo{height:52px;width:52px}.hero{flex-direction:column;align-items:flex-start;padding:20px 0}.hero-stamp{width:100%;min-width:0}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{padding:13px}.stat strong{font-size:1.55rem}.focus{padding:18px}.panel{padding:14px}.right{grid-template-columns:1fr}.task{grid-template-columns:52px minmax(0,1fr);gap:5px;padding:10px}.task-lower{margin-left:0}.task-top{gap:6px}.task-time{font-size:.65rem}.task-lower{gap:7px}.schedule-start .endpill{margin-left:0}.hero-stamp strong{font-size:1.45rem}.peek{grid-template-columns:1fr;gap:6px}.peek-time,.peek-right{font-size:.71rem}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-
-/* Winter exams dashboard */
-.dashboard-section{margin-bottom:18px}.date-navigation{margin-bottom:20px}.exam-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.exam-card{border:1px solid var(--stroke);background:var(--paper2);color:var(--ink);padding:15px;text-align:left;border-radius:15px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;min-height:132px;transition:transform .15s,border-color .15s}.exam-card:hover{transform:translateY(-2px)}.exam-card.picked{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.exam-icon{font-size:1.5rem}.exam-info{flex:1;display:flex;flex-direction:column;gap:5px;min-width:120px}.exam-info strong{font-size:.87rem}.exam-info small{font-size:.72rem;color:var(--ink2)}.exam-countdown{font-size:.7rem;color:var(--accent);font-weight:780;background:var(--soft);padding:4px 7px;border-radius:8px;margin-top:auto}.date-controls{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.date-controls input{color:var(--ink);background:var(--paper2);border:1px solid var(--stroke);padding:8px;border-radius:9px;max-width:160px}.subject-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:2px 0 12px}.subject-tab{font-size:.75rem;color:var(--ink2);background:var(--paper2);border:1px solid var(--stroke);border-radius:999px;padding:7px 12px;font-weight:780}.subject-tab.active{color:var(--ink);background:var(--soft2);border-color:var(--accent)}.daily-summary{display:flex;gap:10px 18px;flex-wrap:wrap;font-size:.75rem;color:var(--ink2);background:var(--soft);border-radius:12px;padding:12px;margin-top:12px}.exam-manage{margin-top:14px;border-top:1px solid var(--stroke);padding-top:12px}.exam-manage summary{cursor:pointer;font-size:.77rem;color:var(--ink2);font-weight:750}.exam-editor{margin-top:12px;display:grid;gap:9px}.exam-edit-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.exam-edit-line label{display:flex;gap:8px;align-items:center}.exam-edit-line input[type=text]{width:215px}.exam-edit-line input[type=date],.add-exam input[type=date]{color:var(--ink);background:var(--paper2);padding:8px 10px;border:1px solid var(--stroke);border-radius:9px}.add-exam{display:flex;flex-wrap:wrap;align-items:flex-end;gap:9px;margin-top:15px;padding:11px;background:var(--soft);border-radius:12px}.add-exam label{display:flex;flex-direction:column;gap:4px;color:var(--ink2);font-size:.72rem}.task-lower select{background:var(--paper2);color:var(--ink);border:1px solid var(--stroke);border-radius:8px;padding:6px;max-width:170px;font-size:.74rem}.hero-stamp strong{font-size:1.33rem}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}#priorityList{padding-left:19px}
-.subject-focus-bar{background:var(--paper);border:1px solid var(--stroke);box-shadow:var(--shadow);padding:17px 19px;border-radius:17px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;scroll-margin-top:16px}
-.subject-focus-bar[hidden],#examOverview[hidden],#subjectTabs[hidden]{display:none!important}
-.subject-focus-bar h2{margin:4px 0 2px;font-size:1.4rem}
-.subject-focus-bar .subject-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#planOverviewPanel{scroll-margin-top:18px}
-@media(max-width:690px){.exam-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.exam-card{padding:11px;min-height:165px}.exam-info{min-width:0}.exam-countdown{width:100%}.date-controls{width:100%}.date-controls input{flex:1}.hero h1{font-size:clamp(2.4rem,8vw,3.5rem)}.hero-stamp{min-width:0}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat:last-child{grid-column:span 2}}
-@media(max-width:390px){.exam-cards{grid-template-columns:1fr}.exam-card{min-height:90px}}
-
-#homePage[hidden],#studyPage[hidden],#subjectTabs[hidden],#subjectFocusBar[hidden]{display:none!important}
-.subject-back-nav{margin:8px 0 2px}
-.subject-back-nav .btn{font-size:.8rem}
-#studyPage .hero{padding-top:15px}
-#studyPage #subjectTabs{display:none!important}
-.site-page{min-width:0}
-.scheduled-break-title{font-size:.91rem;margin:16px 0 9px}
-.scheduled-breaks{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.scheduled-break{display:flex;justify-content:space-between;gap:12px;background:var(--soft);padding:9px 12px;border:1px solid var(--stroke);border-radius:10px;align-items:center}
-.scheduled-break-label{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:125px}
-.scheduled-break strong,.scheduled-break span{font-size:.8rem}
-.scheduled-break span{font-variant-numeric:tabular-nums}
-.scheduled-break .btn{white-space:nowrap}
-.break-counted{color:var(--green);font-weight:650}
-@media(max-width:450px){.scheduled-break{flex-wrap:wrap}.scheduled-break-label{flex-basis:100%}}
-.actual-study-start{border-top:1px solid var(--stroke);margin-top:19px;padding-top:15px}
-.actual-study-start label{font-weight:650;font-size:.82rem}
-.actual-study-start-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:9px 0 5px}
-.actual-study-start-controls input{min-height:40px;border:1px solid var(--stroke);background:var(--paper);color:var(--ink);padding:5px 9px;border-radius:9px;font:inherit}
-.actual-study-start p{margin-top:8px}
+:root{
+  color-scheme:light;
+  --bg:#f6f5f1;--surface:#fffefa;--ink:#222b35;--muted:#69717a;--line:#dadfdf;
+  --soft:#f1f3f1;--accent:#667f71;--accent-contrast:#fff;--warm:#b78161;
+  --shadow:0 14px 38px rgba(27,48,46,.055);
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c1420;--surface:#152132;--ink:#f6f0e9;--muted:#b6becb;--line:#35445a;
+  --soft:#1d2b3e;--accent:#accdb8;--accent-contrast:#13261d;--warm:#e4b388;
+  --shadow:0 18px 44px rgba(0,0,0,.17);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);line-height:1.45}
+button,input{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+button:disabled{cursor:default;opacity:.65}
+.shell{width:min(1140px,calc(100% - 36px));margin:0 auto;padding:32px 0 62px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:12px;font-size:.9rem;font-weight:760;letter-spacing:.015em}
+.mark{display:grid;place-items:center;width:39px;height:39px;border:1px solid var(--line);border-radius:12px;font-size:1.2rem;color:var(--accent)}
+.theme-button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:9px 13px;border-radius:10px;font-size:.8rem;font-weight:650}
+.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);gap:20px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow);padding:28px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.overline{font-size:.71rem;color:var(--muted);font-weight:750;letter-spacing:.14em;text-transform:uppercase}
+.live{font-size:.74rem;color:var(--muted)}
+.activity{padding:46px 0 44px}
+h1{font-size:clamp(2.9rem,6vw,5rem);font-weight:780;letter-spacing:-.058em;line-height:1.02;margin:12px 0 27px}
+.countdown{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap}
+.count-number{font-size:clamp(4.1rem,9vw,6.8rem);font-weight:750;letter-spacing:-.07em;line-height:.9;font-variant-numeric:tabular-nums}
+.count-label{font-size:1.02rem;color:var(--muted);max-width:245px;line-height:1.45}
+.countdown.no-count .count-number{display:none}
+.countdown.no-count .count-label{font-size:1.1rem;max-width:none}
+.rule{height:1px;background:var(--line);margin:0 0 27px}
+h2{font-size:1.14rem;line-height:1.25;font-weight:750;letter-spacing:-.018em;margin:0}
+.schedule{list-style:none;margin:17px 0 0;padding:0;display:grid;gap:9px}
+.schedule li{display:grid;grid-template-columns:112px 1fr auto;align-items:center;column-gap:13px;padding:15px 15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.schedule li.is-now{background:var(--soft);border-color:var(--accent)}
+.schedule li.is-past{opacity:.65}
+.schedule time{font-size:.81rem;color:var(--muted);font-weight:680;font-variant-numeric:tabular-nums}
+.schedule strong{font-size:.92rem;font-weight:690}
+.schedule small{color:var(--muted);font-size:.74rem}
+.schedule .is-now small{color:var(--accent);font-weight:750}
+.todo-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.todo-count{font-size:.77rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.add-form{display:flex;gap:8px;margin-top:23px}
+.add-form input{flex:1;min-width:0;padding:12px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;font-size:.88rem}
+.add-form input::placeholder{color:var(--muted)}
+.add-form button{background:var(--accent);color:var(--accent-contrast);border:0;border-radius:10px;padding:0 17px;font-size:.86rem;font-weight:750}
+.todo-list{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:6px}
+.todo-list li{display:flex;align-items:center;gap:10px;padding:11px 3px;border-bottom:1px solid var(--line)}
+.todo-list li:last-child{border-bottom:0}
+.todo-check{width:18px;height:18px;accent-color:var(--accent);flex:none;cursor:pointer}
+.todo-text{flex:1;min-width:0;background:transparent;border:1px solid transparent;color:var(--ink);padding:6px 4px;border-radius:6px;font-size:.88rem}
+.todo-text:hover,.todo-text:focus{border-color:var(--line)}
+.todo-list li.done .todo-text{text-decoration:line-through;color:var(--muted)}
+.remove-task{flex:none;background:transparent;border:0;color:var(--muted);padding:5px 9px;border-radius:8px;font-size:1.17rem;line-height:1}
+.remove-task:hover{background:var(--soft);color:var(--ink)}
+.empty{margin:23px 0 0;color:var(--muted);font-size:.84rem}
+.sr-only{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.shell{width:min(660px,calc(100% - 26px));padding-top:21px}.panel{padding:22px}.activity{padding:33px 0 38px}}
+@media(max-width:420px){.brand{font-size:.79rem}.head{gap:7px}.theme-button{font-size:.72rem;padding:8px}.schedule li{grid-template-columns:97px 1fr auto;padding:13px 10px;gap:7px}.schedule time{font-size:.73rem}.schedule strong{font-size:.84rem}.count-label{font-size:.9rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><div class="brand"><span class="brand-logo" id="brandLogo" aria-hidden="true">❄</span><span id="brandText">winter exams<br>revision dashboard</span></div><div class="headright"><span class="smallcaps" id="dateLabel">WINTER 2026 / 27</span><button class="btn tiny" id="themeButton" type="button">🎄 Dark mode</button></div></header>
-<div id="homePage" class="site-page">
-<section class="hero"><div><span class="eyebrow">WINTER EXAMS</span><h1 id="heroTitle">winter exams <em>revision dashboard</em></h1><p class="tagline">ngl physics is kinda cool</p></div><div class="hero-stamp"><div class="eyebrow" id="nextExamLabel">NEXT EXAM</div><strong id="nextExamText">—</strong><p id="nextExamDetail">Your exam calendar</p></div></section>
-<section class="panel dashboard-section" id="examOverview" aria-label="Exams and subject selection"><div class="panel-head"><div><div class="eyebrow">EXAMS</div><h2>Your winter exams</h2><p>Select an exam to open today’s plan for that subject.</p></div><span class="chip" id="seasonTotal">5 exams</span></div>
-<div class="exam-cards" id="examCards"></div>
-<details class="exam-manage"><summary>Manage exams and dates</summary><div id="examEditor" class="exam-editor"></div><div class="add-exam"><label>New subject <input id="newExamName" type="text" placeholder="e.g. Mathematics" maxlength="80"></label><label>Exam date <input id="newExamDate" type="date"></label><button class="btn tiny" type="button" id="newExamButton">+ Add subject</button></div></details></section>
+<div class="shell">
+<header class="head">
+ <div class="brand"><span class="mark" id="themeIcon" aria-hidden="true">❄</span><span>Classical Mechanics</span></div>
+ <button class="theme-button" type="button" id="themeToggle">Dark mode</button>
+</header>
+<main class="layout">
+ <section class="panel" aria-labelledby="activityTitle">
+  <div class="section-heading"><span class="overline">Today</span><span class="live" id="currentTime"></span></div>
+  <div class="activity">
+   <span class="overline">Current activity</span>
+   <h1 id="activityTitle">Revise</h1>
+   <div class="countdown" id="countdown" role="timer" aria-live="off">
+    <strong class="count-number" id="minutesLeft">—</strong>
+    <span class="count-label" id="countdownLabel">minutes until run break</span>
+   </div>
+  </div>
+  <div class="rule"></div>
+  <h2>Schedule</h2>
+  <ul class="schedule" id="schedule">
+   <li data-slot="run"><time datetime="14:30">14:30–15:00</time><strong>Run</strong><small>Break</small></li>
+   <li data-slot="dinner"><time datetime="18:30">18:30–19:00</time><strong>Dinner</strong><small>Break</small></li>
+   <li data-slot="problems"><time datetime="19:00">19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></li>
+  </ul>
+ </section>
+ <aside class="panel" aria-labelledby="todoHeading">
+  <div class="todo-head"><h2 id="todoHeading">To-do</h2><span class="todo-count" id="taskCount">0 / 0 done</span></div>
+  <form class="add-form" id="todoForm">
+   <label for="taskInput" class="sr-only">Add a task</label>
+   <input id="taskInput" type="text" maxlength="120" placeholder="Add a task" autocomplete="off" required>
+   <button type="submit">Add</button>
+  </form>
+  <ul class="todo-list" id="todoList"></ul>
+  <p class="empty" id="emptyMessage">No tasks added yet.</p>
+ </aside>
+</main>
 </div>
-<div id="studyPage" class="site-page" hidden>
-<nav class="subject-back-nav" aria-label="Study navigation"><button class="btn tiny" id="backToOverviewTop" type="button">← All exams</button></nav>
-<section class="hero" aria-label="Selected subject"><div><h1 id="studyHeroTitle">Study plan</h1><p class="tagline">ngl physics is kinda cool</p></div></section>
-<div class="warn" id="dayWarning"></div>
-<section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">Break time recorded</div><strong id="breakTotal">00:00</strong><small id="breakPlanInfo">Scheduled breaks: —</small></div></section>
-<section class="panel date-navigation" id="todayPlanSection"><div class="panel-head"><div><div class="eyebrow">YOUR REVISION CALENDAR</div><h2 id="planDayTitle">Today's study plan</h2><p id="selectedDayHint">Switch dates freely. Each day keeps its own plan and study history.</p></div><div class="date-controls"><button class="btn tiny" id="prevDay" type="button" aria-label="Previous day">←</button><input id="planDatePicker" type="date" aria-label="Choose study date"/><button class="btn tiny" id="nextDay" type="button" aria-label="Next day">→</button><button class="btn tiny" id="todayButton" type="button">Today</button></div></div><div class="subject-tabs" id="subjectTabs"></div><p id="selectedSubjectDetail" class="little"></p><div id="dailySummary" class="daily-summary"></div></section>
-<div class="layout"><main class="left">
-<div id="subjectFocusBar" class="subject-focus-bar" hidden aria-live="polite">
- <div><span class="eyebrow">YOUR STUDY PLAN</span><h2 id="subjectFocusTitle">Today's study plan</h2><p class="little" id="subjectFocusDate">Your tasks for today</p></div>
- <div class="subject-actions"><button class="btn tiny" type="button" id="backToExams">← All exams</button><button class="btn tiny primary" type="button" id="goToEditor">Edit plan ↓</button></div>
-</div>
-<section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><strong id="focusProgress" aria-live="off">Minutes left: 0</strong></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="time" id="focusEnd" aria-label="Current task planned end"/><span id="focusEndHint" class="little">You can change this at any time.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times don't start the timer. Enter when you actually began studying continuously. This works even when your timer is already running.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
-<section class="panel" id="planOverviewPanel"><div class="panel-head"><div><h2 id="planOverviewTitle">Plan at a glance</h2><p>Your current schedule at a glance. If you want to change anything, use the editor underneath.</p></div><span class="chip" id="planOverviewEnd">Ends —</span></div><div id="planViewList" class="plan-preview" aria-live="off"></div><p class="little" id="planOverviewSummary">—</p></section>
-<section class="panel"><h2>Breaks</h2><p class="muted">Press <b>Take a break</b> whenever you stop working. Study time stops immediately, and break time starts. Press <b>Resume studying</b> when you return.</p><h3 class="scheduled-break-title">Scheduled breaks</h3><p class="little">Planned breaks appear here automatically. For a past break you took without using the break timer, press <b>Count as taken</b>. If you already timed that break, don't count it again.</p><div id="scheduledBreaks" class="scheduled-breaks"></div><div class="break-hero"><div class="eyebrow">Current break timer</div><strong id="currentBreak">00:00</strong><p id="breakDescription">No break running right now.</p></div><div class="focus-actions"><button class="btn primary" id="sideBreak" type="button">Take a break</button><button class="btn" id="sideResume" type="button">▶ Resume studying</button></div><div class="end-box">Rest is part of the plan. There is no need to make up every minute of a break.</div></section>
-<section class="panel" id="planPanel"><div class="panel-head"><div><h2>Edit your plan</h2><p>Click any task name or goal to rewrite it. Edit start, end or duration. Overlapping minutes are removed from other blocks; a study block may be split around a break. Use ↑ ↓ to reorder tasks.</p></div><div class="panel-controls"><button class="btn tiny" id="addSuggested" type="button">✧ Suggest blocks</button><button class="btn tiny" id="addStudy" type="button">＋ Study task</button><button class="btn tiny" id="addBreak" type="button">＋ Break</button></div></div><div class="schedule-start"><label for="startTime"><b>Next task starts at</b></label><input type="time" id="startTime"/><button class="btn tiny" id="replanNow" type="button">↻ Replan from now</button><span class="endpill" id="planEnd">Plan ends —</span></div><div class="manual-time"><strong>Forgot to press Start?</strong><p class="little">Edit a study block’s <b>Start</b> and <b>End</b> below, then press <b>Count as studied</b>. That time is added to “Studied today”. If you correct the times later, press it again to update the entry. Already-recorded timer minutes won’t be counted twice.</p></div><div id="taskList" class="list" aria-live="off"></div><div class="tally"><span id="doneTally">0 / 0 complete</span><strong id="planSummary">—</strong></div><div class="end-box" id="fitStatus">Your plan is flexible; 21:00 is your stopping time.</div><div class="focus-actions"><button class="btn tiny" id="fitToDeadline" type="button">✨ Fit remaining plan before 21:00</button><button class="btn tiny danger" id="clearDay" type="button">↺ Clear this day</button><button class="btn tiny" id="exportButton" type="button">↓ Save backup</button><label class="btn tiny" for="importInput" style="cursor:pointer">↑ Restore backup</label><input id="importInput" type="file" accept=".json,application/json" hidden/></div><p class="little" style="margin:8px 0 0">Your plans and timers are saved in this browser on this website. Use Save backup regularly; your progress is not synced between devices.</p></section>
-</main><aside class="right">
-
-<section class="panel"><div class="eyebrow">THIS DAY</div><h2>Day’s progress</h2><div class="mini-stat"><span>Completed blocks</span><strong id="completedCount">0 / 0</strong></div><div class="mini-stat"><span>Study blocks remaining</span><strong id="studyCount">—</strong></div><div class="mini-stat"><span>Planned breaks remaining</span><strong id="breakCount">—</strong></div><div class="mini-stat"><span>Real focus time</span><strong id="totalHours">0.0 h</strong></div><div class="meter"><div id="doneMeter"></div></div><p class="little">The progress bar is based on completed blocks, not perfection or how long you sit at your desk.</p></section>
-<section class="panel"><div class="eyebrow">KEY TOPICS</div><h2>Subject focus</h2><ul class="tip-list" id="priorityList"></ul><hr class="rule"/><p class="little">Suggested plan only. The best plan today is the one you can actually follow while staying reasonably rested.</p></section>
-<section class="panel"><h2>Tiny error log</h2><p class="little">Write the mistake and the rule you want to remember. This saves automatically.</p><textarea id="errorLog" placeholder="E.g. Central potential: f(r) = −V′(r). Angular momentum ℓ is conserved, not θ̇."></textarea><p class="little" style="margin:8px 0 0">No need for perfect notes. Just useful reminders for tomorrow.</p></section>
-</aside></div></div>
-<footer>Revision dashboard · progress saved in this browser</footer></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (() => {
 'use strict';
-const KEY='revision-winterexams-dashboard-v1';
-const LEGACY_KEY='cm-study-studio-2026-11-23-v1';
-const LEGACY_DATE='2026-11-23';
-// One-time fresh start requested on 23 November. Never reimport the old day automatically.
-const FRESH_START_KEY='revision-winterexams-2026-11-23-fresh-start-v1';
-const NOV23_SCHEDULE_KEY='revision-winterexams-nov23-exact-schedule-v2';
-const FULL_DAY_REPAIR_KEY='revision-winterexams-nov23-rebuild-run-and-dinner-v4';
-const NOV23_PLAN=[["08:00","08:30","study","Plan the day","Choose priorities and get your materials ready."],["08:30","09:50","break","Break",""],["09:50","11:20","study","Fix website",""],["11:20","12:10","study","Repeat Lagrangian and Hamiltonian Mechanics","Euler–Lagrange equations, generalized momentum, Legendre transform, Hamilton's equations."],["12:10","12:40","study","Exercise question from 2026 exercises on Lagrangian","Attempt independently, then check the solution."],["12:40","13:20","break","Lunch break",""],["13:20","14:20","study","Central forces and effective potential","Do a problem on equilibrium, orbital motion or stability."],["14:20","14:30","break","Break",""],["14:30","16:00","break","Run break","Run, shower and rest."],["16:00","17:00","study","Hamiltonian mechanics — practice problem","Derive canonical momenta and apply Hamilton's equations."],["17:00","17:15","break","Break",""],["17:15","18:15","study","Timed past exam problem","Work independently before checking solutions."],["18:15","18:30","study","Check solutions and error log","Review errors and write down the method you missed."],["18:30","19:00","break","Dinner break",""],["19:00","19:45","study","Redo difficult problems","Retry one or two problems without solutions."],["19:45","20:00","break","Break",""],["20:00","20:30","study","Formula recall and methods","Recap important formulas and standard problem-solving steps."],["20:30","20:40","study","Organise notes and finish","Write a brief checklist for the next session."]];
-const SUBJECT_DEFAULTS=[
-{id:'classical',name:'Classical Mechanics',icon:'⚙️',exam:'2026-11-24',time:'15:00',topics:['Lagrangians & constraints','Central forces & effective potential','Hamiltonian mechanics','Normal modes','Relativity & rigid bodies','Timed exam problems']},
-{id:'space',name:'Space Technology I',icon:'🛰️',exam:'2026-12-10',time:'15:00',topics:['Satellite orbits','Space systems','GNSS & navigation','Space environment','Past exam problems']},
-{id:'quantum',name:'Quantum Mechanics I',icon:'⚛️',exam:'2026-12-15',time:'15:00',topics:['Operators & commutators','Schrödinger equation','Eigenstates & measurement','Angular momentum','Past exam problems']},
-{id:'astro',name:'Astrophysics II',icon:'🌌',exam:'2026-12-22',time:'09:00',topics:['Radiative processes','Relativistic transformations','Shocks & Fermi acceleration','AGN & blazars','Past exam problems']},
-{id:'medicine',name:'Introduction to Medicine',icon:'🩺',exam:'2027-01-06',time:'',topics:['Cell injury & adaptation','Disease & terminology','Heart & circulation','Active recall quizzes','Past exam questions']}
-];
-const END_HOUR=21;
-const base=[
- ['study','Gentle warm-up: intuition + active recall',25,'One engaging explanation, then write three relevant formulas from memory.'],
- ['study','Lagrangians and constraints',45,'Do one fresh problem: choose coordinates → L = T − V → Euler–Lagrange.'],
- ['break','Tea, snack and move away from the screen',15,'No studying during the break.'],
- ['study','Central forces and effective potential',45,'Circular orbits and stability: know which derivatives must vanish or be positive.'],
- ['study','Hamiltonians and canonical transformations',45,'Legendre transform, Hamilton equations, generating functions and signs.'],
- ['break','Short reset',15,'Water, fresh air or a quiet pause.'],
- ['study','Normal modes: set up M and K',40,'Do the determinant and identify the physical meaning of each mode.'],
- ['break','Lunch away from coursework',40,'Eat something substantial.'],
- ['study','Special relativity practice',40,'Lorentz transforms, proper time and energy–momentum conservation.'],
- ['study','Rigid bodies + Galilean transformations',20,'Intermediate-axis theorem, inertia tensor and x′ = x − vt.'],
- ['break','Screen-free break',15,'Let your concentration reset.'],
- ['study','Independent exam problems (timed)',90,'Fresh problems, no hints. Move on if stuck for more than 10 minutes.'],
- ['study','Mark answers + make an error log',45,'Identify the first incorrect step, not just the final wrong answer.'],
- ['break','Dinner and a proper rest',45,'A real break, not an extra revision slot.'],
- ['study','Redo your weakest 2–3 problem types',50,'Try again without solutions; keep it focused.'],
- ['break','Last reset',15,'Stretch or relax within your medical limits.'],
- ['study','Formula recall and calm final sweep',30,'Key methods, signs, and one-page checklist. Stop on time.']
-];
-const $=id=>document.getElementById(id);
-const uid=()=>String(Date.now())+Math.random().toString(36).slice(2,8);
-const dayString=(d)=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const today=()=>dayString(new Date());
-const minutesTime=d=>d.getHours()*60+d.getMinutes();
-const hm=n=>{n=Math.max(0,Math.round(n));return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`};
-const parseHm=s=>/^\d\d:\d\d$/.test(s||'')?Number(s.slice(0,2))*60+Number(s.slice(3)):0;
-const formatClock=(millis)=>{let v=Math.max(0,Math.floor(millis/60000));return `${String(Math.floor(v/60)).padStart(2,'0')}:${String(v%60).padStart(2,'0')}`};
-const formatLong=millis=>{let m=Math.max(0,Math.ceil(millis/60000));return `${Math.floor(m/60)}h ${String(m%60).padStart(2,'0')}m`};
-const nowBound=()=>{const n=Date.now();const d=new Date(); d.setHours(END_HOUR,0,0,0);return Math.min(n,d.getTime())};
-const endStamp=()=>{let d=new Date();d.setHours(END_HOUR,0,0,0);return d.getTime()};
-const saneTask=t=>({id:String(t.id||uid()),kind:t.kind==='break'?'break':'study',name:String(t.name||'Untitled task').slice(0,200),notes:String(t.notes||'').slice(0,800),minutes:Math.max(1,Math.min(600,Math.round(Number(t.minutes)||25))),startOverride:Number.isInteger(t.startOverride)&&t.startOverride>=0&&t.startOverride<1440?t.startOverride:null,manualLogged:Math.max(0,Number(t.manualLogged)||0),breakLogged:Math.max(0,Number(t.breakLogged)||0),done:!!t.done,spent:Math.max(0,Number(t.spent)||0),subject:String(t.subject||'classical')});
-function defaultState(date){const n=new Date();const start=date===today()?Math.min(20*60,Math.ceil(minutesTime(n)/5)*5):9*60;return{date,start:hm(start),tasks:[],mode:'idle',activeId:null,clockStart:null,studied:0,breaks:0,subjectMs:{},log:''}}
-function finishOldTimer(day){if(day.mode==='idle'||!day.clockStart)return;let [y,m,d]=day.date.split('-').map(Number);let cutoff=new Date(y,m-1,d,END_HOUR,0,0,0).getTime();let elapsed=Math.max(0,Math.min(Date.now(),cutoff)-day.clockStart);if(day.mode==='study'){day.studied=(Number(day.studied)||0)+elapsed;let t=day.tasks.find(t=>t.id===day.activeId);if(t)t.spent=(Number(t.spent)||0)+elapsed;const sub=t?.subject||'classical';day.subjectMs[sub]=(Number(day.subjectMs[sub])||0)+elapsed}else if(day.mode==='break')day.breaks=(Number(day.breaks)||0)+elapsed;day.mode='idle';day.clockStart=null;}
-function loadApp(){let output=null;try{const raw=localStorage.getItem(KEY);if(raw){const a=JSON.parse(raw);if(a&&a.version===1&&a.days&&Array.isArray(a.subjects))output=a}}catch(e){}
- if(!output){output={version:1,selectedDate:today(),selectedSubject:'all',subjects:SUBJECT_DEFAULTS.map(s=>({...s})),days:{}};
- try{const raw=localStorage.getItem(LEGACY_KEY);if(raw){const legacy=JSON.parse(raw);if(legacy.date===LEGACY_DATE&&Array.isArray(legacy.tasks)){const day={...defaultState(LEGACY_DATE),...legacy,date:LEGACY_DATE,tasks:legacy.tasks.map(t=>saneTask({...t,subject:'classical'})),subjectMs:{classical:Number(legacy.studied)||0}};if(LEGACY_DATE!==today()||Date.now()>=new Date(2026,10,23,END_HOUR).getTime())finishOldTimer(day);output.days[LEGACY_DATE]=day}}}catch(e){}
+const LIST_KEY = 'revision-simple-checklist-v1';
+const THEME_KEY = 'cm-dashboard-theme';
+const $ = id => document.getElementById(id);
+const STARTS = { run:14*60+30, endRun:15*60, dinner:18*60+30, endDinner:19*60, endProblems:21*60 };
+function getTimeState(now) {
+ const current=now.getHours()*60+now.getMinutes()+now.getSeconds()/60+now.getMilliseconds()/60000;
+ const minutesTo = target => Math.max(0,Math.ceil(target-current));
+ if(current<STARTS.run) return {title:'Revise',remaining:minutesTo(STARTS.run),label:'minutes until run break',now:null};
+ if(current<STARTS.endRun) return {title:'Break',remaining:minutesTo(STARTS.endRun),label:'minutes left in run break',now:'run'};
+ if(current<STARTS.dinner) return {title:'Revise',remaining:minutesTo(STARTS.dinner),label:'minutes until dinner break',now:null};
+ if(current<STARTS.endDinner) return {title:'Break',remaining:minutesTo(STARTS.endDinner),label:'minutes left in dinner break',now:'dinner'};
+ if(current<STARTS.endProblems) return {title:'Exam problems',remaining:minutesTo(STARTS.endProblems),label:'minutes left for exam problems',now:'problems'};
+ return {title:'Done',remaining:null,label:'Schedule finished for today',now:null};
+}
+function updateSchedule(){
+ const now=new Date();
+ const status=getTimeState(now);
+ $('activityTitle').textContent=status.title;
+ $('minutesLeft').textContent=status.remaining===null?'':String(status.remaining);
+ $('countdownLabel').textContent=status.label;
+ $('countdown').classList.toggle('no-count',status.remaining===null);
+ $('currentTime').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
+ const elapsed=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+ for(const [key,start,end] of [['run',STARTS.run,STARTS.endRun],['dinner',STARTS.dinner,STARTS.endDinner],['problems',STARTS.endDinner,STARTS.endProblems]]){
+  const node=document.querySelector('[data-slot="'+key+'"]');
+  if(!node)continue;
+  node.classList.toggle('is-now',status.now===key);
+  node.classList.toggle('is-past',elapsed>=end);
+  const tag=node.querySelector('small');
+  if(tag)tag.textContent=status.now===key?'Now':key==='problems'?'Focus':'Break';
  }
- // Reset ONLY the original 23 Nov revision day once, keeping exam subjects and other dates.
- // The old localStorage record is left untouched, but will not be imported again.
+}
+function readTasks(){
  try{
-  if(localStorage.getItem(FRESH_START_KEY)!=='done'){
-   delete output.days[LEGACY_DATE];
-   output.selectedDate=today();
-   output.selectedSubject='all';
-   localStorage.setItem(FRESH_START_KEY,'done');
-  }
- }catch(e){}
- output.subjects=output.subjects.map(s=>({...s,id:String(s.id),name:String(s.name),exam:String(s.exam||''),topics:Array.isArray(s.topics)?s.topics:[]}));
- for(const [date,d] of Object.entries(output.days)){if(!d||!Array.isArray(d.tasks)){delete output.days[date];continue}d.date=date;d.tasks=d.tasks.map(saneTask);d.subjectMs=d.subjectMs||{};if(!Object.keys(d.subjectMs).length&&Number(d.studied)>0)d.subjectMs.classical=Number(d.studied);d.mode=['study','break'].includes(d.mode)?d.mode:'idle';d.clockStart=Number(d.clockStart)||null;d.studied=Math.max(0,Number(d.studied)||0);d.breaks=Math.max(0,Number(d.breaks)||0);if(date!==today())finishOldTimer(d)}
- if(output.lastOpenedOn!==today())output.selectedDate=today();else if(!/^\d{4}-\d{2}-\d{2}$/.test(output.selectedDate||''))output.selectedDate=today();output.lastOpenedOn=today();if(!output.subjects.some(s=>s.id===output.selectedSubject))output.selectedSubject='all';return output}
-let app=loadApp();
-function installNovember23(){
- if(today()!==LEGACY_DATE)return;
- try{
-  if(localStorage.getItem(NOV23_SCHEDULE_KEY)==='done')return;
-  const day=app.days[LEGACY_DATE]||defaultState(LEGACY_DATE);
-  if(!localStorage.getItem(NOV23_SCHEDULE_KEY+'-backup'))
-    localStorage.setItem(NOV23_SCHEDULE_KEY+'-backup',JSON.stringify(day));
-  finishOldTimer(day);
-  day.start='08:00';
-  day.tasks=NOV23_PLAN.map(([start,end,kind,name,notes])=>saneTask({
-   id:uid(),kind,subject:'classical',name,notes,
-   startOverride:parseHm(start),minutes:parseHm(end)-parseHm(start)
-  }));
-  day.mode='idle';day.activeId=null;day.clockStart=null;
-  app.days[LEGACY_DATE]=day;app.selectedDate=LEGACY_DATE;
-  localStorage.setItem(NOV23_SCHEDULE_KEY,'done');
- }catch(e){console.warn('Could not install requested plan',e)}
+  const value=JSON.parse(localStorage.getItem(LIST_KEY)||'[]');
+  if(!Array.isArray(value))return [];
+  return value.filter(x=>x && typeof x.text==='string' && x.text.trim()).map(x=>({
+   id:String(x.id||String(Date.now())+Math.random().toString(36).slice(2)),
+   text:x.text.slice(0,120),done:!!x.done
+  })).slice(0,200);
+ }catch(e){return []}
 }
-installNovember23();
-function currentDay(date){if(!app.days[date])app.days[date]=defaultState(date);return app.days[date]}
-let state=currentDay(app.selectedDate);
-function save(){try{app.days[state.date]=state;localStorage.setItem(KEY,JSON.stringify(app))}catch(e){}}
-function subjectFor(id){return app.subjects.find(s=>s.id===id)}
-function filteredTasks(){return app.selectedSubject==='all'?state.tasks:state.tasks.filter(t=>t.subject===app.selectedSubject)}
-function subjectStudyTime(sub){return Object.values(app.days).reduce((sum,day)=>sum+(Number(day.subjectMs?.[sub])||0),0)}
-function seasonStudyTime(){return Object.values(app.days).reduce((sum,day)=>sum+(Number(day.studied)||0),0)}
-function switchDate(date){if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;if(state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null}save();app.selectedDate=date;state=currentDay(date);if(!state.activeId)state.activeId=state.tasks.find(t=>!t.done&&t.kind==='study')?.id||null;save();renderAll()}
-// Routes provide dedicated URLs for the exam overview and each subject.
-function routeSubject(){
- const m=location.hash.match(/^#\/exam\/(.+)$/);
- if(!m)return 'all';
- try{let id=decodeURIComponent(m[1]);return subjectFor(id)?id:'all'}catch(e){return 'all'}
+let tasks=readTasks();
+function saveTasks(){
+ try{localStorage.setItem(LIST_KEY,JSON.stringify(tasks))}catch(e){}
 }
-function applyRoute(){
- const subject=routeSubject();
- if(app.selectedSubject!==subject){
-  if(state.mode==='study'){
-   const running=taskById(state.activeId);
-   if(running?.subject&&running.subject!==subject&&subject!=='all'){
-    settle();state.mode='idle';state.clockStart=null;
-   }
-  }
-  app.selectedSubject=subject;save();
- }
- renderAll();
-}
-function goToPage(subject){
- if(subject!=='all'&&!subjectFor(subject))return;
- const hash=subject==='all'?'#/':'#/exam/'+encodeURIComponent(subject);
- if(location.hash!==hash)location.hash=hash;
- applyRoute();window.scrollTo(0,0);
-}
-function switchSubject(subject){goToPage(subject)}
-function openSubjectPlan(subject){
- if(!subjectFor(subject))return;
- if(state.date!==today())switchDate(today());
- goToPage(subject);
-}
-function taskById(id){return state.tasks.find(x=>x.id===id)||null}
-function selected(){let t=taskById(state.activeId);if(t&&!t.done&&t.kind==='study'&&(app.selectedSubject==='all'||t.subject===app.selectedSubject))return t;return filteredTasks().find(x=>!x.done&&x.kind==='study')||null}
-function nextTask(){return state.tasks.find(t=>!t.done&&t.kind==='study')||null}
-function effectiveElapsed(){return state.mode==='idle'||state.clockStart===null?0:Math.max(0,nowBound()-state.clockStart)}
-function settle(){if(state.mode==='idle')return;let d=effectiveElapsed();if(state.mode==='study'){state.studied+=d;let t=taskById(state.activeId);if(t&&t.kind==='study'){t.spent+=d;const sub=t.subject||'classical';state.subjectMs[sub]=(Number(state.subjectMs[sub])||0)+d}}else if(state.mode==='break')state.breaks+=d;state.clockStart=null}
-function updateMode(newMode,tid){settle();state.mode=newMode;state.activeId=tid===undefined?state.activeId:tid;state.clockStart=newMode==='idle'?null:Date.now();save();renderAll()}
-function study(){if(today()!==state.date||Date.now()>=endStamp()){notify('Today’s study window has ended. 🌙');return}let t=selected();if(!t){notify('Add a study task to begin.');return}updateMode('study',t.id)}
-function takeBreak(){if(today()!==state.date||Date.now()>=endStamp()){notify('The study day is over.');return}if(state.mode==='break')return;updateMode('break')}
-function resume(){if(state.mode==='study')return;let current=taskById(state.activeId);if(current&&current.kind==='break'&&!current.done){current.done=true}let t=selected();if(!t){updateMode('idle');notify('Break stopped.');return}updateMode('study',t.id)}
-function completeTask(id,done){const t=taskById(id);if(!t)return;if(t.id===state.activeId&&state.mode!=='idle')settle();t.done=done;if(done&&t.id===state.activeId){let nt=state.tasks.find(x=>!x.done&&x.kind==='study');state.activeId=nt?nt.id:null;if(state.mode==='study'&&!nt){state.mode='idle';state.clockStart=null}else if(state.mode!=='idle')state.clockStart=Date.now()}
-if(!done&&!state.activeId&&t.kind==='study')state.activeId=t.id;save();renderAll()}
-function activate(id){let t=taskById(id);if(!t)return;if(t.done)t.done=false;if(today()!==state.date||Date.now()>=endStamp()){state.activeId=t.id;save();renderAll();return}updateMode(t.kind==='break'?'break':'study',t.id)}
-function planTimes(includeDone=false){
- let cursor=parseHm(state.start),times={};
- for(const t of state.tasks){
-  const start=Math.max(cursor,t.startOverride===null?cursor:t.startOverride);
-  times[t.id]=t.done&&!includeDone?null:{start,end:start+t.minutes,done:t.done};
-  cursor=start+t.minutes;
- }
- return{times,end:cursor};
-}
-function normaliseSchedule(){
- let cursor=parseHm(state.start);
- for(const t of state.tasks){
-  t.startOverride=Math.max(cursor,t.startOverride===null?cursor:t.startOverride);
-  cursor=t.startOverride+t.minutes;
- }
-}
-// Edited block has priority. Other intervals lose their overlapping minutes.
-function trimScheduleAround(tasks,id,start,end){
- const target=tasks.find(t=>t.id===id);
- if(!target)throw Error('Edited task not found');
- const next=[];
- for(const t of tasks){
-  if(t.id===id)continue;
-  const a=t.startOverride,b=a+t.minutes;
-  if(b<=start||a>=end){next.push({...t});continue}
-  const leftMin=Math.max(0,start-a),rightMin=Math.max(0,b-end);
-  const logged=t.kind==='break'?Math.max(0,Number(t.breakLogged)||0):0;
-  const leftLogged=Math.min(logged,leftMin*60000),rightLogged=Math.min(Math.max(0,logged-leftLogged),rightMin*60000);
-  if(leftMin>0)next.push({...t,startOverride:a,minutes:leftMin,breakLogged:leftLogged});
-  if(rightMin>0){
-   const split=leftMin>0;
-   next.push({...t,id:split?uid():t.id,startOverride:end,minutes:rightMin,
-    name:split?(t.name+' (continued)').slice(0,200):t.name,
-    spent:split?0:t.spent,manualLogged:split?0:t.manualLogged,breakLogged:rightLogged,
-    done:split?false:t.done});
-  }
- }
- next.push({...target,startOverride:start,minutes:end-start});
- next.sort((a,b)=>a.startOverride-b.startOverride);
- for(let i=1;i<next.length;i++)if(next[i-1].startOverride+next[i-1].minutes>next[i].startOverride)throw Error('Overlap after edit');
- return next;
-}
-function editScheduleWindow(id,start,end){
- // Keep the two requested long breaks intact when editing other blocks.
- if(state.date===LEGACY_DATE){
-  const anchors=state.tasks.filter(t=>t.name==='Run break'||t.name==='Dinner break');
-  if(anchors.some(t=>t.id!==id&&start<t.startOverride+t.minutes&&end>t.startOverride)){
-   notify('That overlaps the run or dinner break. Choose a different time.');renderAll();return false;
-  }
- }
- if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end>1439||start>=end||end-start>600){
-  notify('Choose a valid start and end within the same day (maximum 10 hours).');renderAll();return false;
- }
- // Preserve active study/break tracking when the edited interval still contains
- // the active block. Edits previously stopped the timer without warning.
- const wasRunning=state.mode!=='idle',oldMode=state.mode,oldActive=state.activeId;
- if(wasRunning)settle();
- normaliseSchedule();
- state.tasks=trimScheduleAround(state.tasks,id,start,end);
- state.start=hm(state.tasks[0]?.startOverride??start);
- const activeSurvives=!!state.tasks.find(t=>t.id===oldActive && !t.done);
- if(wasRunning&&activeSurvives){
-  state.activeId=oldActive;state.mode=oldMode;state.clockStart=Date.now();
- }else if(wasRunning){
-  state.mode='idle';state.clockStart=null;state.activeId=null;
- }else if(!state.tasks.some(t=>t.id===state.activeId)){state.activeId=null}
- save();renderAll();return true;
-}
-const shortHour=n=>n>=24*60?`${hm(n%1440)} +${Math.floor(n/1440)}d`:hm(n);
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function updateThemeUI(){const dark=document.documentElement.dataset.theme==='dark';$('themeButton').textContent=dark?'❄ Light mode':'🎄 Dark mode';const logo=$('brandLogo');if(logo)logo.textContent=dark?'🎄':'❄';}
-function scheduledBreakTotals(){
- let planned=0,elapsedPlanned=0,manual=0;
- const nowDate=new Date(),nowMinutes=minutesTime(nowDate);
- const dayIsPast=state.date<today(),dayIsToday=state.date===today();
- for(const t of state.tasks){
-  if(t.kind!=='break')continue;
-  const end=planTimes(true).times[t.id];if(!end)continue;
-  planned+=t.minutes;
-  if(dayIsPast)elapsedPlanned+=t.minutes;
-  else if(dayIsToday)elapsedPlanned+=Math.max(0,Math.min(end.end,nowMinutes)-end.start);
-  manual+=Math.max(0,Number(t.breakLogged)||0);
- }
- return{planned,elapsedPlanned,manual};
-}
-function breakCanBeCounted(t){
- const p=planTimes(true).times[t.id];
- return !!p&&(state.date<today()||(state.date===today()&&minutesTime(new Date())>=p.end));
-}
-function updateManualBreak(id,clear=false){
- const t=taskById(id);
- if(!t||t.kind!=='break')return;
- if(!clear&&!breakCanBeCounted(t)){
-  notify('This break has not ended yet. You can record it after its scheduled end.');return;
- }
- const amount=clear?0:t.minutes*60000;
- t.breakLogged=amount;
- save();renderAll();
- notify(clear?'Recorded break time removed.':'Break counted as taken.');
-}
-function renderOverview(){let {times,end}=planTimes(true);
- $('scheduledBreaks').innerHTML=filteredTasks().filter(t=>t.kind==='break').map(t=>{
-  const p=times[t.id],counted=Number(t.breakLogged)>0,canCount=breakCanBeCounted(t);
-  const action=counted?`<button type="button" class="btn tiny" data-break-id="${esc(t.id)}" data-break-action="clear">Undo</button>`:
-    `<button type="button" class="btn tiny" data-break-id="${esc(t.id)}" data-break-action="count" ${canCount?'':'disabled title="This scheduled break has not ended"'}>Count as taken</button>`;
-  return `<div class="scheduled-break"><div class="scheduled-break-label"><strong>${esc(t.name)}</strong><span>${esc(shortHour(p.start))}–${esc(shortHour(p.end))}</span></div>${counted?'<span class="break-counted">Recorded</span>':''}${action}</div>`;
- }).join('')||'<p class="little">No scheduled breaks.</p>';$('planViewList').innerHTML=filteredTasks().map(t=>{let p=times[t.id];let kind=t.kind==='break'?'Break':'Study';return `<div class="peek ${t.done?'done':''} ${t.kind==='break'?'isbreak':''}"><div class="peek-time">${p?esc(shortHour(p.start)):''}<span>→</span>${p?esc(shortHour(p.end)):''}</div><div class="peek-main"><div class="peek-top"><strong>${esc(t.name)}</strong><span class="kindpill">${kind}</span></div>${t.notes?`<div class="peek-note">${esc(t.notes)}</div>`:''}</div><div class="peek-right">${t.done?'✓ done':`${t.minutes} min`}</div></div>`}).join('')||'<p class="muted">No tasks yet.</p>';let studyM=filteredTasks().filter(t=>t.kind==='study').reduce((a,t)=>a+t.minutes,0),breakM=filteredTasks().filter(t=>t.kind==='break').reduce((a,t)=>a+t.minutes,0);$('planOverviewEnd').textContent='Ends '+shortHour(end);$('planOverviewSummary').textContent=`${filteredTasks().length} shown · ${formatLong(studyM*60000)} study · ${formatLong(breakM*60000)} breaks`; }
-function focusEndEdit(id,value){
- const p=planTimes(true).times[id];if(!p)return;
- if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Invalid end time.');renderAll();return}
- if(editScheduleWindow(id,p.start,parseHm(value)))notify('Schedule updated. Overlapping minutes removed.');
-}
-function focusStartEdit(id,value){
- const p=planTimes(true).times[id];if(!p)return;
- if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Invalid start time.');renderAll();return}
- const start=parseHm(value);
- if(editScheduleWindow(id,start,start+p.end-p.start))notify('Schedule updated. Overlapping minutes removed.');
-}
-function countManualTime(id,clear=false){
- const t=taskById(id);if(!t||t.kind!=='study')return;
- // Settle the running timer before changing the recorded total.
- const running=state.mode!=='idle';if(running)settle();
- const previous=t.manualLogged||0;
- const timedOrPreviouslyRecorded=Math.max(0,t.spent-previous);
- const requested=clear?0:Math.max(0,t.minutes*60000-timedOrPreviouslyRecorded);
- const change=requested-previous;
- t.manualLogged=requested;
- t.spent=Math.max(0,t.spent+change);
- state.studied=Math.max(0,state.studied+change);state.subjectMs[t.subject||'classical']=Math.max(0,(state.subjectMs[t.subject||'classical']||0)+change);
- if(running)state.clockStart=Date.now();
- save();renderAll();
- notify(clear?'Manual study time removed.':previous?'Logged study time updated.':`${t.minutes} min added to studied today.`);
-}
-function changeDuration(id,value){
- const p=planTimes(true).times[id];if(!p)return;
- const dur=Math.round(Number(value));
- if(!Number.isInteger(dur)||dur<1||dur>600){notify('Duration must be 1–600 minutes.');renderAll();return}
- if(editScheduleWindow(id,p.start,p.start+dur))notify('Duration changed; conflicting blocks adjusted.');
-}
-function move(id,dir){
- if(state.date===LEGACY_DATE){notify('Today’s timetable is fixed. Change individual task times instead.');return}
- const ix=state.tasks.findIndex(t=>t.id===id),j=ix+dir;
- if(ix<0||j<0||j>=state.tasks.length)return;
- normaliseSchedule();
- const backup=state.tasks.map(t=>({...t}));
- const first=Math.min(ix,j),anchor=state.tasks[first].startOverride;
- [state.tasks[ix],state.tasks[j]]=[state.tasks[j],state.tasks[ix]];
- let cursor=anchor;
- for(let i=first;i<state.tasks.length;i++){state.tasks[i].startOverride=cursor;cursor+=state.tasks[i].minutes}
- if(cursor>1439){state.tasks=backup;notify('Cannot move: plan would run past midnight.');renderAll();return}
- state.start=hm(state.tasks[0].startOverride);save();renderAll();
-}
-function remove(id){const t=taskById(id);if(!t)return;if(t.id===state.activeId&&state.mode!=='idle')settle();state.tasks=state.tasks.filter(x=>x.id!==id);if(state.activeId===id){state.activeId=nextTask()?.id||null;if(state.mode!=='idle')state.clockStart=Date.now();if(state.mode==='study'&&!state.activeId){state.mode='idle';state.clockStart=null}}save();renderAll();notify('Task removed')}
-function add(kind){
- normaliseSchedule();
- const start=planTimes(true).end,dur=kind==='break'?15:30;
- if(start+dur>1439){notify('No room at the end of this day. Edit another interval first.');return}
- const t=saneTask({id:uid(),kind,subject:app.selectedSubject==='all'?'classical':app.selectedSubject,
-  name:kind==='break'?'New break':'New study task',minutes:dur,startOverride:start,notes:''});
- state.tasks.push(t);save();renderAll();
- document.querySelector(`[data-id="${t.id}"] .task-name`)?.focus();
-}
-function renderList(){let {times,end}=planTimes(),allTimes=planTimes(true).times;for(const t of state.tasks)if(t.done)times[t.id]=allTimes[t.id];let picked=selected();$('taskList').innerHTML=filteredTasks().map((t)=>{let i=state.tasks.findIndex(x=>x.id===t.id);let p=times[t.id];let start=p?shortHour(p.start):'Done',finish=p?shortHour(p.end):'✓';let current=state.mode!=='idle'&&state.activeId===t.id;return `<div class="task ${t.kind==='break'?'breaktask':''} ${t.done?'done':''} ${current?'istoday':''}" data-id="${esc(t.id)}"><div class="task-time"><span>${esc(start)}</span><span class="task-clockend">${esc(finish)}</span></div><div class="task-body"><div class="task-top"><input type="checkbox" aria-label="Mark ${esc(t.name)} complete" data-action="done" ${t.done?'checked':''}/><div class="task-main"><input class="task-name" type="text" aria-label="Task title" maxlength="200" value="${esc(t.name)}" data-action="name"/><input class="task-description" type="text" aria-label="Task goal" maxlength="800" value="${esc(t.notes)}" placeholder="Your goal for this block (optional)" data-action="notes"/></div></div><div class="task-lower">${app.selectedSubject==='all'? `<label>Subject <select data-action="subject" aria-label="Subject for ${esc(t.name)}">${app.subjects.map(s=>`<option value="${esc(s.id)}" ${t.subject===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>`:''}<label>Start <input type="time" data-action="start" aria-label="Start time for ${esc(t.name)}" value="${p?hm(p.start%1440):''}" ${!p?'disabled':''}/></label><label>End <input type="time" data-action="end" aria-label="End time for ${esc(t.name)}" value="${p?hm(p.end%1440):''}" ${!p?'disabled':''}/></label><label>Minutes <input type="number" min="1" max="600" step="1" data-action="minutes" value="${t.minutes}"/></label>${t.startOverride!==null?'<button type="button" class="reset-time" data-action="auto" title="Follow the preceding block automatically">↺ Auto start</button>':''}${t.kind==='study'?`<button type="button" class="log-action" data-action="log">${t.manualLogged?'Update logged time':'Count as studied'}</button>${t.manualLogged?`<span class="logged">${formatLong(t.manualLogged)} logged</span><button type="button" data-action="unlog" aria-label="Remove manually counted study time">Undo log</button>`:''}`:''}<button type="button" data-action="activate" class="${current?'active':''}">${current?'● Active':t.kind==='break'?'☕ Start break':'▶ Focus'}</button><button type="button" data-action="up" aria-label="Move task up" ${i===0?'disabled':''}>↑</button><button type="button" data-action="down" aria-label="Move task down" ${i===state.tasks.length-1?'disabled':''}>↓</button><button type="button" data-action="delete" class="delete" aria-label="Delete task">×</button></div></div></div>`}).join('')||'<p class="muted">A blank page for a fresh study day. Choose an exam subject, then add a study task or suggested blocks in the editor below.</p>';
-$('planEnd').textContent='Plan ends '+shortHour(end);
-$('doneTally').textContent=`${state.tasks.filter(t=>t.done).length} / ${state.tasks.length} complete`;
-let unfinished=state.tasks.filter(t=>!t.done),studyM=unfinished.filter(t=>t.kind==='study').reduce((a,t)=>a+t.minutes,0),breakM=unfinished.filter(t=>t.kind==='break').reduce((a,t)=>a+t.minutes,0);
-$('planSummary').textContent=`${formatLong(studyM*60000)} study · ${formatLong(breakM*60000)} breaks`;
-let status=$('fitStatus');if(end>END_HOUR*60){status.textContent=`Your current plan finishes ${formatLong((end-END_HOUR*60)*60000)} after 21:00. Shorten blocks, remove tasks, or click “Fit remaining plan”.`;status.classList.add('over')}else{status.textContent=`Your remaining plan finishes at ${shortHour(end)} — ${formatLong((END_HOUR*60-end)*60000)} of unplanned breathing room before 21:00.`;status.classList.remove('over')}
-}
-function renderFocus(){let t=selected();let p=t?planTimes().times[t.id]:null;let currentBreak=taskById(state.activeId);if(state.mode==='break'){$('focusName').textContent=currentBreak?.kind==='break'?currentBreak.name:'Break';$('focusNote').textContent=currentBreak?.kind==='break'?(currentBreak.notes||'Break timer running.'):'Break timer running.';$('focusBadge').textContent='ON A BREAK'}else if(t){$('focusName').textContent=t.name;$('focusNote').textContent=t.notes||'No notes for this task.';$('focusBadge').textContent=state.mode==='break'?'ON A BREAK':'YOUR CURRENT FOCUS'}else if(!filteredTasks().some(x=>x.kind==='study')){$('focusName').textContent='Ready for a fresh start';$('focusNote').textContent='Choose an exam subject above, then add a study task or use Suggest blocks in Edit your plan.';$('focusBadge').textContent='YOUR NEXT STUDY SESSION'}else{$('focusName').textContent='All planned study blocks finished!';$('focusNote').textContent='You can finish early, or add another small study block if you genuinely want to.';$('focusBadge').textContent='COMPLETED'}
-$('focusDuration').textContent=t?`Planned: ${t.minutes} min`:'No active study tasks';$('focusUntil').textContent=p?`Plan: ${shortHour(p.start)}–${shortHour(p.end)}`:'Plan: —';$('focusEnd').value=p?hm(p.end%1440):'';$('focusEnd').disabled=!p;
-$('mainStart').textContent=state.mode==='study'?'● Studying now':state.mode==='break'?'▶ Resume studying':'▶ Start studying';$('mainStart').disabled=!t;
- const canTakeBreak=state.date===today()&&Date.now()<endStamp()&&state.mode!=='break';
- $('breakButton').disabled=!canTakeBreak;$('sideBreak').disabled=!canTakeBreak;
- $('finishButton').disabled=!t;$('sideResume').disabled=state.mode!=='break';
- const backfill=$('countFromActualStart'),input=$('actualStudyStart');
- // Corrections must remain clickable even if the timer is already running.
- // If something cannot be corrected, explain why on click rather than silently disabling the control.
- backfill.disabled=false;
- input.disabled=false;
- if(t&&input!==document.activeElement){
-  const p=planTimes(true).times[t.id];
-  if(p&&!input.value)input.value=hm(Math.min(p.start,Math.floor(minutesTime(new Date()))));
- }
-}
-function datePretty(date){const [y,m,d]=date.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
-function examDays(exam){const [y,m,d]=exam.split('-').map(Number);const a=new Date(y,m-1,d),b=new Date();b.setHours(0,0,0,0);return Math.round((a-b)/86400000)}
-function renderDashboard(){const subjects=[...app.subjects].sort((a,b)=>a.exam.localeCompare(b.exam));const upcoming=subjects.find(x=>examDays(x.exam)>=0),n=upcoming?examDays(upcoming.exam):null;
- const focusExam=subjectFor(app.selectedSubject);
- const heroExam=focusExam||upcoming;
- const heroDays=heroExam?examDays(heroExam.exam):null;
- $('nextExamLabel').textContent=focusExam?'YOUR EXAM':'NEXT EXAM';
- $('nextExamText').textContent=heroExam?`${heroExam.icon} ${heroDays<0?'Date passed':heroDays===0?'today':heroDays===1?'tomorrow':`${heroDays} days`}`:'All done ✨';
- $('nextExamDetail').textContent=heroExam?`${heroExam.name} · ${datePretty(heroExam.exam)}${heroExam.time?' · '+heroExam.time:''}`:'Your winter exams are complete';
- $('dateLabel').textContent=datePretty(today()).toUpperCase();
- $('seasonTotal').textContent=`${subjects.length} exams`;
- $('examCards').innerHTML=subjects.map(s=>{const d=examDays(s.exam);const label=d<0?'Completed date':d===0?'Exam today':d===1?'Tomorrow':`${d} days to go`;return `<button type="button" class="exam-card ${app.selectedSubject===s.id?'picked':''}" data-subject="${esc(s.id)}" aria-label="Open today’s ${esc(s.name)} study plan"><span class="exam-icon">${esc(s.icon||'📖')}</span><span class="exam-info"><strong>${esc(s.name)}</strong><small>${esc(datePretty(s.exam))}${s.time?' · '+esc(s.time):''}</small></span><span class="exam-countdown">${esc(label)}</span></button>`}).join('');
- $('examEditor').innerHTML=subjects.map(s=>`<div class="exam-edit-line"><label>${esc(s.icon||'📖')} <input type="text" value="${esc(s.name)}" data-exam="${esc(s.id)}" data-field="name" aria-label="Edit subject name" maxlength="80"></label><input type="date" value="${esc(s.exam)}" data-exam="${esc(s.id)}" data-field="exam" aria-label="Exam date for ${esc(s.name)}"></div>`).join('');
- $('planDatePicker').value=state.date;const chosenExam=subjectFor(app.selectedSubject);$('planDayTitle').textContent=(state.date===today()?"Today's":datePretty(state.date))+(chosenExam?` ${chosenExam.name} plan`:' study plan');$('planOverviewTitle').textContent=chosenExam?`${chosenExam.name} · ${state.date===today()?"today's plan":datePretty(state.date)}`:'Plan at a glance';
- $('selectedDayHint').textContent=state.date===today()?'Your plan for today. You can always return to earlier days.':'You are viewing a saved day. Edit its plan or record missed study time.';
- $('subjectTabs').innerHTML=[{id:'all',name:'All subjects',icon:'✧'},...subjects].map(s=>`<button type="button" class="subject-tab ${app.selectedSubject===s.id?'active':''}" data-subject="${esc(s.id)}">${esc(s.icon)} ${esc(s.name)}</button>`).join('');
- const sub=subjectFor(app.selectedSubject),dayMs=sub?(state.subjectMs?.[sub.id]||0):state.studied;
- $('selectedSubjectDetail').textContent=sub?`Viewing the ${sub.name} plan for this day. Add or edit blocks below.`:'Showing all subjects for this day. Select a subject above to focus its plan.';
- $('dailySummary').innerHTML=`<span>✓ ${filteredTasks().filter(t=>t.done).length}/${filteredTasks().length} blocks complete</span><span>☕ ${formatLong(state.breaks)} breaks</span>`;
- $('addSuggested').disabled=app.selectedSubject==='all'||!(sub?.topics?.length);
- const topics=sub?.topics?.length?sub.topics:['Practise from memory','Try a problem before looking at solutions','Keep a tiny error log','Take a proper break'];
- $('priorityList').innerHTML=topics.map(t=>`<li>${esc(t)}</li>`).join('');
-}
-function renderAll(){
- $('startTime').value=state.start;$('errorLog').value=state.log;updateThemeUI();renderDashboard();
- const sub=subjectFor(app.selectedSubject);
- $('homePage').hidden=!!sub;$('studyPage').hidden=!sub;
- $('subjectTabs').hidden=true;$('subjectFocusBar').hidden=!sub;
- $('brandText').innerHTML=sub?esc(sub.name)+'<br>revision plan':'winter exams<br>revision dashboard';
- if(sub){
-  $('studyHeroTitle').textContent=sub.name+' revision plan';
-  $('subjectFocusTitle').textContent=state.date===today()?"Today's plan":datePretty(state.date)+' plan';
-  $('subjectFocusDate').textContent='Your tasks for '+datePretty(state.date);
- }
- document.title=sub?sub.name+' · Revision plan':'Winter exams · Revision dashboard';
- renderOverview();renderList();renderFocus();renderClock();
-}
-function renderClock(){let n=Date.now();if(today()!==state.date){$('dayWarning').className='warn show';$('dayWarning').textContent='You are viewing another date. You can edit or log past study time here; live timers are available only for today.';if(state.mode!=='idle'){finishOldTimer(state);save()}}else{$('dayWarning').className='warn'}if(n>=endStamp()&&state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null;save();renderAll();notify('21:00 — time to finish for today. ♡');return}
-const elapsed=effectiveElapsed(),isStudy=state.mode==='study',isBreak=state.mode==='break',s=state.studied+(isStudy?elapsed:0),b=state.breaks+(isBreak?elapsed:0),until=Math.max(0,endStamp()-n);
-const bt=scheduledBreakTotals();
-$('studied').textContent=formatClock(s);
-$('breakTotal').textContent=formatClock(b+bt.manual);
-$('breakPlanInfo').textContent=`${formatLong(bt.elapsedPlanned*60000)} scheduled so far · ${formatLong(bt.planned*60000)} planned`;
-$('untilNine').textContent=state.date===today()?formatLong(until):'—';
-
-let selectedTask=selected();let spent=selectedTask?selectedTask.spent+(isStudy&&state.activeId===selectedTask.id?elapsed:0):0,goal=selectedTask?.minutes*60000||0;
-let percent=goal>0?Math.min(100,spent/goal*100):0;$('progressInner').style.width=percent.toFixed(1)+'%';$('progressRoot').setAttribute('aria-valuenow',percent.toFixed(0));$('timeOnTask').textContent=formatLong(spent)+' on this block';$('focusProgress').textContent=selectedTask?`Minutes left: ${Math.max(0,Math.ceil((goal-spent)/60000))}`:'Minutes left: —';$('progressRoot').setAttribute('aria-valuetext',selectedTask?`${Math.max(0,Math.ceil((goal-spent)/60000))} minutes remaining`:'No active study task');
-$('modeTag').textContent=isStudy?'● Studying':isBreak?'☕ On a break':'○ Ready to study';$('modeTag').style.color=isStudy?'var(--green)':isBreak?'var(--orange)':'var(--ink2)';
-$('statusLine').innerHTML=isStudy?'<b>Study timer running.</b> Breaks are not included in your study total.':isBreak?'<b>Break timer running.</b> Your study time is not increasing while you rest.':'Timer stopped. Press Start studying, or count from your actual start time above.';
-let currentBreakMs=isBreak?elapsed:0;$('currentBreak').textContent=formatClock(currentBreakMs);$('breakDescription').textContent=isBreak?'Your current break is running.':'No break running right now.';
-let done=state.tasks.filter(t=>t.done).length,all=state.tasks.length;$('completedCount').textContent=`${done} / ${all}`;$('doneMeter').style.width=(all?done/all*100:0)+'%';$('studyCount').textContent=String(state.tasks.filter(t=>!t.done&&t.kind==='study').length);$('breakCount').textContent=String(state.tasks.filter(t=>!t.done&&t.kind==='break').length);$('totalHours').textContent=(s/3600000).toFixed(1)+' h';
-}
-function notify(msg){let el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.classList.remove('show'),2500)}
-function scheduleRemaining(resize=false){
- if(state.date===LEGACY_DATE){notify('Run and dinner are fixed in today’s plan. Edit individual time blocks instead.');return}
- if(today()!==state.date){notify('Choose today to replan unfinished blocks.');return}
- normaliseSchedule();
- const done=state.tasks.filter(t=>t.done),pending=state.tasks.filter(t=>!t.done);
- if(!pending.length){notify('No unfinished blocks.');return}
- let cursor=Math.ceil(minutesTime(new Date())/5)*5;
- for(const t of done)cursor=Math.max(cursor,t.startOverride+t.minutes);
- const room=END_HOUR*60-cursor;
- if(room<=0){notify('No room left before the planned stop time.');return}
- let durations=pending.map(t=>t.minutes),total=durations.reduce((a,b)=>a+b,0);
- if(total>room && !resize){notify('Remaining blocks do not fit. Use Fit remaining plan or shorten some blocks.');return}
- if(total>room){
-  const mins=pending.map(t=>t.kind==='break'?5:10);
-  const required=mins.reduce((a,b)=>a+b,0);
-  if(required>room){notify('Too many blocks to fit. Remove some blocks first.');return}
-  const weights=durations.map((d,i)=>Math.max(0,d-mins[i])),sum=weights.reduce((a,b)=>a+b,0);
-  durations=durations.map((d,i)=>mins[i]+Math.floor((room-required)*(weights[i]/(sum||1))));
-  let leftover=room-durations.reduce((a,b)=>a+b,0);
-  for(let i=0;leftover>0;i=(i+1)%durations.length,leftover--)durations[i]++;
- }
- if(state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null}
- for(let i=0;i<pending.length;i++){pending[i].minutes=durations[i];pending[i].startOverride=cursor;cursor+=durations[i]}
- state.tasks.sort((a,b)=>a.startOverride-b.startOverride);
- state.start=hm(state.tasks[0].startOverride);
- save();renderAll();
- notify(resize?'Remaining blocks fitted without overlaps.':'Remaining blocks shifted without overlaps.');
-}
-function fit(){scheduleRemaining(true)}
-$('countFromActualStart').addEventListener('click',()=>{
- if(state.date!==today()){notify('Select Today in the date selector to correct today’s study time.');return}
- if(state.mode==='break'){notify('Resume studying first, then correct your start time.');return}
- const t=selected(),value=$('actualStudyStart').value;
- if(!t){notify('Choose a study task in the plan first.');return}
- if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){notify('Enter a valid actual start time.');return}
- const now=Date.now(),stamp=new Date();const [h,m]=value.split(':').map(Number);
- stamp.setHours(h,m,0,0);
- const started=stamp.getTime();
- if(started>now||started<new Date().setHours(0,0,0,0)){notify('Choose an earlier start time today.');return}
- // Settle the running timer before calculating what is missing; never credit its minutes twice.
- if(state.mode==='study'){settle();state.mode='idle';state.clockStart=null}
- const actualMs=now-started,credited=Math.max(0,Number(t.spent)||0);
- const added=Math.max(0,actualMs-credited);
- t.spent=credited+added;
- state.studied=Math.max(0,Number(state.studied)||0)+added;
- const subject=t.subject||'classical';
- state.subjectMs[subject]=Math.max(0,Number(state.subjectMs[subject])||0)+added;
- state.activeId=t.id;state.mode='study';state.clockStart=now;
- save();renderAll();
- notify(added>0?'Missing minutes added. Study timer is running.':'Study timer is running; no missing minutes to add.');
-});
-$('scheduledBreaks').addEventListener('click',e=>{
- const btn=e.target.closest('button[data-break-id]');
- if(!btn)return;
- updateManualBreak(btn.dataset.breakId,btn.dataset.breakAction==='clear');
-});
-$('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
-$('startTime').addEventListener('change',e=>{
- if(state.date===LEGACY_DATE){notify('Today’s run and dinner are fixed. Edit individual task times instead.');renderAll();return}
- const value=e.target.value;
- if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){renderAll();return}
- normaliseSchedule();
- const first=state.tasks[0]?.startOverride??parseHm(state.start),shift=parseHm(value)-first;
- if(state.tasks.some(t=>t.startOverride+shift<0||t.startOverride+t.minutes+shift>1439)){
-  notify('That start time would move blocks outside the day.');renderAll();return;
- }
- for(const t of state.tasks)t.startOverride+=shift;
- state.start=value;save();renderAll();
-});$('focusEnd').addEventListener('change',e=>{const t=selected();if(t)focusEndEdit(t.id,e.target.value)});$('replanNow').addEventListener('click',()=>scheduleRemaining(false));$('fitToDeadline').addEventListener('click',fit);$('addStudy').addEventListener('click',()=>add('study'));$('addBreak').addEventListener('click',()=>add('break'));
-$('clearDay').addEventListener('click',()=>{if(!confirm('Clear all tasks, recorded study time, breaks and notes for '+datePretty(state.date)+'? This cannot be undone without a backup.'))return;if(state.mode!=='idle')settle();app.days[state.date]=defaultState(state.date);state=app.days[state.date];save();renderAll();notify('A fresh start for this day!')});
-$('taskList').addEventListener('change',e=>{let root=e.target.closest('[data-id]');if(!root)return;let id=root.dataset.id,t=taskById(id),a=e.target.dataset.action;if(!t)return;if(a==='done'){completeTask(id,e.target.checked)}else if(a==='name'){t.name=e.target.value.trim()||'Untitled task';save();renderAll()}else if(a==='notes'){t.notes=e.target.value;save();renderAll()}else if(a==='subject'){if(state.mode==='study'&&state.activeId===id){settle();state.clockStart=Date.now()}const previous=t.subject;t.subject=e.target.value;const credited=t.spent||0;if(credited>0&&previous!==t.subject){state.subjectMs[previous]=Math.max(0,(state.subjectMs[previous]||0)-credited);state.subjectMs[t.subject]=(state.subjectMs[t.subject]||0)+credited}save();renderAll()}else if(a==='minutes'){changeDuration(id,e.target.value)}else if(a==='start'){focusStartEdit(id,e.target.value)}else if(a==='end'){focusEndEdit(id,e.target.value)}});
-$('taskList').addEventListener('click',e=>{let btn=e.target.closest('button[data-action]');if(!btn)return;let root=btn.closest('[data-id]');if(!root)return;let id=root.dataset.id;switch(btn.dataset.action){case 'activate':activate(id);break;case 'log':countManualTime(id);break;case 'unlog':countManualTime(id,true);break;case 'auto':{const ix=state.tasks.findIndex(t=>t.id===id),t=taskById(id);
- if(ix>=0&&t){const p=planTimes(true).times;const start=ix===0?parseHm(state.start):p[state.tasks[ix-1].id].end;
-  editScheduleWindow(id,start,start+t.minutes)}
- break}case 'up':move(id,-1);break;case 'down':move(id,1);break;case 'delete':remove(id);break}});
-$('errorLog').addEventListener('input',e=>{state.log=e.target.value;save()});
-$('themeButton').addEventListener('click',()=>{let theme=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=theme;try{localStorage.setItem('cm-dashboard-theme',theme)}catch(e){}updateThemeUI()});updateThemeUI();
-$('exportButton').addEventListener('click',()=>{save();const blob=new Blob([JSON.stringify(app,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='winter_exams_revision_backup.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)});
-$('importInput').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{let json=JSON.parse(await file.text());if(json.version===1&&json.days&&Array.isArray(json.subjects)){if(!confirm('Replace ALL dashboard plans and timers with this backup?'))return;app=json;for(const day of Object.values(app.days)){day.mode='idle';day.clockStart=null;day.subjectMs=day.subjectMs||{}}app.selectedDate=today();state=currentDay(app.selectedDate)}else if(json.date===LEGACY_DATE&&Array.isArray(json.tasks)){if(!confirm('Import your old Classical Mechanics plan into 23 November? Existing dashboard data for that day will be replaced.'))return;app.days[LEGACY_DATE]={...defaultState(LEGACY_DATE),...json,mode:'idle',clockStart:null,subjectMs:{classical:Number(json.studied)||0},tasks:json.tasks.map(t=>saneTask({...t,subject:'classical'}))};state=currentDay(app.selectedDate)}else throw new Error('invalid backup');save();renderAll();notify('Backup restored!')}catch(err){notify('Could not read that backup file.')}finally{e.target.value=''}});
-function addTopicBlocks(){
- const sub=subjectFor(app.selectedSubject);if(!sub?.topics?.length){notify('Choose a subject with suggested topics.');return}
- normaliseSchedule();let cursor=planTimes(true).end,added=0;
- for(const topic of sub.topics){
-  if(cursor+35>1439)break;
-  state.tasks.push(saneTask({id:uid(),kind:'study',subject:sub.id,name:topic,minutes:35,
-   startOverride:cursor,notes:'Try independently before checking the solution.'}));
-  cursor+=35;added++;
- }
- save();renderAll();notify(added?added+' suggested blocks added.':'No room left in the day.');
-}
-$('addSuggested').addEventListener('click',addTopicBlocks);
-$('todayButton').addEventListener('click',()=>switchDate(today()));
-$('planDatePicker').addEventListener('change',e=>switchDate(e.target.value));
-for(const [id,delta] of [['prevDay',-1],['nextDay',1]])$(id).addEventListener('click',()=>{const [y,m,d]=state.date.split('-').map(Number);switchDate(dayString(new Date(y,m-1,d+delta)))});
-$('subjectTabs').addEventListener('click',e=>{let el=e.target.closest('[data-subject]');if(el)switchSubject(el.dataset.subject)});
-$('examCards').addEventListener('click',e=>{let el=e.target.closest('[data-subject]');if(el)openSubjectPlan(el.dataset.subject)});
-$('backToExams').addEventListener('click',()=>goToPage('all'));
-$('backToOverviewTop').addEventListener('click',()=>goToPage('all'));
-$('goToEditor').addEventListener('click',()=>$('planPanel').scrollIntoView({behavior:'smooth',block:'start'}));
-$('examEditor').addEventListener('change',e=>{const id=e.target.dataset.exam,sub=subjectFor(id);if(!sub)return;if(e.target.dataset.field==='exam'&&/^\d{4}-\d{2}-\d{2}$/.test(e.target.value))sub.exam=e.target.value;if(e.target.dataset.field==='name'&&e.target.value.trim())sub.name=e.target.value.trim().slice(0,80);save();renderAll()});
-$('newExamButton').addEventListener('click',()=>{let name=$('newExamName').value.trim(),date=$('newExamDate').value;if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(date)){notify('Add a subject name and exam date.');return}let id='subject-'+uid();app.subjects.push({id,name:name.slice(0,80),exam:date,time:'',icon:'📖',topics:[]});$('newExamName').value='';$('newExamDate').value='';app.selectedSubject=id;save();renderAll();notify('Subject added!')});
-// Save session immediately on tab close. The real-time timestamp also lets the timer survive a reload.
-window.addEventListener('pagehide',save);
-// Minimal one-time correction of just the reported Classical Mechanics block.
-// This does not reset the existing timer, study totals or unrelated days.
-// Rebuild the entire day once. The previous automatic repair only fixed one task
-// and could leave an incorrect, multi-hour block at the end of the schedule.
-function restoreNovember23Schedule(){
- const day=app.days[LEGACY_DATE];if(!day||!Array.isArray(day.tasks))return;
- try{if(localStorage.getItem(FULL_DAY_REPAIR_KEY)==='done')return}catch(e){return}
- try{
-  // Recovery copy of the original day, including timers and the complete edited plan.
-  localStorage.setItem(FULL_DAY_REPAIR_KEY+'-backup',JSON.stringify(day));
-  const originals=day.tasks.filter(t=>t&&typeof t==='object');
-  const used=new Set();
-  const newTasks=NOV23_PLAN.map(([from,to,kind,name,notes])=>{
-   const start=parseHm(from),duration=parseHm(to)-start;
-   const matches=originals.filter(t=>
-    !used.has(t.id)&&t.kind===kind&&t.subject==='classical'&&
-    String(t.name||'').replace(/ \(continued\)$/,'')===name);
-   matches.sort((a,b)=>Math.abs((Number.isInteger(a.startOverride)?a.startOverride:start)-start)-
-                       Math.abs((Number.isInteger(b.startOverride)?b.startOverride:start)-start));
-   const old=matches[0];
-   if(old)used.add(old.id);
-   // Reuse the old task and its id so already credited minutes stay attached.
-   return saneTask({...old,id:old?.id||uid(),kind,subject:'classical',
-    name,notes:old?.notes||notes,startOverride:start,minutes:duration});
+function renderTasks(){
+ const list=$('todoList');
+ list.replaceChildren();
+ for(const task of tasks){
+  const item=document.createElement('li');
+  item.dataset.id=task.id;
+  if(task.done)item.classList.add('done');
+  const checkbox=document.createElement('input');
+  checkbox.type='checkbox';checkbox.className='todo-check';checkbox.checked=task.done;
+  checkbox.setAttribute('aria-label','Mark '+task.text+' complete');
+  const text=document.createElement('input');
+  text.type='text';text.className='todo-text';text.value=task.text;text.maxLength=120;
+  text.setAttribute('aria-label','Edit to-do task');
+  const remove=document.createElement('button');
+  remove.type='button';remove.className='remove-task';remove.textContent='×';
+  remove.setAttribute('aria-label','Remove '+task.text);
+  checkbox.addEventListener('change',()=>{
+   task.done=checkbox.checked;item.classList.toggle('done',task.done);saveTasks();updateCount();
   });
-  const oldActive=originals.find(t=>t.id===day.activeId);
-  // Retain a running timer even if its previous block was renamed or removed.
-  if(day.mode!=='idle'&&day.clockStart&&!newTasks.some(t=>t.id===day.activeId)){
-   const minutesNow=minutesTime(new Date());
-   const sameKind=newTasks.filter(t=>t.kind===(day.mode==='break'?'break':'study'));
-   const chosen=sameKind.find(t=>t.startOverride<=minutesNow&&minutesNow<t.startOverride+t.minutes)||
-    sameKind.find(t=>!t.done)||sameKind[0];
-   if(chosen){
-    const assignedId=chosen.id;
-    chosen.id=day.activeId;
-    chosen.spent+=Math.max(0,Number(oldActive?.spent)||0);
-    chosen.manualLogged+=Math.max(0,Number(oldActive?.manualLogged)||0);
-    chosen.breakLogged+=Math.max(0,Number(oldActive?.breakLogged)||0);
-    // Keep the current timer's clockStart so the elapsed time is not lost.
-    if(assignedId===day.activeId)throw Error('Duplicate active id');
-   }
-  }
-  if(new Set(newTasks.map(t=>t.id)).size!==newTasks.length)throw Error('Duplicate task ids');
-  if(newTasks.some((t,i)=>i>0&&newTasks[i-1].startOverride+newTasks[i-1].minutes!==t.startOverride))throw Error('Schedule not continuous');
-  const run=newTasks.find(t=>t.name==='Run break');
-  const dinner=newTasks.find(t=>t.name==='Dinner break');
-  if(!run||run.startOverride!==870||run.minutes!==90||!dinner||dinner.startOverride!==1110||dinner.minutes!==30)throw Error('Break anchors wrong');
-  day.tasks=newTasks;day.start='08:00';
-  // Crucially, do not alter day.studied, day.breaks, subjectMs, mode, or clockStart.
-  if(state.date===LEGACY_DATE)state=day;
-  app.days[LEGACY_DATE]=day;
-  localStorage.setItem(KEY,JSON.stringify(app));
-  localStorage.setItem(FULL_DAY_REPAIR_KEY,'done');
- }catch(e){console.warn('Previous schedule preserved; rebuild did not complete',e)}
+  text.addEventListener('input',()=>{task.text=text.value.slice(0,120);saveTasks()});
+  text.addEventListener('blur',()=>{if(!task.text.trim()){tasks=tasks.filter(t=>t.id!==task.id);renderTasks();saveTasks()}});
+  remove.addEventListener('click',()=>{tasks=tasks.filter(t=>t.id!==task.id);saveTasks();renderTasks()});
+  item.append(checkbox,text,remove);
+  list.append(item);
+ }
+ $('emptyMessage').hidden=tasks.length!==0;
+ updateCount();
 }
-restoreNovember23Schedule();
-normaliseSchedule();
-if(!state.activeId)state.activeId=nextTask()?.id||null;
-save();window.addEventListener('hashchange',()=>{applyRoute();window.scrollTo(0,0)});applyRoute();setInterval(renderClock,1000);
+function updateCount(){
+ const done=tasks.filter(t=>t.done).length;
+ $('taskCount').textContent=done+' / '+tasks.length+' done';
+}
+$('todoForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const input=$('taskInput'),name=input.value.trim();
+ if(!name)return;
+ tasks.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),text:name.slice(0,120),done:false});
+ input.value='';saveTasks();renderTasks();input.focus();
+});
+function setTheme(theme){
+ const mode=theme==='dark'?'dark':'light';
+ document.documentElement.dataset.theme=mode;
+ $('themeIcon').textContent=mode==='dark'?'✦':'❄';
+ $('themeToggle').textContent=mode==='dark'?'Light mode':'Dark mode';
+ try{localStorage.setItem(THEME_KEY,mode)}catch(e){}
+}
+try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(e){setTheme('light')}
+$('themeToggle').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+renderTasks();
+updateSchedule();
+setInterval(updateSchedule,10000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateSchedule()});
 })();
 </script>
 </body>

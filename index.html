@@ -55,7 +55,7 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 </div>
 <div id="studyPage" class="site-page" hidden>
 <nav class="subject-back-nav" aria-label="Study navigation"><button class="btn tiny" id="backToOverviewTop" type="button">← All exams</button></nav>
-<section class="hero" aria-label="Selected subject"><div><span class="eyebrow">REVISION PLAN</span><h1 id="studyHeroTitle">Study plan</h1><p class="tagline">ngl physics is kinda cool</p></div><div class="hero-stamp"><div class="eyebrow">EXAM DATE</div><strong id="studyExamWhen">—</strong><p id="studyExamDetail">—</p></div></section>
+<section class="hero" aria-label="Selected subject"><div><h1 id="studyHeroTitle">Study plan</h1><p class="tagline">ngl physics is kinda cool</p></div></section>
 <div class="warn" id="dayWarning"></div>
 <section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">☕ Time on breaks</div><strong id="breakTotal">00:00</strong><small>Break timer tracked separately</small></div></section>
 <section class="panel date-navigation" id="todayPlanSection"><div class="panel-head"><div><div class="eyebrow">YOUR REVISION CALENDAR</div><h2 id="planDayTitle">Today's study plan</h2><p id="selectedDayHint">Switch dates freely. Each day keeps its own plan and study history.</p></div><div class="date-controls"><button class="btn tiny" id="prevDay" type="button" aria-label="Previous day">←</button><input id="planDatePicker" type="date" aria-label="Choose study date"/><button class="btn tiny" id="nextDay" type="button" aria-label="Next day">→</button><button class="btn tiny" id="todayButton" type="button">Today</button></div></div><div class="subject-tabs" id="subjectTabs"></div><p id="selectedSubjectDetail" class="little"></p><div id="dailySummary" class="daily-summary"></div></section>
@@ -270,9 +270,6 @@ function renderAll(){
  $('brandText').innerHTML=sub?esc(sub.name)+'<br>revision plan':'winter exams<br>revision dashboard';
  if(sub){
   $('studyHeroTitle').textContent=sub.name+' revision plan';
-  const n=examDays(sub.exam);
-  $('studyExamWhen').textContent=n<0?'Date passed':n===0?'Today':n===1?'Tomorrow':n+' days';
-  $('studyExamDetail').textContent=datePretty(sub.exam)+(sub.time?' · '+sub.time:'');
   $('subjectFocusTitle').textContent=state.date===today()?"Today's plan":datePretty(state.date)+' plan';
   $('subjectFocusDate').textContent='Your tasks for '+datePretty(state.date);
  }

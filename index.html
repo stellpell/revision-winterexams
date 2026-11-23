@@ -218,7 +218,7 @@ function openSubjectPlan(subject){
  goToPage(subject);
 }
 function taskById(id){return state.tasks.find(x=>x.id===id)||null}
-function selected(){let t=taskById(state.activeId);if(t&&!t.done&&t.kind==='study'&&state.mode==='study'&&(app.selectedSubject==='all'||t.subject===app.selectedSubject))return t;return filteredTasks().find(x=>!x.done&&x.kind==='study')||null}
+function selected(){let t=taskById(state.activeId);if(t&&!t.done&&t.kind==='study'&&(app.selectedSubject==='all'||t.subject===app.selectedSubject))return t;return filteredTasks().find(x=>!x.done&&x.kind==='study')||null}
 function nextTask(){return state.tasks.find(t=>!t.done&&t.kind==='study')||null}
 function effectiveElapsed(){return state.mode==='idle'||state.clockStart===null?0:Math.max(0,nowBound()-state.clockStart)}
 function settle(){if(state.mode==='idle')return;let d=effectiveElapsed();if(state.mode==='study'){state.studied+=d;let t=taskById(state.activeId);if(t&&t.kind==='study'){t.spent+=d;const sub=t.subject||'classical';state.subjectMs[sub]=(Number(state.subjectMs[sub])||0)+d}}else if(state.mode==='break')state.breaks+=d;state.clockStart=null}

@@ -45,8 +45,12 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 .scheduled-break-title{font-size:.91rem;margin:16px 0 9px}
 .scheduled-breaks{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
 .scheduled-break{display:flex;justify-content:space-between;gap:12px;background:var(--soft);padding:9px 12px;border:1px solid var(--stroke);border-radius:10px;align-items:center}
+.scheduled-break-label{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:125px}
 .scheduled-break strong,.scheduled-break span{font-size:.8rem}
-.scheduled-break span{white-space:nowrap;font-variant-numeric:tabular-nums}
+.scheduled-break span{font-variant-numeric:tabular-nums}
+.scheduled-break .btn{white-space:nowrap}
+.break-counted{color:var(--green);font-weight:650}
+@media(max-width:450px){.scheduled-break{flex-wrap:wrap}.scheduled-break-label{flex-basis:100%}}
 .actual-study-start{border-top:1px solid var(--stroke);margin-top:19px;padding-top:15px}
 .actual-study-start label{font-weight:650;font-size:.82rem}
 .actual-study-start-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:9px 0 5px}
@@ -67,7 +71,7 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 <nav class="subject-back-nav" aria-label="Study navigation"><button class="btn tiny" id="backToOverviewTop" type="button">← All exams</button></nav>
 <section class="hero" aria-label="Selected subject"><div><h1 id="studyHeroTitle">Study plan</h1><p class="tagline">ngl physics is kinda cool</p></div></section>
 <div class="warn" id="dayWarning"></div>
-<section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">☕ Recorded break time</div><strong id="breakTotal">00:00</strong><small>Scheduled breaks are shown below</small></div></section>
+<section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">Break time recorded</div><strong id="breakTotal">00:00</strong><small id="breakPlanInfo">Scheduled breaks: —</small></div></section>
 <section class="panel date-navigation" id="todayPlanSection"><div class="panel-head"><div><div class="eyebrow">YOUR REVISION CALENDAR</div><h2 id="planDayTitle">Today's study plan</h2><p id="selectedDayHint">Switch dates freely. Each day keeps its own plan and study history.</p></div><div class="date-controls"><button class="btn tiny" id="prevDay" type="button" aria-label="Previous day">←</button><input id="planDatePicker" type="date" aria-label="Choose study date"/><button class="btn tiny" id="nextDay" type="button" aria-label="Next day">→</button><button class="btn tiny" id="todayButton" type="button">Today</button></div></div><div class="subject-tabs" id="subjectTabs"></div><p id="selectedSubjectDetail" class="little"></p><div id="dailySummary" class="daily-summary"></div></section>
 <div class="layout"><main class="left">
 <div id="subjectFocusBar" class="subject-focus-bar" hidden aria-live="polite">
@@ -76,7 +80,7 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 </div>
 <section class="focus"><span class="eyebrow" id="focusBadge">YOUR CURRENT FOCUS</span><h2 class="focus-name" id="focusName">Get ready for your first block</h2><p class="focus-note" id="focusNote">Pick a task below and press Start studying.</p><div class="focus-meta"><span class="chip" id="focusDuration">Planned: 25 min</span><span class="chip" id="focusUntil">Until: —</span><span class="chip" id="modeTag">● Not started</span></div><div class="progress-outer" role="progressbar" aria-label="Current task progress" aria-valuemin="0" aria-valuemax="100" id="progressRoot"><div class="progress-inner" id="progressInner"></div></div><div class="progress-bottom"><span id="timeOnTask">0 min on this block</span><span id="focusProgress">0% of planned time</span></div><div class="focus-actions"><button class="btn green" id="mainStart" type="button">▶ Start studying</button><button class="btn primary" id="breakButton" type="button">Take a break</button><button class="btn quiet" id="finishButton" type="button">✓ Mark task done</button></div><div class="end-edit"><label for="focusEnd">Change this task's planned end:</label><input type="time" id="focusEnd" aria-label="Current task planned end"/><span id="focusEndHint" class="little">You can change this at any time.</span></div><div class="actual-study-start"><label for="actualStudyStart">Started studying earlier?</label><div class="actual-study-start-controls"><input type="time" id="actualStudyStart" aria-label="Actual study start time"/><button type="button" class="btn tiny" id="countFromActualStart">Count from this time</button></div><p class="little">Scheduled times don't start the timer. Enter when you actually began studying continuously. This works even when your timer is already running.</p></div><div class="statusline" id="statusLine">Study time is only recorded while the timer runs.</div></section>
 <section class="panel" id="planOverviewPanel"><div class="panel-head"><div><h2 id="planOverviewTitle">Plan at a glance</h2><p>Your current schedule at a glance. If you want to change anything, use the editor underneath.</p></div><span class="chip" id="planOverviewEnd">Ends —</span></div><div id="planViewList" class="plan-preview" aria-live="off"></div><p class="little" id="planOverviewSummary">—</p></section>
-<section class="panel"><h2>Breaks</h2><p class="muted">Press <b>Take a break</b> whenever you stop working. Study time stops immediately, and break time starts. Press <b>Resume studying</b> when you return.</p><h3 class="scheduled-break-title">Scheduled breaks</h3><div id="scheduledBreaks" class="scheduled-breaks"></div><div class="break-hero"><div class="eyebrow">Current break timer</div><strong id="currentBreak">00:00</strong><p id="breakDescription">No break running right now.</p></div><div class="focus-actions"><button class="btn primary" id="sideBreak" type="button">Take a break</button><button class="btn" id="sideResume" type="button">▶ Resume studying</button></div><div class="end-box">Rest is part of the plan. There is no need to make up every minute of a break.</div></section>
+<section class="panel"><h2>Breaks</h2><p class="muted">Press <b>Take a break</b> whenever you stop working. Study time stops immediately, and break time starts. Press <b>Resume studying</b> when you return.</p><h3 class="scheduled-break-title">Scheduled breaks</h3><p class="little">Your scheduled breaks appear here even if you didn’t use the break timer. For a break you already took, press <b>Count as taken</b> to include it in your recorded break time.</p><div id="scheduledBreaks" class="scheduled-breaks"></div><div class="break-hero"><div class="eyebrow">Current break timer</div><strong id="currentBreak">00:00</strong><p id="breakDescription">No break running right now.</p></div><div class="focus-actions"><button class="btn primary" id="sideBreak" type="button">Take a break</button><button class="btn" id="sideResume" type="button">▶ Resume studying</button></div><div class="end-box">Rest is part of the plan. There is no need to make up every minute of a break.</div></section>
 <section class="panel" id="planPanel"><div class="panel-head"><div><h2>Edit your plan</h2><p>Click any task name or goal to rewrite it. Edit start, end or duration. Overlapping minutes are removed from other blocks; a study block may be split around a break. Use ↑ ↓ to reorder tasks.</p></div><div class="panel-controls"><button class="btn tiny" id="addSuggested" type="button">✧ Suggest blocks</button><button class="btn tiny" id="addStudy" type="button">＋ Study task</button><button class="btn tiny" id="addBreak" type="button">＋ Break</button></div></div><div class="schedule-start"><label for="startTime"><b>Next task starts at</b></label><input type="time" id="startTime"/><button class="btn tiny" id="replanNow" type="button">↻ Replan from now</button><span class="endpill" id="planEnd">Plan ends —</span></div><div class="manual-time"><strong>Forgot to press Start?</strong><p class="little">Edit a study block’s <b>Start</b> and <b>End</b> below, then press <b>Count as studied</b>. That time is added to “Studied today”. If you correct the times later, press it again to update the entry. Already-recorded timer minutes won’t be counted twice.</p></div><div id="taskList" class="list" aria-live="off"></div><div class="tally"><span id="doneTally">0 / 0 complete</span><strong id="planSummary">—</strong></div><div class="end-box" id="fitStatus">Your plan is flexible; 21:00 is your stopping time.</div><div class="focus-actions"><button class="btn tiny" id="fitToDeadline" type="button">✨ Fit remaining plan before 21:00</button><button class="btn tiny danger" id="clearDay" type="button">↺ Clear this day</button><button class="btn tiny" id="exportButton" type="button">↓ Save backup</button><label class="btn tiny" for="importInput" style="cursor:pointer">↑ Restore backup</label><input id="importInput" type="file" accept=".json,application/json" hidden/></div><p class="little" style="margin:8px 0 0">Your plans and timers are saved in this browser on this website. Use Save backup regularly; your progress is not synced between devices.</p></section>
 </main><aside class="right">
 
@@ -133,7 +137,7 @@ const formatClock=(millis)=>{let v=Math.max(0,Math.floor(millis/60000));return `
 const formatLong=millis=>{let m=Math.max(0,Math.ceil(millis/60000));return `${Math.floor(m/60)}h ${String(m%60).padStart(2,'0')}m`};
 const nowBound=()=>{const n=Date.now();const d=new Date(); d.setHours(END_HOUR,0,0,0);return Math.min(n,d.getTime())};
 const endStamp=()=>{let d=new Date();d.setHours(END_HOUR,0,0,0);return d.getTime()};
-const saneTask=t=>({id:String(t.id||uid()),kind:t.kind==='break'?'break':'study',name:String(t.name||'Untitled task').slice(0,200),notes:String(t.notes||'').slice(0,800),minutes:Math.max(1,Math.min(600,Math.round(Number(t.minutes)||25))),startOverride:Number.isInteger(t.startOverride)&&t.startOverride>=0&&t.startOverride<1440?t.startOverride:null,manualLogged:Math.max(0,Number(t.manualLogged)||0),done:!!t.done,spent:Math.max(0,Number(t.spent)||0),subject:String(t.subject||'classical')});
+const saneTask=t=>({id:String(t.id||uid()),kind:t.kind==='break'?'break':'study',name:String(t.name||'Untitled task').slice(0,200),notes:String(t.notes||'').slice(0,800),minutes:Math.max(1,Math.min(600,Math.round(Number(t.minutes)||25))),startOverride:Number.isInteger(t.startOverride)&&t.startOverride>=0&&t.startOverride<1440?t.startOverride:null,manualLogged:Math.max(0,Number(t.manualLogged)||0),breakLogged:Math.max(0,Number(t.breakLogged)||0),done:!!t.done,spent:Math.max(0,Number(t.spent)||0),subject:String(t.subject||'classical')});
 function defaultState(date){const n=new Date();const start=date===today()?Math.min(20*60,Math.ceil(minutesTime(n)/5)*5):9*60;return{date,start:hm(start),tasks:[],mode:'idle',activeId:null,clockStart:null,studied:0,breaks:0,subjectMs:{},log:''}}
 function finishOldTimer(day){if(day.mode==='idle'||!day.clockStart)return;let [y,m,d]=day.date.split('-').map(Number);let cutoff=new Date(y,m-1,d,END_HOUR,0,0,0).getTime();let elapsed=Math.max(0,Math.min(Date.now(),cutoff)-day.clockStart);if(day.mode==='study'){day.studied=(Number(day.studied)||0)+elapsed;let t=day.tasks.find(t=>t.id===day.activeId);if(t)t.spent=(Number(t.spent)||0)+elapsed;const sub=t?.subject||'classical';day.subjectMs[sub]=(Number(day.subjectMs[sub])||0)+elapsed}else if(day.mode==='break')day.breaks=(Number(day.breaks)||0)+elapsed;day.mode='idle';day.clockStart=null;}
 function loadApp(){let output=null;try{const raw=localStorage.getItem(KEY);if(raw){const a=JSON.parse(raw);if(a&&a.version===1&&a.days&&Array.isArray(a.subjects))output=a}}catch(e){}
@@ -249,12 +253,16 @@ function trimScheduleAround(tasks,id,start,end){
   if(t.id===id)continue;
   const a=t.startOverride,b=a+t.minutes;
   if(b<=start||a>=end){next.push({...t});continue}
-  if(a<start)next.push({...t,startOverride:a,minutes:start-a});
-  if(b>end){
-   const split=a<start;
-   next.push({...t,id:split?uid():t.id,startOverride:end,minutes:b-end,
+  const leftMin=Math.max(0,start-a),rightMin=Math.max(0,b-end);
+  const logged=t.kind==='break'?Math.max(0,Number(t.breakLogged)||0):0;
+  const leftLogged=Math.min(logged,leftMin*60000),rightLogged=Math.min(Math.max(0,logged-leftLogged),rightMin*60000);
+  if(leftMin>0)next.push({...t,startOverride:a,minutes:leftMin,breakLogged:leftLogged});
+  if(rightMin>0){
+   const split=leftMin>0;
+   next.push({...t,id:split?uid():t.id,startOverride:end,minutes:rightMin,
     name:split?(t.name+' (continued)').slice(0,200):t.name,
-    spent:split?0:t.spent,manualLogged:split?0:t.manualLogged,done:split?false:t.done});
+    spent:split?0:t.spent,manualLogged:split?0:t.manualLogged,breakLogged:rightLogged,
+    done:split?false:t.done});
   }
  }
  next.push({...target,startOverride:start,minutes:end-start});
@@ -284,9 +292,41 @@ function editScheduleWindow(id,start,end){
 const shortHour=n=>n>=24*60?`${hm(n%1440)} +${Math.floor(n/1440)}d`:hm(n);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function updateThemeUI(){const dark=document.documentElement.dataset.theme==='dark';$('themeButton').textContent=dark?'❄ Light mode':'🎄 Dark mode';const logo=$('brandLogo');if(logo)logo.textContent=dark?'🎄':'❄';}
+function scheduledBreakTotals(){
+ let planned=0,elapsedPlanned=0,manual=0;
+ const nowDate=new Date(),nowMinutes=minutesTime(nowDate);
+ const dayIsPast=state.date<today(),dayIsToday=state.date===today();
+ for(const t of state.tasks){
+  if(t.kind!=='break')continue;
+  const end=planTimes(true).times[t.id];if(!end)continue;
+  planned+=t.minutes;
+  if(dayIsPast)elapsedPlanned+=t.minutes;
+  else if(dayIsToday)elapsedPlanned+=Math.max(0,Math.min(end.end,nowMinutes)-end.start);
+  manual+=Math.max(0,Number(t.breakLogged)||0);
+ }
+ return{planned,elapsedPlanned,manual};
+}
+function breakCanBeCounted(t){
+ const p=planTimes(true).times[t.id];
+ return !!p&&(state.date<today()||(state.date===today()&&minutesTime(new Date())>=p.end));
+}
+function updateManualBreak(id,clear=false){
+ const t=taskById(id);
+ if(!t||t.kind!=='break')return;
+ if(!clear&&!breakCanBeCounted(t)){
+  notify('This break has not ended yet. You can record it after its scheduled end.');return;
+ }
+ const amount=clear?0:t.minutes*60000;
+ t.breakLogged=amount;
+ save();renderAll();
+ notify(clear?'Recorded break time removed.':'Break counted as taken.');
+}
 function renderOverview(){let {times,end}=planTimes(true);
  $('scheduledBreaks').innerHTML=filteredTasks().filter(t=>t.kind==='break').map(t=>{
-  const p=times[t.id];return `<div class="scheduled-break"><strong>${esc(t.name)}</strong><span>${esc(shortHour(p.start))}–${esc(shortHour(p.end))}</span></div>`;
+  const p=times[t.id],counted=Number(t.breakLogged)>0,canCount=breakCanBeCounted(t);
+  const action=counted?`<button type="button" class="btn tiny" data-break-id="${esc(t.id)}" data-break-action="clear">Undo</button>`:
+    `<button type="button" class="btn tiny" data-break-id="${esc(t.id)}" data-break-action="count" ${canCount?'':'disabled title="This scheduled break has not ended"'}>Count as taken</button>`;
+  return `<div class="scheduled-break"><div class="scheduled-break-label"><strong>${esc(t.name)}</strong><span>${esc(shortHour(p.start))}–${esc(shortHour(p.end))}</span></div>${counted?'<span class="break-counted">Recorded</span>':''}${action}</div>`;
  }).join('')||'<p class="little">No scheduled breaks.</p>';$('planViewList').innerHTML=filteredTasks().map(t=>{let p=times[t.id];let kind=t.kind==='break'?'Break':'Study';return `<div class="peek ${t.done?'done':''} ${t.kind==='break'?'isbreak':''}"><div class="peek-time">${p?esc(shortHour(p.start)):''}<span>→</span>${p?esc(shortHour(p.end)):''}</div><div class="peek-main"><div class="peek-top"><strong>${esc(t.name)}</strong><span class="kindpill">${kind}</span></div>${t.notes?`<div class="peek-note">${esc(t.notes)}</div>`:''}</div><div class="peek-right">${t.done?'✓ done':`${t.minutes} min`}</div></div>`}).join('')||'<p class="muted">No tasks yet.</p>';let studyM=filteredTasks().filter(t=>t.kind==='study').reduce((a,t)=>a+t.minutes,0),breakM=filteredTasks().filter(t=>t.kind==='break').reduce((a,t)=>a+t.minutes,0);$('planOverviewEnd').textContent='Ends '+shortHour(end);$('planOverviewSummary').textContent=`${filteredTasks().length} shown · ${formatLong(studyM*60000)} study · ${formatLong(breakM*60000)} breaks`; }
 function focusEndEdit(id,value){
  const p=planTimes(true).times[id];if(!p)return;
@@ -401,7 +441,11 @@ function renderAll(){
 }
 function renderClock(){let n=Date.now();if(today()!==state.date){$('dayWarning').className='warn show';$('dayWarning').textContent='You are viewing another date. You can edit or log past study time here; live timers are available only for today.';if(state.mode!=='idle'){finishOldTimer(state);save()}}else{$('dayWarning').className='warn'}if(n>=endStamp()&&state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null;save();renderAll();notify('21:00 — time to finish for today. ♡');return}
 const elapsed=effectiveElapsed(),isStudy=state.mode==='study',isBreak=state.mode==='break',s=state.studied+(isStudy?elapsed:0),b=state.breaks+(isBreak?elapsed:0),until=Math.max(0,endStamp()-n);
-$('studied').textContent=formatClock(s);$('breakTotal').textContent=formatClock(b);$('untilNine').textContent=state.date===today()?formatLong(until):'—';
+const bt=scheduledBreakTotals();
+$('studied').textContent=formatClock(s);
+$('breakTotal').textContent=formatClock(b+bt.manual);
+$('breakPlanInfo').textContent=`${formatLong(bt.elapsedPlanned*60000)} of ${formatLong(bt.planned*60000)} scheduled so far`;
+$('untilNine').textContent=state.date===today()?formatLong(until):'—';
 
 let selectedTask=selected();let spent=selectedTask?selectedTask.spent+(isStudy&&state.activeId===selectedTask.id?elapsed:0):0,goal=selectedTask?.minutes*60000||0;
 let percent=goal>0?Math.min(100,spent/goal*100):0;$('progressInner').style.width=percent.toFixed(1)+'%';$('progressRoot').setAttribute('aria-valuenow',percent.toFixed(0));$('timeOnTask').textContent=formatLong(spent)+' on this block';$('focusProgress').textContent=`${Math.round(percent)}% of planned time`;
@@ -460,6 +504,11 @@ $('countFromActualStart').addEventListener('click',()=>{
  state.activeId=t.id;state.mode='study';state.clockStart=now;
  save();renderAll();
  notify(added>0?'Missing minutes added. Study timer is running.':'Study timer is running; no missing minutes to add.');
+});
+$('scheduledBreaks').addEventListener('click',e=>{
+ const btn=e.target.closest('button[data-break-id]');
+ if(!btn)return;
+ updateManualBreak(btn.dataset.breakId,btn.dataset.breakAction==='clear');
 });
 $('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
 $('startTime').addEventListener('change',e=>{

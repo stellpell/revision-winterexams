@@ -36,17 +36,28 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 @media(max-width:690px){.exam-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.exam-card{padding:11px;min-height:165px}.exam-info{min-width:0}.exam-countdown{width:100%}.date-controls{width:100%}.date-controls input{flex:1}.hero h1{font-size:clamp(2.4rem,8vw,3.5rem)}.hero-stamp{min-width:0}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats .stat:last-child{grid-column:span 2}}
 @media(max-width:390px){.exam-cards{grid-template-columns:1fr}.exam-card{min-height:90px}}
 
+#homePage[hidden],#studyPage[hidden],#subjectTabs[hidden],#subjectFocusBar[hidden]{display:none!important}
+.subject-back-nav{margin:8px 0 2px}
+.subject-back-nav .btn{font-size:.8rem}
+#studyPage .hero{padding-top:15px}
+#studyPage #subjectTabs{display:none!important}
+.site-page{min-width:0}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand"><span class="brand-logo" id="brandLogo" aria-hidden="true">❄</span><span>winter exams<br>revision dashboard</span></div><div class="headright"><span class="smallcaps" id="dateLabel">WINTER 2026 / 27</span><button class="btn tiny" id="themeButton" type="button">🎄 Dark mode</button></div></header>
-<section class="hero"><div><span class="eyebrow">YOUR LITTLE CORNER OF WINTER</span><h1 id="heroTitle">winter exams <em>revision dashboard</em></h1><p class="tagline">ngl physics is kinda cool</p></div><div class="hero-stamp"><div class="eyebrow" id="nextExamLabel">NEXT EXAM</div><strong id="nextExamText">—</strong><p id="nextExamDetail">Your exam calendar</p></div></section>
-<div class="warn" id="dayWarning"></div>
-<section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">☕ Time on breaks</div><strong id="breakTotal">00:00</strong><small>Break timer tracked separately</small></div></section>
-<section class="panel dashboard-section" id="examOverview" aria-label="Exams and subject selection"><div class="panel-head"><div><div class="eyebrow">THE BIG PICTURE</div><h2>Your winter exams</h2><p>Select an exam to open today’s plan for that subject.</p></div><span class="chip" id="seasonTotal">0h 00m this season</span></div>
+<header><div class="brand"><span class="brand-logo" id="brandLogo" aria-hidden="true">❄</span><span id="brandText">winter exams<br>revision dashboard</span></div><div class="headright"><span class="smallcaps" id="dateLabel">WINTER 2026 / 27</span><button class="btn tiny" id="themeButton" type="button">🎄 Dark mode</button></div></header>
+<div id="homePage" class="site-page">
+<section class="hero"><div><span class="eyebrow">WINTER EXAMS</span><h1 id="heroTitle">winter exams <em>revision dashboard</em></h1><p class="tagline">ngl physics is kinda cool</p></div><div class="hero-stamp"><div class="eyebrow" id="nextExamLabel">NEXT EXAM</div><strong id="nextExamText">—</strong><p id="nextExamDetail">Your exam calendar</p></div></section>
+<section class="panel dashboard-section" id="examOverview" aria-label="Exams and subject selection"><div class="panel-head"><div><div class="eyebrow">EXAMS</div><h2>Your winter exams</h2><p>Select an exam to open today’s plan for that subject.</p></div><span class="chip" id="seasonTotal">5 exams</span></div>
 <div class="exam-cards" id="examCards"></div>
 <details class="exam-manage"><summary>Manage exams and dates</summary><div id="examEditor" class="exam-editor"></div><div class="add-exam"><label>New subject <input id="newExamName" type="text" placeholder="e.g. Mathematics" maxlength="80"></label><label>Exam date <input id="newExamDate" type="date"></label><button class="btn tiny" type="button" id="newExamButton">+ Add subject</button></div></details></section>
+</div>
+<div id="studyPage" class="site-page" hidden>
+<nav class="subject-back-nav" aria-label="Study navigation"><button class="btn tiny" id="backToOverviewTop" type="button">← All exams</button></nav>
+<section class="hero" aria-label="Selected subject"><div><span class="eyebrow">REVISION PLAN</span><h1 id="studyHeroTitle">Study plan</h1><p class="tagline">ngl physics is kinda cool</p></div><div class="hero-stamp"><div class="eyebrow">EXAM DATE</div><strong id="studyExamWhen">—</strong><p id="studyExamDetail">—</p></div></section>
+<div class="warn" id="dayWarning"></div>
+<section class="stats" aria-label="Live study statistics"><div class="stat accent"><div class="eyebrow">📖 Studied this day</div><strong id="studied">00:00</strong><small>Recorded study time for the selected day</small></div><div class="stat"><div class="eyebrow">🌙 Until 21:00 today</div><strong id="untilNine">—</strong><small>Time until your planned stop</small></div><div class="stat"><div class="eyebrow">☕ Time on breaks</div><strong id="breakTotal">00:00</strong><small>Break timer tracked separately</small></div></section>
 <section class="panel date-navigation" id="todayPlanSection"><div class="panel-head"><div><div class="eyebrow">YOUR REVISION CALENDAR</div><h2 id="planDayTitle">Today's study plan</h2><p id="selectedDayHint">Switch dates freely. Each day keeps its own plan and study history.</p></div><div class="date-controls"><button class="btn tiny" id="prevDay" type="button" aria-label="Previous day">←</button><input id="planDatePicker" type="date" aria-label="Choose study date"/><button class="btn tiny" id="nextDay" type="button" aria-label="Next day">→</button><button class="btn tiny" id="todayButton" type="button">Today</button></div></div><div class="subject-tabs" id="subjectTabs"></div><p id="selectedSubjectDetail" class="little"></p><div id="dailySummary" class="daily-summary"></div></section>
 <div class="layout"><main class="left">
 <div id="subjectFocusBar" class="subject-focus-bar" hidden aria-live="polite">
@@ -60,9 +71,10 @@ h1{font-size:clamp(2.55rem,5vw,4.75rem);line-height:1.01;letter-spacing:-.055em;
 </main><aside class="right">
 
 <section class="panel"><div class="eyebrow">THIS DAY</div><h2>Day’s progress</h2><div class="mini-stat"><span>Completed blocks</span><strong id="completedCount">0 / 0</strong></div><div class="mini-stat"><span>Study blocks remaining</span><strong id="studyCount">—</strong></div><div class="mini-stat"><span>Planned breaks remaining</span><strong id="breakCount">—</strong></div><div class="mini-stat"><span>Real focus time</span><strong id="totalHours">0.0 h</strong></div><div class="meter"><div id="doneMeter"></div></div><p class="little">The progress bar is based on completed blocks, not perfection or how long you sit at your desk.</p></section>
-<section class="panel"><div class="eyebrow">LITTLE REMINDERS</div><h2>Subject focus</h2><ul class="tip-list" id="priorityList"></ul><hr class="rule"/><p class="little">Suggested plan only. The best plan today is the one you can actually follow while staying reasonably rested.</p></section>
+<section class="panel"><div class="eyebrow">KEY TOPICS</div><h2>Subject focus</h2><ul class="tip-list" id="priorityList"></ul><hr class="rule"/><p class="little">Suggested plan only. The best plan today is the one you can actually follow while staying reasonably rested.</p></section>
 <section class="panel"><h2>Tiny error log</h2><p class="little">Write the mistake and the rule you want to remember. This saves automatically.</p><textarea id="errorLog" placeholder="E.g. Central potential: f(r) = −V′(r). Angular momentum ℓ is conserved, not θ̇."></textarea><p class="little" style="margin:8px 0 0">No need for perfect notes. Just useful reminders for tomorrow.</p></section>
-</aside></div><footer>made for a cosy winter of physics & learning ♡ · saved locally in your browser</footer></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
+</aside></div></div>
+<footer>Revision dashboard · progress saved in this browser</footer></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (() => {
 'use strict';
@@ -138,17 +150,39 @@ function filteredTasks(){return app.selectedSubject==='all'?state.tasks:state.ta
 function subjectStudyTime(sub){return Object.values(app.days).reduce((sum,day)=>sum+(Number(day.subjectMs?.[sub])||0),0)}
 function seasonStudyTime(){return Object.values(app.days).reduce((sum,day)=>sum+(Number(day.studied)||0),0)}
 function switchDate(date){if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;if(state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null}save();app.selectedDate=date;state=currentDay(date);if(!state.activeId)state.activeId=state.tasks.find(t=>!t.done&&t.kind==='study')?.id||null;save();renderAll()}
-function switchSubject(subject){if(subject!=='all'&&!subjectFor(subject))return;app.selectedSubject=subject;save();renderAll()}
+// Routes provide dedicated URLs for the exam overview and each subject.
+function routeSubject(){
+ const m=location.hash.match(/^#\/exam\/(.+)$/);
+ if(!m)return 'all';
+ try{let id=decodeURIComponent(m[1]);return subjectFor(id)?id:'all'}catch(e){return 'all'}
+}
+function applyRoute(){
+ const subject=routeSubject();
+ if(app.selectedSubject!==subject){
+  if(state.mode==='study'){
+   const running=taskById(state.activeId);
+   if(running?.subject&&running.subject!==subject&&subject!=='all'){
+    settle();state.mode='idle';state.clockStart=null;
+   }
+  }
+  app.selectedSubject=subject;save();
+ }
+ renderAll();
+}
+function goToPage(subject){
+ if(subject!=='all'&&!subjectFor(subject))return;
+ const hash=subject==='all'?'#/':'#/exam/'+encodeURIComponent(subject);
+ if(location.hash!==hash)location.hash=hash;
+ applyRoute();window.scrollTo(0,0);
+}
+function switchSubject(subject){goToPage(subject)}
 function openSubjectPlan(subject){
  if(!subjectFor(subject))return;
  if(state.date!==today())switchDate(today());
- switchSubject(subject);
- // Navigate to the actual study plan, not just the date selector above it.
- const el=$('subjectFocusBar')||$('planOverviewPanel');
- if(el)el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+ goToPage(subject);
 }
 function taskById(id){return state.tasks.find(x=>x.id===id)||null}
-function selected(){let t=taskById(state.activeId);if(t&&!t.done&&t.kind==='study'&&state.mode==='study')return t;return filteredTasks().find(x=>!x.done&&x.kind==='study')||null}
+function selected(){let t=taskById(state.activeId);if(t&&!t.done&&t.kind==='study'&&state.mode==='study'&&(app.selectedSubject==='all'||t.subject===app.selectedSubject))return t;return filteredTasks().find(x=>!x.done&&x.kind==='study')||null}
 function nextTask(){return state.tasks.find(t=>!t.done&&t.kind==='study')||null}
 function effectiveElapsed(){return state.mode==='idle'||state.clockStart===null?0:Math.max(0,nowBound()-state.clockStart)}
 function settle(){if(state.mode==='idle')return;let d=effectiveElapsed();if(state.mode==='study'){state.studied+=d;let t=taskById(state.activeId);if(t&&t.kind==='study'){t.spent+=d;const sub=t.subject||'classical';state.subjectMs[sub]=(Number(state.subjectMs[sub])||0)+d}}else if(state.mode==='break')state.breaks+=d;state.clockStart=null}
@@ -201,7 +235,7 @@ let unfinished=state.tasks.filter(t=>!t.done),studyM=unfinished.filter(t=>t.kind
 $('planSummary').textContent=`${formatLong(studyM*60000)} study · ${formatLong(breakM*60000)} breaks`;
 let status=$('fitStatus');if(end>END_HOUR*60){status.textContent=`Your current plan finishes ${formatLong((end-END_HOUR*60)*60000)} after 21:00. Shorten blocks, remove tasks, or click “Fit remaining plan”.`;status.classList.add('over')}else{status.textContent=`Your remaining plan finishes at ${shortHour(end)} — ${formatLong((END_HOUR*60-end)*60000)} of unplanned breathing room before 21:00.`;status.classList.remove('over')}
 }
-function renderFocus(){let t=selected();let p=t?planTimes().times[t.id]:null;let currentBreak=taskById(state.activeId);if(state.mode==='break'&&currentBreak?.kind==='break'){$('focusName').textContent=currentBreak.name;$('focusNote').textContent=currentBreak.notes||'Taking a real break.';$('focusBadge').textContent='YOU ARE ON A BREAK'}else if(t){$('focusName').textContent=t.name;$('focusNote').textContent=t.notes||'No notes for this task.';$('focusBadge').textContent=state.mode==='break'?'ON A BREAK':'YOUR CURRENT FOCUS'}else if(!filteredTasks().some(x=>x.kind==='study')){$('focusName').textContent='Ready for a fresh start';$('focusNote').textContent='Choose an exam subject above, then add a study task or use Suggest blocks in Edit your plan.';$('focusBadge').textContent='YOUR NEXT STUDY SESSION'}else{$('focusName').textContent='All planned study blocks finished!';$('focusNote').textContent='You can finish early, or add another small study block if you genuinely want to.';$('focusBadge').textContent='YOU MADE IT ♡'}
+function renderFocus(){let t=selected();let p=t?planTimes().times[t.id]:null;let currentBreak=taskById(state.activeId);if(state.mode==='break'&&currentBreak?.kind==='break'){$('focusName').textContent=currentBreak.name;$('focusNote').textContent=currentBreak.notes||'Taking a real break.';$('focusBadge').textContent='YOU ARE ON A BREAK'}else if(t){$('focusName').textContent=t.name;$('focusNote').textContent=t.notes||'No notes for this task.';$('focusBadge').textContent=state.mode==='break'?'ON A BREAK':'YOUR CURRENT FOCUS'}else if(!filteredTasks().some(x=>x.kind==='study')){$('focusName').textContent='Ready for a fresh start';$('focusNote').textContent='Choose an exam subject above, then add a study task or use Suggest blocks in Edit your plan.';$('focusBadge').textContent='YOUR NEXT STUDY SESSION'}else{$('focusName').textContent='All planned study blocks finished!';$('focusNote').textContent='You can finish early, or add another small study block if you genuinely want to.';$('focusBadge').textContent='COMPLETED'}
 $('focusDuration').textContent=t?`Planned: ${t.minutes} min`:'No active study tasks';$('focusUntil').textContent=p?`Plan until: ${shortHour(p.end)}`:'Plan until: —';$('focusEnd').value=p?hm(p.end%1440):'';$('focusEnd').disabled=!p;
 $('mainStart').textContent=state.mode==='study'?'● Studying now':state.mode==='break'?'▶ Resume studying':'▶ Start studying';$('mainStart').disabled=!t;$('breakButton').disabled=state.mode!=='study';$('finishButton').disabled=!t; $('sideBreak').disabled=state.mode!=='study';$('sideResume').disabled=state.mode!=='break'||!t;
 }
@@ -215,7 +249,7 @@ function renderDashboard(){const subjects=[...app.subjects].sort((a,b)=>a.exam.l
  $('nextExamText').textContent=heroExam?`${heroExam.icon} ${heroDays<0?'Date passed':heroDays===0?'today':heroDays===1?'tomorrow':`${heroDays} days`}`:'All done ✨';
  $('nextExamDetail').textContent=heroExam?`${heroExam.name} · ${datePretty(heroExam.exam)}${heroExam.time?' · '+heroExam.time:''}`:'Your winter exams are complete';
  $('dateLabel').textContent=datePretty(today()).toUpperCase();
- $('seasonTotal').textContent=`${formatLong(seasonStudyTime())} studied this season`;
+ $('seasonTotal').textContent=`${subjects.length} exams`;
  $('examCards').innerHTML=subjects.map(s=>{const d=examDays(s.exam);const label=d<0?'Completed date':d===0?'Exam today':d===1?'Tomorrow':`${d} days to go`;return `<button type="button" class="exam-card ${app.selectedSubject===s.id?'picked':''}" data-subject="${esc(s.id)}" aria-label="Open today’s ${esc(s.name)} study plan"><span class="exam-icon">${esc(s.icon||'📖')}</span><span class="exam-info"><strong>${esc(s.name)}</strong><small>${esc(datePretty(s.exam))}${s.time?' · '+esc(s.time):''}</small></span><span class="exam-countdown">${esc(label)}</span></button>`}).join('');
  $('examEditor').innerHTML=subjects.map(s=>`<div class="exam-edit-line"><label>${esc(s.icon||'📖')} <input type="text" value="${esc(s.name)}" data-exam="${esc(s.id)}" data-field="name" aria-label="Edit subject name" maxlength="80"></label><input type="date" value="${esc(s.exam)}" data-exam="${esc(s.id)}" data-field="exam" aria-label="Exam date for ${esc(s.name)}"></div>`).join('');
  $('planDatePicker').value=state.date;const chosenExam=subjectFor(app.selectedSubject);$('planDayTitle').textContent=(state.date===today()?"Today's":datePretty(state.date))+(chosenExam?` ${chosenExam.name} plan`:' study plan');$('planOverviewTitle').textContent=chosenExam?`${chosenExam.name} · ${state.date===today()?"today's plan":datePretty(state.date)}`:'Plan at a glance';
@@ -228,16 +262,23 @@ function renderDashboard(){const subjects=[...app.subjects].sort((a,b)=>a.exam.l
  const topics=sub?.topics?.length?sub.topics:['Practise from memory','Try a problem before looking at solutions','Keep a tiny error log','Take a proper break'];
  $('priorityList').innerHTML=topics.map(t=>`<li>${esc(t)}</li>`).join('');
 }
-function renderAll(){ $('startTime').value=state.start;$('errorLog').value=state.log;updateThemeUI();renderDashboard();
+function renderAll(){
+ $('startTime').value=state.start;$('errorLog').value=state.log;updateThemeUI();renderDashboard();
  const sub=subjectFor(app.selectedSubject);
- const bar=$('subjectFocusBar');
- bar.hidden=!sub;
- $('examOverview').hidden=!!sub;
- $('subjectTabs').hidden=!!sub;
- const hero=$('heroTitle');
- if(sub){hero.textContent=`${sub.name} revision plan`;}else{hero.innerHTML='winter exams <em>revision dashboard</em>';}
- if(sub){$('subjectFocusTitle').textContent=`${sub.icon||'📖'} ${sub.name} · ${state.date===today()?"today's plan":"revision plan"}`; $('subjectFocusDate').textContent=state.date===today()?`Your plan for today, ${datePretty(state.date)}`:`Your plan for ${datePretty(state.date)}`;}
- renderOverview();renderList();renderFocus();renderClock();}
+ $('homePage').hidden=!!sub;$('studyPage').hidden=!sub;
+ $('subjectTabs').hidden=true;$('subjectFocusBar').hidden=!sub;
+ $('brandText').innerHTML=sub?esc(sub.name)+'<br>revision plan':'winter exams<br>revision dashboard';
+ if(sub){
+  $('studyHeroTitle').textContent=sub.name+' revision plan';
+  const n=examDays(sub.exam);
+  $('studyExamWhen').textContent=n<0?'Date passed':n===0?'Today':n===1?'Tomorrow':n+' days';
+  $('studyExamDetail').textContent=datePretty(sub.exam)+(sub.time?' · '+sub.time:'');
+  $('subjectFocusTitle').textContent=state.date===today()?"Today's plan":datePretty(state.date)+' plan';
+  $('subjectFocusDate').textContent='Your tasks for '+datePretty(state.date);
+ }
+ document.title=sub?sub.name+' · Revision plan':'Winter exams · Revision dashboard';
+ renderOverview();renderList();renderFocus();renderClock();
+}
 function renderClock(){let n=Date.now();if(today()!==state.date){$('dayWarning').className='warn show';$('dayWarning').textContent='You are viewing another date. You can edit or log past study time here; live timers are available only for today.';if(state.mode!=='idle'){finishOldTimer(state);save()}}else{$('dayWarning').className='warn'}if(n>=endStamp()&&state.mode!=='idle'){settle();state.mode='idle';state.clockStart=null;save();renderAll();notify('21:00 — time to finish for today. ♡');return}
 const elapsed=effectiveElapsed(),isStudy=state.mode==='study',isBreak=state.mode==='break',s=state.studied+(isStudy?elapsed:0),b=state.breaks+(isBreak?elapsed:0),until=Math.max(0,endStamp()-n);
 $('studied').textContent=formatClock(s);$('breakTotal').textContent=formatClock(b);$('untilNine').textContent=state.date===today()?formatLong(until):'—';
@@ -267,14 +308,15 @@ $('planDatePicker').addEventListener('change',e=>switchDate(e.target.value));
 for(const [id,delta] of [['prevDay',-1],['nextDay',1]])$(id).addEventListener('click',()=>{const [y,m,d]=state.date.split('-').map(Number);switchDate(dayString(new Date(y,m-1,d+delta)))});
 $('subjectTabs').addEventListener('click',e=>{let el=e.target.closest('[data-subject]');if(el)switchSubject(el.dataset.subject)});
 $('examCards').addEventListener('click',e=>{let el=e.target.closest('[data-subject]');if(el)openSubjectPlan(el.dataset.subject)});
-$('backToExams').addEventListener('click',()=>{switchSubject('all');$('examOverview').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
+$('backToExams').addEventListener('click',()=>goToPage('all'));
+$('backToOverviewTop').addEventListener('click',()=>goToPage('all'));
 $('goToEditor').addEventListener('click',()=>$('planPanel').scrollIntoView({behavior:'smooth',block:'start'}));
 $('examEditor').addEventListener('change',e=>{const id=e.target.dataset.exam,sub=subjectFor(id);if(!sub)return;if(e.target.dataset.field==='exam'&&/^\d{4}-\d{2}-\d{2}$/.test(e.target.value))sub.exam=e.target.value;if(e.target.dataset.field==='name'&&e.target.value.trim())sub.name=e.target.value.trim().slice(0,80);save();renderAll()});
 $('newExamButton').addEventListener('click',()=>{let name=$('newExamName').value.trim(),date=$('newExamDate').value;if(!name||!/^\d{4}-\d{2}-\d{2}$/.test(date)){notify('Add a subject name and exam date.');return}let id='subject-'+uid();app.subjects.push({id,name:name.slice(0,80),exam:date,time:'',icon:'📖',topics:[]});$('newExamName').value='';$('newExamDate').value='';app.selectedSubject=id;save();renderAll();notify('Subject added!')});
 // Save session immediately on tab close. The real-time timestamp also lets the timer survive a reload.
 window.addEventListener('pagehide',save);
 if(!state.activeId)state.activeId=nextTask()?.id||null;
-save();renderAll();setInterval(renderClock,1000);
+save();window.addEventListener('hashchange',()=>{applyRoute();window.scrollTo(0,0)});applyRoute();setInterval(renderClock,1000);
 })();
 </script>
 </body>

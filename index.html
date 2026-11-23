@@ -98,8 +98,8 @@ const LEGACY_DATE='2026-11-23';
 // One-time fresh start requested on 23 November. Never reimport the old day automatically.
 const FRESH_START_KEY='revision-winterexams-2026-11-23-fresh-start-v1';
 const NOV23_SCHEDULE_KEY='revision-winterexams-nov23-exact-schedule-v2';
-const SAFE_TIME_REPAIR_KEY='revision-winterexams-classical-1120-1210-safe-restore-v2';
-const NOV23_PLAN=[["08:00","08:30","study","Plan the day","Set priorities and organise materials."],["08:30","09:50","break","Break","Scheduled break."],["09:50","11:20","study","Fix website","Website work."],["11:20","11:50","study","Repeat Lagrangian and Hamiltonian Mechanics","Review Euler–Lagrange equations, generalized momentum, Legendre transform and Hamilton equations."],["11:50","12:40","study","Exercise question from 2026 exercises on Lagrangian","Attempt a Lagrangian problem independently, then review the solution."],["12:40","13:20","break","Lunch break",""],["13:20","14:15","study","Central forces and effective potential","Work on a 2026 exercise, including equilibrium and stability."],["14:15","14:30","break","Break",""],["14:30","15:30","study","Hamiltonian mechanics — practice problem","Derive canonical momenta and Hamilton's equations independently."],["15:30","15:45","break","Break",""],["15:45","16:45","study","Timed past exam problem","Try a past exam question under timed conditions, without hints."],["16:45","17:15","study","Check solutions and error log","Correct mistakes and write down the key methods."],["17:15","18:00","break","Dinner break",""],["18:00","19:00","study","Redo difficult problems","Redo two difficult questions without reading the solution."],["19:00","19:15","break","Break",""],["19:15","19:50","study","Formula recall and methods","Recall core equations, conditions and standard solution steps."],["19:50","20:00","study","Organise notes and finish","Write a short methods checklist and stop."]];
+const FULL_DAY_REPAIR_KEY='revision-winterexams-nov23-rebuild-run-and-dinner-v4';
+const NOV23_PLAN=[["08:00","08:30","study","Plan the day","Choose priorities and get your materials ready."],["08:30","09:50","break","Break",""],["09:50","11:20","study","Fix website",""],["11:20","12:10","study","Repeat Lagrangian and Hamiltonian Mechanics","Euler–Lagrange equations, generalized momentum, Legendre transform, Hamilton's equations."],["12:10","12:40","study","Exercise question from 2026 exercises on Lagrangian","Attempt independently, then check the solution."],["12:40","13:20","break","Lunch break",""],["13:20","14:20","study","Central forces and effective potential","Do a problem on equilibrium, orbital motion or stability."],["14:20","14:30","break","Break",""],["14:30","16:00","break","Run break","Run, shower and rest."],["16:00","17:00","study","Hamiltonian mechanics — practice problem","Derive canonical momenta and apply Hamilton's equations."],["17:00","17:15","break","Break",""],["17:15","18:15","study","Timed past exam problem","Work independently before checking solutions."],["18:15","18:30","study","Check solutions and error log","Review errors and write down the method you missed."],["18:30","19:00","break","Dinner break",""],["19:00","19:45","study","Redo difficult problems","Retry one or two problems without solutions."],["19:45","20:00","break","Break",""],["20:00","20:30","study","Formula recall and methods","Recap important formulas and standard problem-solving steps."],["20:30","20:40","study","Organise notes and finish","Write a brief checklist for the next session."]];
 const SUBJECT_DEFAULTS=[
 {id:'classical',name:'Classical Mechanics',icon:'⚙️',exam:'2026-11-24',time:'15:00',topics:['Lagrangians & constraints','Central forces & effective potential','Hamiltonian mechanics','Normal modes','Relativity & rigid bodies','Timed exam problems']},
 {id:'space',name:'Space Technology I',icon:'🛰️',exam:'2026-12-10',time:'15:00',topics:['Satellite orbits','Space systems','GNSS & navigation','Space environment','Past exam problems']},
@@ -272,6 +272,13 @@ function trimScheduleAround(tasks,id,start,end){
  return next;
 }
 function editScheduleWindow(id,start,end){
+ // Keep the two requested long breaks intact when editing other blocks.
+ if(state.date===LEGACY_DATE){
+  const anchors=state.tasks.filter(t=>t.name==='Run break'||t.name==='Dinner break');
+  if(anchors.some(t=>t.id!==id&&start<t.startOverride+t.minutes&&end>t.startOverride)){
+   notify('That overlaps the run or dinner break. Choose a different time.');renderAll();return false;
+  }
+ }
  if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||end>1439||start>=end||end-start>600){
   notify('Choose a valid start and end within the same day (maximum 10 hours).');renderAll();return false;
  }
@@ -362,6 +369,7 @@ function changeDuration(id,value){
  if(editScheduleWindow(id,p.start,p.start+dur))notify('Duration changed; conflicting blocks adjusted.');
 }
 function move(id,dir){
+ if(state.date===LEGACY_DATE){notify('Today’s timetable is fixed. Change individual task times instead.');return}
  const ix=state.tasks.findIndex(t=>t.id===id),j=ix+dir;
  if(ix<0||j<0||j>=state.tasks.length)return;
  normaliseSchedule();
@@ -460,6 +468,7 @@ let done=state.tasks.filter(t=>t.done).length,all=state.tasks.length;$('complete
 }
 function notify(msg){let el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.classList.remove('show'),2500)}
 function scheduleRemaining(resize=false){
+ if(state.date===LEGACY_DATE){notify('Run and dinner are fixed in today’s plan. Edit individual time blocks instead.');return}
  if(today()!==state.date){notify('Choose today to replan unfinished blocks.');return}
  normaliseSchedule();
  const done=state.tasks.filter(t=>t.done),pending=state.tasks.filter(t=>!t.done);
@@ -516,6 +525,7 @@ $('scheduledBreaks').addEventListener('click',e=>{
 });
 $('mainStart').addEventListener('click',()=>state.mode==='study'?null:state.mode==='break'?resume():study());$('breakButton').addEventListener('click',takeBreak);$('sideBreak').addEventListener('click',takeBreak);$('sideResume').addEventListener('click',resume);$('finishButton').addEventListener('click',()=>{let t=selected();if(t)completeTask(t.id,true)});
 $('startTime').addEventListener('change',e=>{
+ if(state.date===LEGACY_DATE){notify('Today’s run and dinner are fixed. Edit individual task times instead.');renderAll();return}
  const value=e.target.value;
  if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){renderAll();return}
  normaliseSchedule();
@@ -562,39 +572,60 @@ $('newExamButton').addEventListener('click',()=>{let name=$('newExamName').value
 window.addEventListener('pagehide',save);
 // Minimal one-time correction of just the reported Classical Mechanics block.
 // This does not reset the existing timer, study totals or unrelated days.
-function restoreLagrangianSlot(){
- if(today()!==LEGACY_DATE)return;
- const day=app.days[LEGACY_DATE];
- if(!day||!Array.isArray(day.tasks))return;
- try{if(localStorage.getItem(SAFE_TIME_REPAIR_KEY)==='done')return}catch(e){return}
- const target=day.tasks.find(t=>t.id===day.activeId && t.subject==='classical' && t.name==='Repeat Lagrangian and Hamiltonian Mechanics')||
-              day.tasks.find(t=>t.subject==='classical' && t.name==='Repeat Lagrangian and Hamiltonian Mechanics');
- if(!target)return;
+// Rebuild the entire day once. The previous automatic repair only fixed one task
+// and could leave an incorrect, multi-hour block at the end of the schedule.
+function restoreNovember23Schedule(){
+ const day=app.days[LEGACY_DATE];if(!day||!Array.isArray(day.tasks))return;
+ try{if(localStorage.getItem(FULL_DAY_REPAIR_KEY)==='done')return}catch(e){return}
  try{
-  // If the correct time is already present, do not modify the user's plan.
-  if(target.startOverride===680 && target.minutes===50){
-    localStorage.setItem(SAFE_TIME_REPAIR_KEY,'done');return;
-  }
-  const original=JSON.stringify(day);
-  localStorage.setItem(SAFE_TIME_REPAIR_KEY+'-backup',original);
-  let cursor=parseHm(day.start);
-  const intervals=day.tasks.map(t=>{
-   const start=Number.isInteger(t.startOverride)?t.startOverride:cursor;
-   cursor=start+t.minutes;
-   return {...t,startOverride:start};
+  // Recovery copy of the original day, including timers and the complete edited plan.
+  localStorage.setItem(FULL_DAY_REPAIR_KEY+'-backup',JSON.stringify(day));
+  const originals=day.tasks.filter(t=>t&&typeof t==='object');
+  const used=new Set();
+  const newTasks=NOV23_PLAN.map(([from,to,kind,name,notes])=>{
+   const start=parseHm(from),duration=parseHm(to)-start;
+   const matches=originals.filter(t=>
+    !used.has(t.id)&&t.kind===kind&&t.subject==='classical'&&
+    String(t.name||'').replace(/ \(continued\)$/,'')===name);
+   matches.sort((a,b)=>Math.abs((Number.isInteger(a.startOverride)?a.startOverride:start)-start)-
+                       Math.abs((Number.isInteger(b.startOverride)?b.startOverride:start)-start));
+   const old=matches[0];
+   if(old)used.add(old.id);
+   // Reuse the old task and its id so already credited minutes stay attached.
+   return saneTask({...old,id:old?.id||uid(),kind,subject:'classical',
+    name,notes:old?.notes||notes,startOverride:start,minutes:duration});
   });
-  const fixed=trimScheduleAround(intervals,target.id,680,730);
-  // Keep only a valid, chronological, collision-free result.
-  if(!fixed.length||!fixed.some(t=>t.id===target.id && t.startOverride===680 && t.minutes===50))throw Error('Time correction invalid');
-  if(fixed.some((t,i)=>i>0 && fixed[i-1].startOverride+fixed[i-1].minutes>t.startOverride))throw Error('Overlap');
-  day.tasks=fixed;day.start=hm(fixed[0].startOverride);
+  const oldActive=originals.find(t=>t.id===day.activeId);
+  // Retain a running timer even if its previous block was renamed or removed.
+  if(day.mode!=='idle'&&day.clockStart&&!newTasks.some(t=>t.id===day.activeId)){
+   const minutesNow=minutesTime(new Date());
+   const sameKind=newTasks.filter(t=>t.kind===(day.mode==='break'?'break':'study'));
+   const chosen=sameKind.find(t=>t.startOverride<=minutesNow&&minutesNow<t.startOverride+t.minutes)||
+    sameKind.find(t=>!t.done)||sameKind[0];
+   if(chosen){
+    const assignedId=chosen.id;
+    chosen.id=day.activeId;
+    chosen.spent+=Math.max(0,Number(oldActive?.spent)||0);
+    chosen.manualLogged+=Math.max(0,Number(oldActive?.manualLogged)||0);
+    chosen.breakLogged+=Math.max(0,Number(oldActive?.breakLogged)||0);
+    // Keep the current timer's clockStart so the elapsed time is not lost.
+    if(assignedId===day.activeId)throw Error('Duplicate active id');
+   }
+  }
+  if(new Set(newTasks.map(t=>t.id)).size!==newTasks.length)throw Error('Duplicate task ids');
+  if(newTasks.some((t,i)=>i>0&&newTasks[i-1].startOverride+newTasks[i-1].minutes!==t.startOverride))throw Error('Schedule not continuous');
+  const run=newTasks.find(t=>t.name==='Run break');
+  const dinner=newTasks.find(t=>t.name==='Dinner break');
+  if(!run||run.startOverride!==870||run.minutes!==90||!dinner||dinner.startOverride!==1110||dinner.minutes!==30)throw Error('Break anchors wrong');
+  day.tasks=newTasks;day.start='08:00';
+  // Crucially, do not alter day.studied, day.breaks, subjectMs, mode, or clockStart.
   if(state.date===LEGACY_DATE)state=day;
   app.days[LEGACY_DATE]=day;
   localStorage.setItem(KEY,JSON.stringify(app));
-  localStorage.setItem(SAFE_TIME_REPAIR_KEY,'done');
- }catch(e){console.warn('No changes made to the schedule',e)}
+  localStorage.setItem(FULL_DAY_REPAIR_KEY,'done');
+ }catch(e){console.warn('Previous schedule preserved; rebuild did not complete',e)}
 }
-restoreLagrangianSlot();
+restoreNovember23Schedule();
 normaliseSchedule();
 if(!state.activeId)state.activeId=nextTask()?.id||null;
 save();window.addEventListener('hashchange',()=>{applyRoute();window.scrollTo(0,0)});applyRoute();setInterval(renderClock,1000);

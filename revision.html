@@ -238,7 +238,7 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
   <section class="stats" aria-label="Live study statistics">
     <div class="stat"><div class="eyebrow">studied this day</div><strong id="studied">00:00</strong><small>Recorded study time</small></div>
     <div class="stat"><div class="eyebrow">break time</div><strong id="breaks">00:00</strong><small>Recorded breaks</small></div>
-    <div class="stat"><div class="eyebrow">current day</div><strong id="todayLabel">—</strong><small id="todayDetail">Today’s plan</small></div>
+    <div class="stat"><div class="eyebrow">hours until stop</div><strong id="stopRemaining">—</strong><small>Until 21:00 today</small></div>
   </section>
 
   <section id="homeView">
@@ -365,6 +365,11 @@ function dayTime(d){return d.getHours()*60+d.getMinutes()+d.getSeconds()/60+d.ge
 function sessionKey(subject,day){return day+'|'+subject}
 function stampEnd(day){var bits=day.split('-').map(Number);return new Date(bits[0],bits[1]-1,bits[2],21,0,0,0).getTime()}
 function formatClock(ms){var total=Math.max(0,Math.floor(ms/60000));return Math.floor(total/60)+'h '+String(total%60).padStart(2,'0')+'m'}
+function hoursUntilStop(now){
+ var stop=new Date(now.getFullYear(),now.getMonth(),now.getDate(),21,0,0,0);
+ var minutes=Math.max(0,Math.ceil((stop.getTime()-now.getTime())/60000));
+ return Math.floor(minutes/60)+'h '+String(minutes%60).padStart(2,'0')+'m';
+}
 function safeNumber(v){return Number.isFinite(Number(v))?Math.max(0,Number(v)):0}
 function uniq(){return String(Date.now())+'-'+Math.random().toString(36).slice(2)}
 function normalizeTasks(tasks){
@@ -473,7 +478,7 @@ function renderTotals(now){
  $('studyButton').disabled=!canStart&&day.mode==='idle';
  $('breakButton').disabled=!canStart&&day.mode==='idle';
 }
-function renderStudy(){if(!shownSubject)return;var now=new Date();resolveOldDays(now.getTime());renderCountdown(now);renderTotals(now);save()}
+function renderStudy(){if(!shownSubject)return;var now=new Date();resolveOldDays(now.getTime());renderCountdown(now);renderTotals(now);$('stopRemaining').textContent=hoursUntilStop(now);save()}
 function renderNextExam(){
  var future=data.subjects.filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s.exam||'')}).slice().sort(function(a,b){return a.exam.localeCompare(b.exam)});
  if(!future.length){$('nextExamText').textContent='No exam set';$('nextExamDetail').textContent='Edit your subjects to add dates';return}
@@ -532,9 +537,7 @@ function setTheme(value){
  try{localStorage.setItem(THEME_KEY,theme)}catch(err){}
 }
 function renderDayLabels(){
- var today=new Date();
- $('todayLabel').textContent=today.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
- $('todayDetail').textContent='Schedule ends 21:00';
+ $('stopRemaining').textContent=hoursUntilStop(new Date());
  $('dateLabel').textContent='WINTER 2026 / 27';
 }
 function renderRoute(){

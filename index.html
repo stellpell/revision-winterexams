@@ -12,7 +12,7 @@
 
 *{box-sizing:border-box}
 html{min-height:100%;scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:var(--body);background-attachment:fixed;background-size:cover;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+body{margin:0;min-height:100vh;background:var(--body);background-attachment:fixed;background-size:cover;color:var(--ink);font-family:"Avenir Next","Helvetica Neue",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.48}
 body::before{content:"";pointer-events:none;position:fixed;inset:0;z-index:0;background:var(--decor1);opacity:.75;mix-blend-mode:screen}
 body::after{content:"";pointer-events:none;position:fixed;inset:0;z-index:0;background:var(--decor2);opacity:.9}
 button,input,textarea{font:inherit}
@@ -37,9 +37,9 @@ header{display:flex;justify-content:space-between;align-items:center;gap:10px;ma
 .tagline{margin:13px 0 0;color:var(--ink2);font-size:.93rem}
 .eyebrow{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--orange)}
 .panel{background:var(--paper);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--shadow);padding:23px}
-h2{margin:0;font-size:1.19rem;letter-spacing:-.025em}
+h2{margin:0;font-family:"Iowan Old Style",Baskerville,"Palatino Linotype",Georgia,serif;font-size:1.17rem;font-weight:590;letter-spacing:-.015em}
 p{line-height:1.5}
-.muted{color:var(--ink2);font-size:.83rem}
+.muted{color:var(--ink2);font-size:.76rem}
 .crumb{display:inline-flex;margin:2px 0 10px}
 .overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
 .exam-card{background:var(--paper);border:1px solid var(--stroke);box-shadow:var(--shadow);border-radius:17px;text-align:left;color:var(--ink);min-height:158px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .15s,border-color .15s}
@@ -69,13 +69,13 @@ p{line-height:1.5}
 .stat{background:var(--paper);border:1px solid var(--stroke);border-radius:17px;padding:16px 19px;box-shadow:var(--shadow)}
 .stat strong{display:block;font-size:1.75rem;letter-spacing:-.04em;font-variant-numeric:tabular-nums;margin-top:7px}
 .stat small{font-size:.74rem;color:var(--ink2)}
-.schedule{display:grid;gap:10px;margin:19px 0 0}
-.slot{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:12px;padding:13px;border-radius:13px;background:var(--paper2);border:1px solid var(--stroke)}
+.schedule{display:grid;gap:7px;margin:15px 0 0}
+.slot{display:grid;grid-template-columns:94px minmax(0,1fr) auto;align-items:center;gap:12px;padding:9px 12px;border-radius:11px;background:var(--paper2);border:1px solid var(--stroke)}
 .slot.now{border-color:var(--accent);background:var(--soft)}
-.slot.past{opacity:.64}
-.slot time{color:var(--ink2);font-size:.77rem;font-weight:770;font-variant-numeric:tabular-nums}
-.slot strong{font-size:.89rem}
-.slot small{color:var(--orange);font-size:.72rem;font-weight:770}
+.slot.past{opacity:.6}
+.slot time{color:var(--ink2);font-size:.73rem;font-weight:550;font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:.005em}
+.slot strong{font-size:.8rem;font-weight:600;letter-spacing:.005em}
+.slot small{color:var(--orange);font-size:.65rem;font-weight:570;letter-spacing:.02em}
 .todo-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .tally{font-size:.78rem;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
 .todo-form{display:flex;gap:8px;margin-top:17px}
@@ -102,7 +102,7 @@ summary{color:var(--ink2);font-size:.81rem;font-weight:750;cursor:pointer}
 .footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.72rem}
 [hidden]{display:none!important}
 @media(max-width:850px){.overview{grid-template-columns:repeat(2,minmax(0,1fr))}.study-grid{grid-template-columns:1fr}.wrap{width:min(680px,calc(100% - 28px))}.focus{padding:25px}}
-@media(max-width:470px){.overview{grid-template-columns:1fr}.hero h1{font-size:2.75rem}.focus{padding:20px}.panel{padding:19px}.slot{grid-template-columns:94px 1fr auto;gap:7px;padding:11px 9px}.slot time{font-size:.72rem}.slot strong{font-size:.83rem}.stats{gap:8px}.stat{padding:13px}.brand{font-size:.66rem}.brand-logo{width:46px;height:46px}.count-num{font-size:4rem}.session-actions .btn{padding:11px 14px}}
+@media(max-width:470px){.overview{grid-template-columns:1fr}.hero h1{font-size:2.75rem}.focus{padding:20px}.panel{padding:19px}.slot{grid-template-columns:91px minmax(0,1fr) auto;gap:7px;padding:9px}.slot time{font-size:.71rem}.slot strong{font-size:.78rem}.slot small{font-size:.61rem}.stats{gap:8px}.stat{padding:13px}.brand{font-size:.66rem}.brand-logo{width:46px;height:46px}.count-num{font-size:4rem}.session-actions .btn{padding:11px 14px}}
 </style>
 </head>
 <body>
@@ -131,9 +131,14 @@ summary{color:var(--ink2);font-size:.81rem;font-weight:750;cursor:pointer}
      <p class="status" id="trackingStatus"><span class="status-dot" aria-hidden="true"></span><span id="trackingMessage">Timer stopped · study time is recorded when you start tracking.</span></p>
     </section>
     <section class="stats" aria-label="Recorded time"><div class="stat"><span class="eyebrow">Studied today</span><strong id="studyTotal">0h 00m</strong><small>Recorded study time</small></div><div class="stat"><span class="eyebrow">Break time</span><strong id="breakTotal">0h 00m</strong><small>Recorded breaks</small></div></section>
-    <section class="panel"><h2>Today's schedule</h2><p class="muted">Only the fixed breaks and exam-problem session.</p>
+    <section class="panel"><h2>Today's schedule</h2><p class="muted">Today's blocks at a glance.</p>
      <div class="schedule" id="schedule">
+      <div class="slot" data-slot="planning"><time>08:00–08:30</time><strong>Plan the day</strong><small>Plan</small></div>
+      <div class="slot" data-slot="morning"><time>08:30–09:50</time><strong>Morning break</strong><small>Break</small></div>
+      <div class="slot" data-slot="exerciseMorning"><time>09:50–13:30</time><strong>Exercise problems</strong><small>Focus</small></div>
+      <div class="slot" data-slot="concept"><time>13:30–14:30</time><strong>Concept test</strong><small>Focus</small></div>
       <div class="slot" data-slot="run"><time>14:30–15:00</time><strong>Run break</strong><small>Break</small></div>
+      <div class="slot" data-slot="exerciseAfternoon"><time>16:00–18:30</time><strong>Exercise problems</strong><small>Focus</small></div>
       <div class="slot" data-slot="dinner"><time>18:30–19:00</time><strong>Dinner break</strong><small>Break</small></div>
       <div class="slot" data-slot="problems"><time>19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></div>
      </div>
@@ -237,9 +242,14 @@ save();
 var shownSubject=null;
 function statusFor(now){
  var m=dayTime(now),ceil=function(n){return Math.max(0,Math.ceil(n-m))};
- if(m<870)return {name:'Revise',left:ceil(870),description:'minutes until run break',from:480,to:870,active:null};
+ if(m<480)return {name:'Revise',left:ceil(480),description:'minutes until planning',from:0,to:480,active:null};
+ if(m<510)return {name:'Plan the day',left:ceil(510),description:'minutes left for planning',from:480,to:510,active:'planning'};
+ if(m<590)return {name:'Break',left:ceil(590),description:'minutes left in morning break',from:510,to:590,active:'morning'};
+ if(m<810)return {name:'Exercise problems',left:ceil(810),description:'minutes until concept test',from:590,to:810,active:'exerciseMorning'};
+ if(m<870)return {name:'Concept test',left:ceil(870),description:'minutes until run break',from:810,to:870,active:'concept'};
  if(m<900)return {name:'Break',left:ceil(900),description:'minutes left in run break',from:870,to:900,active:'run'};
- if(m<1110)return {name:'Revise',left:ceil(1110),description:'minutes until dinner break',from:900,to:1110,active:null};
+ if(m<960)return {name:'Revise',left:ceil(960),description:'minutes until exercise problems',from:900,to:960,active:null};
+ if(m<1110)return {name:'Exercise problems',left:ceil(1110),description:'minutes until dinner break',from:960,to:1110,active:'exerciseAfternoon'};
  if(m<1140)return {name:'Break',left:ceil(1140),description:'minutes left in dinner break',from:1110,to:1140,active:'dinner'};
  if(m<1260)return {name:'Exam problems',left:ceil(1260),description:'minutes left for exam problems',from:1140,to:1260,active:'problems'};
  return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
@@ -273,14 +283,19 @@ function renderCountdown(now){
  $('progressFill').style.width=progress+'%';
  $('progressTrack').setAttribute('aria-valuenow',String(Math.round(progress)));
  $('progressTrack').setAttribute('aria-valuetext',status.left===null?'Schedule finished':String(status.left)+' minutes left');
- ['run','dinner','problems'].forEach(function(id){
+ var slotKinds={
+  planning:[510,'Plan'],morning:[590,'Break'],exerciseMorning:[810,'Focus'],
+  concept:[870,'Focus'],run:[900,'Break'],exerciseAfternoon:[1110,'Focus'],
+  dinner:[1140,'Break'],problems:[1260,'Focus']
+ };
+ Object.entries(slotKinds).forEach(function(entry){
+  var id=entry[0],end=entry[1][0],type=entry[1][1];
   var node=document.querySelector('[data-slot="'+id+'"]');
   if(!node)return;
-  var end=id==='run'?900:id==='dinner'?1140:1260;
   node.classList.toggle('now',status.active===id);
   node.classList.toggle('past',dayTime(now)>=end);
   var badge=node.querySelector('small');
-  if(badge)badge.textContent=status.active===id?'Now':id==='problems'?'Focus':'Break';
+  if(badge)badge.textContent=status.active===id?'Now':type;
  });
 }
 function renderTotals(now){

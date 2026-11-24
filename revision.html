@@ -217,6 +217,18 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
 .date-nav-actions .btn{padding:7px 11px;min-width:32px}
 .history-note{font-size:.78rem;padding:8px 12px;border-radius:10px;border:1px solid var(--stroke);background:var(--paper2);color:var(--ink2);margin:0 0 12px}
 @media(max-width:500px){.date-navigation{align-items:flex-start}.date-nav-actions{width:100%}.date-nav-actions input{flex:1}}
+.plan-editor{margin-top:14px}
+.plan-rows{display:grid;gap:7px;margin:12px 0}
+.plan-edit-row{display:grid;grid-template-columns:68px 68px minmax(90px,1fr) minmax(110px,1.4fr) auto auto;align-items:center;gap:6px;padding:8px;border:1px solid var(--stroke);border-radius:11px;background:var(--paper2)}
+.plan-edit-row input,.plan-edit-row select,.plan-add-form input,.plan-add-form select{min-width:0;width:100%;padding:7px 6px;border:1px solid var(--stroke);border-radius:8px;background:var(--paper2);color:var(--ink);font-family:inherit;font-size:.76rem}
+.plan-edit-row input[type=text]{font-variant-numeric:tabular-nums}
+.plan-edit-row .btn{padding:7px 9px;font-size:.72rem}
+.plan-rows .muted{padding:4px 0 6px}
+.plan-add-form{display:flex;flex-direction:column;align-items:flex-start;gap:10px;border-top:1px solid var(--stroke);padding-top:13px;margin-top:10px}
+.plan-inputs{display:grid;grid-template-columns:75px 75px 115px minmax(120px,1fr);gap:8px;width:100%}
+.plan-inputs label{color:var(--ink2);font-size:.72rem;display:flex;flex-direction:column;gap:4px}
+.plan-error{margin:10px 0 0;padding:9px 11px;border:1px solid var(--orange);border-radius:9px;color:var(--ink);font-size:.77rem}
+@media(max-width:680px){.plan-edit-row{grid-template-columns:1fr 1fr 1fr;gap:7px}.plan-edit-row .plan-row-title{grid-column:1/4}.plan-edit-row .btn{width:100%}.plan-inputs{grid-template-columns:1fr 1fr}.plan-inputs .plan-name{grid-column:1/3}}
 </style>
 </head>
 <body>
@@ -307,16 +319,22 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
         <section class="panel">
           <h2>Today’s schedule</h2>
           <p class="muted">Today’s blocks at a glance.</p>
-          <div class="schedule" id="schedule">
-            <div class="slot" data-slot="planning"><time>08:00–08:30</time><strong>Plan the day</strong><small>Plan</small></div>
-            <div class="slot" data-slot="morning"><time>08:30–09:50</time><strong>Morning break</strong><small>Break</small></div>
-            <div class="slot" data-slot="exerciseMorning"><time>09:50–13:30</time><strong>Exercise problems</strong><small>Focus</small></div>
-            <div class="slot" data-slot="concept"><time>13:30–14:30</time><strong>Concept test</strong><small>Focus</small></div>
-            <div class="slot" data-slot="run"><time>14:30–16:00</time><strong>Run break</strong><small>Break</small></div>
-            <div class="slot" data-slot="exerciseAfternoon"><time>16:00–18:30</time><strong>Exercise problems</strong><small>Focus</small></div>
-            <div class="slot" data-slot="dinner"><time>18:30–19:00</time><strong>Dinner break</strong><small>Break</small></div>
-            <div class="slot" data-slot="problems"><time>19:00–21:00</time><strong>Exam problems</strong><small>Focus</small></div>
-          </div>
+          <div class="schedule" id="schedule"></div>
+          <details id="planEditor" class="plan-editor">
+            <summary>Edit daily plan</summary>
+            <p class="muted">Add, change or remove time blocks. Time ranges can't overlap. Each day has its own plan.</p>
+            <div id="planRows" class="plan-rows"></div>
+            <form id="addPlanForm" class="plan-add-form">
+              <div class="plan-inputs">
+                <label>Start <input type="text" inputmode="numeric" id="newPlanStart" maxlength="5" placeholder="HH:MM" value="09:00" required></label>
+                <label>End <input type="text" inputmode="numeric" id="newPlanEnd" maxlength="5" placeholder="HH:MM" value="10:00" required></label>
+                <label>Type <select id="newPlanKind"><option value="study">Revise</option><option value="break">Break</option><option value="problems">Exam problems</option></select></label>
+                <label class="plan-name">Name <input type="text" maxlength="100" id="newPlanTitle" placeholder="Optional name"></label>
+              </div>
+              <button class="btn tiny primary" type="submit">Add block</button>
+            </form>
+            <p id="planError" class="plan-error" role="status" aria-live="polite" hidden></p>
+          </details>
           <details style="margin-top:14px">
             <summary>Adjust recorded time</summary>
             <div class="control-row">
@@ -417,6 +435,48 @@ function importLegacy(){
 function validData(x){return x&&x.version===3&&Array.isArray(x.subjects)&&x.days&&x.lists}
 var data=validData(storageRead(KEY))?storageRead(KEY):importLegacy();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(err){}}
+var NOV23_SCHEDULE=[
+ ['08:00','08:30','study','Plan the day'],
+ ['08:30','09:50','break','Morning break'],
+ ['09:50','13:30','study','Exercise problems'],
+ ['13:30','14:30','study','Concept test'],
+ ['14:30','16:00','break','Run break'],
+ ['16:00','18:30','study','Exercise problems'],
+ ['18:30','19:00','break','Dinner break'],
+ ['19:00','21:00','problems','Exam problems']
+];
+function initDailyPlans(){
+ if(data.dailyPlans&&typeof data.dailyPlans==='object'&&!Array.isArray(data.dailyPlans))return;
+ try{
+  if(!localStorage.getItem('revision-studio-v3-before-daily-plans-v1'))
+   localStorage.setItem('revision-studio-v3-before-daily-plans-v1',JSON.stringify(data));
+ }catch(err){}
+ data.dailyPlans={};
+ // Preserve the timetable that was actually used on November 23 as a saved day.
+ data.dailyPlans[sessionKey('classical','2026-11-23')]={
+  blocks:NOV23_SCHEDULE.map(function(r){return {id:uniq(),start:r[0],end:r[1],kind:r[2],title:r[3]}})
+ };
+}
+initDailyPlans();
+function getPlan(subject,date){
+ var key=sessionKey(subject,date);
+ if(!data.dailyPlans[key])data.dailyPlans[key]={blocks:[]};
+ return data.dailyPlans[key];
+}
+function blockMin(time){return Number(time.slice(0,2))*60+Number(time.slice(3))}
+function validBlockTime(value){return /^([01]\d|2[0-3]):[0-5]\d$/.test(value)}
+function labelForKind(kind){return kind==='break'?'Break':kind==='problems'?'Exam problems':'Revise'}
+function validateBlock(candidate,blocks,ignoreId){
+ if(!validBlockTime(candidate.start)||!validBlockTime(candidate.end))return 'Use 24-hour times such as 09:30.';
+ var start=blockMin(candidate.start),end=blockMin(candidate.end);
+ if(end<=start)return 'End time must be later than start time.';
+ if(end>1260)return 'Plan blocks must finish by 21:00.';
+ if(!['study','break','problems'].includes(candidate.kind))return 'Choose a valid block type.';
+ if(blocks.some(function(b){return b.id!==ignoreId&&start<blockMin(b.end)&&end>blockMin(b.start)}))
+  return 'That time overlaps another block. Adjust the times first.';
+ return '';
+}
+function sortPlan(blocks){blocks.sort(function(a,b){return blockMin(a.start)-blockMin(b.start)})}
 function isValidDate(value){return typeof value==='string' && /^\d{4}-\d{2}-\d{2}$/.test(value)}
 function dateBefore(date){
  var bits=date.split('-').map(Number);
@@ -481,17 +541,97 @@ function resolveOldDays(now){var today=currentDate();Object.entries(data.days).f
 resolveOldDays(Date.now());save();
 var shownSubject=null;
 function statusFor(now){
- var m=dayTime(now),ceil=function(n){return Math.max(0,Math.ceil(n-m))};
- if(m<480)return {name:'Revise',left:ceil(480),description:'minutes until planning',from:0,to:480,active:null};
- if(m<510)return {name:'Plan the day',left:ceil(510),description:'minutes left for planning',from:480,to:510,active:'planning'};
- if(m<590)return {name:'Break',left:ceil(590),description:'minutes left in morning break',from:510,to:590,active:'morning'};
- if(m<810)return {name:'Exercise problems',left:ceil(810),description:'minutes until concept test',from:590,to:810,active:'exerciseMorning'};
- if(m<870)return {name:'Concept test',left:ceil(870),description:'minutes until run break',from:810,to:870,active:'concept'};
- if(m<960)return {name:'Break',left:ceil(960),description:'minutes left in run break',from:870,to:960,active:'run'};
- if(m<1110)return {name:'Exercise problems',left:ceil(1110),description:'minutes until dinner break',from:960,to:1110,active:'exerciseAfternoon'};
- if(m<1140)return {name:'Break',left:ceil(1140),description:'minutes left in dinner break',from:1110,to:1140,active:'dinner'};
- if(m<1260)return {name:'Exam problems',left:ceil(1260),description:'minutes left for exam problems',from:1140,to:1260,active:'problems'};
- return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
+ var minute=dayTime(now),ceil=function(x){return Math.max(0,Math.ceil(x-minute))};
+ if(minute>=1260)return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
+ var blocks=shownSubject?getPlan(shownSubject.id,viewedDate).blocks:[];
+ for(var i=0;i<blocks.length;i++){
+  var b=blocks[i],start=blockMin(b.start),end=blockMin(b.end);
+  if(minute>=start&&minute<end){
+   return {name:b.kind==='study'?(b.title||'Revise'):labelForKind(b.kind),
+    left:ceil(end),description:b.kind==='break'?'minutes left in '+(b.title||'break'):b.kind==='problems'?'minutes left for exam problems':'minutes left in this block',
+    from:start,to:end,active:b.id};
+  }
+  if(minute<start){
+   var prev=i?blockMin(blocks[i-1].end):0;
+   return {name:'Revise',left:ceil(start),description:'minutes until '+(b.title||labelForKind(b.kind)),
+    from:prev,to:start,active:null};
+  }
+ }
+ return {name:'Revise',left:ceil(1260),description:'minutes until stop',
+  from:blocks.length?blockMin(blocks[blocks.length-1].end):0,to:1260,active:null};
+}
+function renderSchedule(now){
+ if(!shownSubject)return;
+ var root=$('schedule');root.replaceChildren();
+ var blocks=getPlan(shownSubject.id,viewedDate).blocks;
+ if(!blocks.length){
+  var empty=document.createElement('p');
+  empty.className='muted';
+  empty.textContent='No blocks planned for this day. Add one in Edit daily plan.';
+  root.append(empty);return;
+ }
+ blocks.forEach(function(b){
+  var node=document.createElement('div');node.className='slot';
+  var time=document.createElement('time');time.textContent=b.start+'–'+b.end;
+  var name=document.createElement('strong');name.textContent=b.title||labelForKind(b.kind);
+  var kind=document.createElement('small');kind.textContent=b.kind==='break'?'Break':b.kind==='problems'?'Exam problems':'Focus';
+  var minute=dayTime(now);
+  if(!isViewingHistory()&&minute>=blockMin(b.start)&&minute<blockMin(b.end)){
+   node.classList.add('now');kind.textContent='Now';
+  }else if(isViewingHistory()||minute>=blockMin(b.end))node.classList.add('past');
+  node.append(time,name,kind);root.append(node);
+ });
+}
+function showPlanError(message){
+ $('planError').textContent=message;
+ $('planError').hidden=!message;
+}
+function renderPlanEditor(){
+ if(!shownSubject)return;
+ var history=isViewingHistory(),root=$('planRows');
+ $('planEditor').hidden=history;
+ root.replaceChildren();
+ if(history)return;
+ var plan=getPlan(shownSubject.id,viewedDate);
+ if(!plan.blocks.length){
+  var empty=document.createElement('p');empty.className='muted';
+  empty.textContent='No blocks yet. Add your first one below.';root.append(empty);
+ }
+ plan.blocks.forEach(function(b){
+  var row=document.createElement('div');row.className='plan-edit-row';
+  function input(value,max){
+   var node=document.createElement('input');node.type='text';node.value=value;node.maxLength=max;
+   return node;
+  }
+  var start=input(b.start,5),end=input(b.end,5);
+  start.setAttribute('aria-label','Start time for '+b.title);
+  end.setAttribute('aria-label','End time for '+b.title);
+  var kind=document.createElement('select');
+  [['study','Revise'],['break','Break'],['problems','Exam problems']].forEach(function(k){
+   var option=document.createElement('option');option.value=k[0];option.textContent=k[1];
+   if(b.kind===k[0])option.selected=true;
+   kind.append(option);
+  });
+  kind.value=b.kind;kind.setAttribute('aria-label','Type for '+b.title);
+  var title=input(b.title,100);title.className='plan-row-title';title.setAttribute('aria-label','Block name');
+  var commit=document.createElement('button');commit.type='button';commit.className='btn tiny';commit.textContent='Save';
+  commit.addEventListener('click',function(){
+   if(isViewingHistory())return;
+   var update={id:b.id,start:start.value.trim(),end:end.value.trim(),kind:kind.value,title:title.value.trim().slice(0,100)||labelForKind(kind.value)};
+   var error=validateBlock(update,plan.blocks,b.id);
+   if(error){showPlanError(error);return}
+   Object.assign(b,update);sortPlan(plan.blocks);save();showPlanError('');
+   renderPlanEditor();renderStudy();
+  });
+  var remove=document.createElement('button');remove.type='button';remove.className='btn tiny';remove.textContent='Remove';
+  remove.setAttribute('aria-label','Remove '+b.title);
+  remove.addEventListener('click',function(){
+   if(isViewingHistory())return;
+   plan.blocks=plan.blocks.filter(function(x){return x.id!==b.id});
+   save();showPlanError('');renderPlanEditor();renderStudy();
+  });
+  row.append(start,end,kind,title,commit,remove);root.append(row);
+ });
 }
 function updateSession(mode){
  if(!shownSubject||isViewingHistory())return;
@@ -523,16 +663,6 @@ function renderCountdown(now){
  $('progressFill').style.width=progress+'%';
  $('progressTrack').setAttribute('aria-valuenow',String(Math.round(progress)));
  $('progressTrack').setAttribute('aria-valuetext',status.left===null?'Schedule finished':String(status.left)+' minutes left');
- var slotKinds={planning:[510,'Plan'],morning:[590,'Break'],exerciseMorning:[810,'Focus'],concept:[870,'Focus'],run:[960,'Break'],exerciseAfternoon:[1110,'Focus'],dinner:[1140,'Break'],problems:[1260,'Focus']};
- Object.entries(slotKinds).forEach(function(entry){
-  var id=entry[0],end=entry[1][0],type=entry[1][1];
-  var node=document.querySelector('[data-slot="'+id+'"]');
-  if(!node)return;
-  node.classList.toggle('now',status.active===id);
-  node.classList.toggle('past',dayTime(now)>=end);
-  var badge=node.querySelector('small');
-  if(badge)badge.textContent=status.active===id?'Now':type;
- });
 }
 function renderTotals(now){
  if(!shownSubject)return;
@@ -561,6 +691,7 @@ function renderDateNav(){
  $('nextDay').disabled=viewedDate>=today;
  $('returnToday').disabled=!past;
  $('historyNotice').hidden=!past;
+ $('planEditor').hidden=past;
  $('todoForm').hidden=past;
  $('todoHeading').textContent=past?'To-do · saved day':'To-do';
  $('stopTitle').textContent=past?'Saved day':'hours until stop';
@@ -569,10 +700,11 @@ function renderDateNav(){
 function renderStudy(){
  if(!shownSubject)return;
  var rollover=ensureDailyRollover();
- if(rollover){viewedDate=currentDate();renderTodo()}
+ if(rollover){viewedDate=currentDate();renderTodo();renderPlanEditor()}
  var now=new Date();
  resolveOldDays(now.getTime());
  renderDateNav();
+ renderSchedule(now);
  if(isViewingHistory()){
   $('activityHeading').textContent='Saved day';
   $('minutesLeft').textContent='—';
@@ -660,7 +792,7 @@ function renderRoute(){
  $('homeView').hidden=onStudy;
  $('studyView').hidden=!onStudy;
  $('homeHero').hidden=onStudy;
- if(onStudy){$('subjectTitle').textContent=shownSubject.name+' revision plan';document.title=shownSubject.name+' · revision plan';renderTodo();renderStudy();}
+ if(onStudy){$('subjectTitle').textContent=shownSubject.name+' revision plan';document.title=shownSubject.name+' · revision plan';renderTodo();renderPlanEditor();renderStudy();}
  else {document.title='Winter exams · revision dashboard';renderCards();renderSubjectManager();}
  renderDayLabels();
 }
@@ -669,13 +801,31 @@ $('backToExams').addEventListener('click',function(){location.hash='#/'});
 function openSavedDate(date){
  if(!isValidDate(date)||date<'2026-11-23'||date>currentDate())return;
  viewedDate=date;
+ showPlanError('');
  renderTodo();
+ renderPlanEditor();
  renderStudy();
 }
 $('previousDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,-1))});
 $('nextDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,1))});
 $('returnToday').addEventListener('click',function(){openSavedDate(currentDate())});
 $('viewDate').addEventListener('change',function(){openSavedDate($('viewDate').value)});
+$('addPlanForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ if(!shownSubject||isViewingHistory())return;
+ var plan=getPlan(shownSubject.id,viewedDate);
+ var candidate={id:uniq(),start:$('newPlanStart').value.trim(),end:$('newPlanEnd').value.trim(),
+  kind:$('newPlanKind').value,title:$('newPlanTitle').value.trim().slice(0,100)||labelForKind($('newPlanKind').value)};
+ var error=validateBlock(candidate,plan.blocks,null);
+ if(error){showPlanError(error);return}
+ plan.blocks.push(candidate);sortPlan(plan.blocks);save();
+ showPlanError('');
+ $('newPlanTitle').value='';
+ $('newPlanStart').value=candidate.end;
+ var endM=Math.min(1260,blockMin(candidate.end)+30);
+ $('newPlanEnd').value=String(Math.floor(endM/60)).padStart(2,'0')+':'+String(endM%60).padStart(2,'0');
+ renderPlanEditor();renderStudy();
+});
 $('studyButton').addEventListener('click',function(){if(!shownSubject)return;var d=getDay(shownSubject.id,currentDate());updateSession(d.mode==='study'?'idle':'study')});
 $('breakButton').addEventListener('click',function(){if(!shownSubject)return;var d=getDay(shownSubject.id,currentDate());updateSession(d.mode==='break'?'idle':'break')});
 $('addStudy').addEventListener('click',function(){editMinutes('study',1)});
@@ -693,7 +843,7 @@ renderCards(); renderSubjectManager(); renderDayLabels(); renderRoute();
 setInterval(function(){
  var changed=ensureDailyRollover();
  if(changed)viewedDate=currentDate();
- if(shownSubject){if(changed)renderTodo();renderStudy();}
+ if(shownSubject){if(changed){renderTodo();renderPlanEditor()}renderStudy();}
 },10000);
 })();
 </script>

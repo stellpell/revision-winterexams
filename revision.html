@@ -211,6 +211,12 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
   .focus{padding:18px}
   .panel,.stat{padding:15px}
 }
+.date-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+.date-nav-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.date-nav-actions input{width:145px;max-width:100%;padding:7px 9px;border-radius:10px;border:1px solid var(--stroke);background:var(--paper2);color:var(--ink);font:inherit;font-size:.78rem}
+.date-nav-actions .btn{padding:7px 11px;min-width:32px}
+.history-note{font-size:.78rem;padding:8px 12px;border-radius:10px;border:1px solid var(--stroke);background:var(--paper2);color:var(--ink2);margin:0 0 12px}
+@media(max-width:500px){.date-navigation{align-items:flex-start}.date-nav-actions{width:100%}.date-nav-actions input{flex:1}}
 </style>
 </head>
 <body>
@@ -238,7 +244,7 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
   <section class="stats" aria-label="Live study statistics">
     <div class="stat"><div class="eyebrow">studied this day</div><strong id="studied">00:00</strong><small>Recorded study time</small></div>
     <div class="stat"><div class="eyebrow">break time</div><strong id="breaks">00:00</strong><small>Recorded breaks</small></div>
-    <div class="stat"><div class="eyebrow">hours until stop</div><strong id="stopRemaining">—</strong><small>Until 21:00 today</small></div>
+    <div class="stat"><div class="eyebrow" id="stopTitle">hours until stop</div><strong id="stopRemaining">—</strong><small id="stopDetail">Until 21:00 today</small></div>
   </section>
 
   <section id="homeView">
@@ -259,7 +265,16 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
   </section>
 
   <section id="studyView" hidden>
-    <div class="control-row" style="margin-bottom:12px"><button type="button" class="btn tiny quiet" id="backToExams">← All exams</button></div>
+    <div class="date-navigation">
+      <button type="button" class="btn tiny quiet" id="backToExams">← All exams</button>
+      <div class="date-nav-actions" aria-label="Browse saved study days">
+        <button type="button" class="btn tiny" id="previousDay" aria-label="Previous day">‹</button>
+        <input id="viewDate" type="date" aria-label="Date to view">
+        <button type="button" class="btn tiny" id="nextDay" aria-label="Next day">›</button>
+        <button type="button" class="btn tiny" id="returnToday">Today</button>
+      </div>
+    </div>
+    <p class="history-note" id="historyNotice" hidden>Viewing a saved day. Its checklist and recorded hours are preserved.</p>
     <section class="hero" style="margin-top:0">
       <div>
         <span class="eyebrow">revision plan</span>
@@ -318,7 +333,7 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
 
       <aside class="stack">
         <section class="panel">
-          <div class="todo-head"><h2>To-do</h2><span class="tally" id="todoCount">0 / 0 done</span></div>
+          <div class="todo-head"><h2 id="todoHeading">To-do</h2><span class="tally" id="todoCount">0 / 0 done</span></div>
           <form class="todo-form" id="todoForm">
             <input type="text" id="todoInput" maxlength="120" placeholder="Add a task" autocomplete="off" required>
             <button type="submit" class="btn primary">Add</button>
@@ -402,6 +417,61 @@ function importLegacy(){
 function validData(x){return x&&x.version===3&&Array.isArray(x.subjects)&&x.days&&x.lists}
 var data=validData(storageRead(KEY))?storageRead(KEY):importLegacy();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(err){}}
+function isValidDate(value){return typeof value==='string' && /^\d{4}-\d{2}-\d{2}$/.test(value)}
+function dateBefore(date){
+ var bits=date.split('-').map(Number);
+ var d=new Date(bits[0],bits[1]-1,bits[2]);
+ d.setDate(d.getDate()-1);
+ return dateKey(d);
+}
+function dateShift(date,offset){
+ var bits=date.split('-').map(Number);
+ var d=new Date(bits[0],bits[1]-1,bits[2]);
+ d.setDate(d.getDate()+offset);
+ return dateKey(d);
+}
+function migrateDailyChecklists(){
+ if(data.dailyLists&&typeof data.dailyLists==='object'&&!Array.isArray(data.dailyLists))return;
+ // Preserve the whole original saved state for recovery before migrating shared lists.
+ try{
+  if(!localStorage.getItem('revision-studio-v3-before-daily-checklists-v1'))
+   localStorage.setItem('revision-studio-v3-before-daily-checklists-v1',JSON.stringify(data));
+ }catch(err){}
+ data.dailyLists={};
+ var today=currentDate();
+ var existing=Object.keys(data.lists||{}).some(function(sub){return (data.lists[sub]||[]).length>0});
+ var oldDates=Object.keys(data.days||{}).map(function(k){return k.split('|')[0]}).filter(function(d){return isValidDate(d)&&d<today}).sort();
+ var origin=existing?(oldDates.length?oldDates[oldDates.length-1]:(today>'2026-11-23'?'2026-11-23':today)):today;
+ Object.keys(data.lists||{}).forEach(function(sub){
+  data.dailyLists[sessionKey(sub,origin)]=normalizeTasks(data.lists[sub]);
+ });
+ data.lastDailyDate=origin;
+}
+function ensureDailyRollover(){
+ var today=currentDate(),previous=data.lastDailyDate;
+ if(!isValidDate(previous)){data.lastDailyDate=today;save();return false}
+ if(previous>=today)return false;
+ var subjects=new Set(data.subjects.map(function(s){return s.id}));
+ Object.keys(data.dailyLists).forEach(function(key){
+  if(key.indexOf(previous+'|')===0)subjects.add(key.slice(previous.length+1));
+ });
+ subjects.forEach(function(sub){
+  var old=data.dailyLists[sessionKey(sub,previous)]||[];
+  var key=sessionKey(sub,today);
+  if(!Object.prototype.hasOwnProperty.call(data.dailyLists,key)){
+   data.dailyLists[key]=normalizeTasks(old).filter(function(t){return !t.done}).map(function(t){
+    return {id:uniq(),text:t.text,done:false,carriedFrom:previous};
+   });
+  }
+ });
+ data.lastDailyDate=today;
+ save();
+ return true;
+}
+migrateDailyChecklists();
+ensureDailyRollover();
+var viewedDate=currentDate();
+function isViewingHistory(){return viewedDate!==currentDate()}
 function currentDate(){return dateKey(new Date())}
 function currentSubject(){var match=location.hash.match(/^#\/exam\/([^/?#]+)/);if(!match)return null;var id;try{id=decodeURIComponent(match[1])}catch(err){return null}return data.subjects.find(function(s){return s.id===id})||null}
 function getDay(sub,date){var key=sessionKey(sub,date);if(!data.days[key])data.days[key]={studiedMs:0,breakMs:0,mode:'idle',clockStart:null};return data.days[key]}
@@ -424,7 +494,7 @@ function statusFor(now){
  return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
 }
 function updateSession(mode){
- if(!shownSubject)return;
+ if(!shownSubject||isViewingHistory())return;
  var now=Date.now(),date=currentDate(),day=getDay(shownSubject.id,date);
  if(now>=stampEnd(date)){settle(day,date,now);day.mode='idle';save();renderStudy();return}
  if(day.mode!=='idle')settle(day,date,now);
@@ -432,7 +502,7 @@ function updateSession(mode){
  save();renderStudy();
 }
 function editMinutes(which,sign){
- if(!shownSubject)return;
+ if(!shownSubject||isViewingHistory())return;
  var number=Number($('adjustMinutes').value);
  if(!Number.isInteger(number)||number<1||number>360){$('adjustMinutes').focus();return}
  var date=currentDate(),day=getDay(shownSubject.id,date),now=Date.now();
@@ -466,19 +536,57 @@ function renderCountdown(now){
 }
 function renderTotals(now){
  if(!shownSubject)return;
- var date=currentDate(),day=getDay(shownSubject.id,date);
- var live=timeSinceStarted(day,date,now.getTime());
+ var date=viewedDate,history=isViewingHistory();
+ var day=history?(data.days[sessionKey(shownSubject.id,date)]||{studiedMs:0,breakMs:0,mode:'idle',clockStart:null}):getDay(shownSubject.id,date);
+ var live=history?0:timeSinceStarted(day,date,now.getTime());
  var study=safeNumber(day.studiedMs)+(day.mode==='study'?live:0),rest=safeNumber(day.breakMs)+(day.mode==='break'?live:0);
  $('studied').textContent=formatClock(study);
  $('breaks').textContent=formatClock(rest);
  $('trackingMessage').textContent=day.mode==='study'?'Study timer running':day.mode==='break'?'Break timer running':'Timer stopped · press Start studying to record time.';
  $('studyButton').textContent=day.mode==='study'?'Pause studying':day.mode==='break'?'Resume studying':'Start studying';
  $('breakButton').textContent=day.mode==='break'?'Stop break':'Take a break';
- var canStart=now.getTime()<stampEnd(date);
- $('studyButton').disabled=!canStart&&day.mode==='idle';
- $('breakButton').disabled=!canStart&&day.mode==='idle';
+ var canStart=!history&&now.getTime()<stampEnd(date);
+ $('studyButton').disabled=history||(!canStart&&day.mode==='idle');
+ $('breakButton').disabled=history||(!canStart&&day.mode==='idle');
+ $('trackingMessage').textContent=history?'Saved record · timers are available on Today only':$('trackingMessage').textContent;
+ $('studyButton').textContent=history?'Start studying':$('studyButton').textContent;
+ $('breakButton').textContent=history?'Take a break':$('breakButton').textContent;
 }
-function renderStudy(){if(!shownSubject)return;var now=new Date();resolveOldDays(now.getTime());renderCountdown(now);renderTotals(now);$('stopRemaining').textContent=hoursUntilStop(now);save()}
+function renderDateNav(){
+ var today=currentDate(),past=isViewingHistory();
+ $('viewDate').value=viewedDate;
+ $('viewDate').min='2026-11-23';
+ $('viewDate').max=today;
+ $('previousDay').disabled=viewedDate<='2026-11-23';
+ $('nextDay').disabled=viewedDate>=today;
+ $('returnToday').disabled=!past;
+ $('historyNotice').hidden=!past;
+ $('todoForm').hidden=past;
+ $('todoHeading').textContent=past?'To-do · saved day':'To-do';
+ $('stopTitle').textContent=past?'Saved day':'hours until stop';
+ $('stopDetail').textContent=past?'Previous revision record':'Until 21:00 today';
+}
+function renderStudy(){
+ if(!shownSubject)return;
+ var rollover=ensureDailyRollover();
+ if(rollover){viewedDate=currentDate();renderTodo()}
+ var now=new Date();
+ resolveOldDays(now.getTime());
+ renderDateNav();
+ if(isViewingHistory()){
+  $('activityHeading').textContent='Saved day';
+  $('minutesLeft').textContent='—';
+  $('countLabel').textContent='Previous study session';
+  $('minutesChip').textContent='History';
+  $('countdownTextChip').textContent=viewedDate;
+  $('progressFill').style.width='0%';
+  $('progressTrack').setAttribute('aria-valuenow','0');
+  $('progressTrack').setAttribute('aria-valuetext','Saved study day');
+ }else renderCountdown(now);
+ renderTotals(now);
+ $('stopRemaining').textContent=isViewingHistory()?viewedDate.slice(5):hoursUntilStop(now);
+ save();
+}
 function renderNextExam(){
  var future=data.subjects.filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s.exam||'')}).slice().sort(function(a,b){return a.exam.localeCompare(b.exam)});
  if(!future.length){$('nextExamText').textContent='No exam set';$('nextExamDetail').textContent='Edit your subjects to add dates';return}
@@ -513,19 +621,23 @@ function renderSubjectManager(){
   row.append(name,date);root.append(row);
  });
 }
-function tasksFor(sub){if(!data.lists[sub])data.lists[sub]=[];return data.lists[sub]}
+function tasksFor(sub,date){
+ var key=sessionKey(sub,date||viewedDate);
+ if(!Array.isArray(data.dailyLists[key]))data.dailyLists[key]=[];
+ return data.dailyLists[key];
+}
 function renderTodoCount(){if(!shownSubject)return;var list=tasksFor(shownSubject.id);$('todoCount').textContent=list.filter(function(t){return t.done}).length+' / '+list.length+' done'}
 function renderTodo(){
  var list=$('todoList');list.replaceChildren(); if(!shownSubject)return;
- var tasks=tasksFor(shownSubject.id);
+ var tasks=tasksFor(shownSubject.id),history=isViewingHistory();
  tasks.forEach(function(t){
   var row=document.createElement('li');row.className='todo-item';row.classList.toggle('done',t.done);
-  var check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;
-  var input=document.createElement('input');input.type='text';input.value=t.text;input.maxLength=120;
-  var remove=document.createElement('button');remove.type='button';remove.className='remove';remove.textContent='×';
-  check.addEventListener('change',function(){t.done=check.checked;row.classList.toggle('done',t.done);save();renderTodoCount()});
-  input.addEventListener('change',function(){t.text=input.value.trim()||t.text;save();input.value=t.text});
-  remove.addEventListener('click',function(){data.lists[shownSubject.id]=tasksFor(shownSubject.id).filter(function(x){return x.id!==t.id});save();renderTodo()});
+  var check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.disabled=history;
+  var input=document.createElement('input');input.type='text';input.value=t.text;input.maxLength=120;input.readOnly=history;
+  var remove=document.createElement('button');remove.type='button';remove.className='remove';remove.textContent='×';remove.disabled=history;
+  check.addEventListener('change',function(){if(isViewingHistory())return;t.done=check.checked;row.classList.toggle('done',t.done);save();renderTodoCount()});
+  input.addEventListener('change',function(){if(isViewingHistory())return;t.text=input.value.trim()||t.text;save();input.value=t.text});
+  remove.addEventListener('click',function(){if(isViewingHistory())return;data.dailyLists[sessionKey(shownSubject.id,viewedDate)]=tasksFor(shownSubject.id).filter(function(x){return x.id!==t.id});save();renderTodo()});
   row.append(check,input,remove);list.append(row);
  });
  $('emptyTodo').hidden=tasks.length>0; renderTodoCount();
@@ -542,6 +654,8 @@ function renderDayLabels(){
 }
 function renderRoute(){
  shownSubject=currentSubject();
+ viewedDate=currentDate();
+ ensureDailyRollover();
  var onStudy=!!shownSubject;
  $('homeView').hidden=onStudy;
  $('studyView').hidden=!onStudy;
@@ -551,14 +665,24 @@ function renderRoute(){
  renderDayLabels();
 }
 $('themeButton').addEventListener('click',function(){setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
-$('backToExams').addEventListener('click',function(){location.hash='#/'})
+$('backToExams').addEventListener('click',function(){location.hash='#/'});
+function openSavedDate(date){
+ if(!isValidDate(date)||date<'2026-11-23'||date>currentDate())return;
+ viewedDate=date;
+ renderTodo();
+ renderStudy();
+}
+$('previousDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,-1))});
+$('nextDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,1))});
+$('returnToday').addEventListener('click',function(){openSavedDate(currentDate())});
+$('viewDate').addEventListener('change',function(){openSavedDate($('viewDate').value)});
 $('studyButton').addEventListener('click',function(){if(!shownSubject)return;var d=getDay(shownSubject.id,currentDate());updateSession(d.mode==='study'?'idle':'study')});
 $('breakButton').addEventListener('click',function(){if(!shownSubject)return;var d=getDay(shownSubject.id,currentDate());updateSession(d.mode==='break'?'idle':'break')});
 $('addStudy').addEventListener('click',function(){editMinutes('study',1)});
 $('removeStudy').addEventListener('click',function(){editMinutes('study',-1)});
 $('addBreak').addEventListener('click',function(){editMinutes('break',1)});
 $('removeBreak').addEventListener('click',function(){editMinutes('break',-1)});
-$('todoForm').addEventListener('submit',function(e){e.preventDefault();if(!shownSubject)return;var input=$('todoInput'),text=input.value.trim();if(!text)return;tasksFor(shownSubject.id).push({id:uniq(),text:text.slice(0,120),done:false});input.value='';save();renderTodo();input.focus()});
+$('todoForm').addEventListener('submit',function(e){e.preventDefault();if(!shownSubject||isViewingHistory())return;var input=$('todoInput'),text=input.value.trim();if(!text)return;tasksFor(shownSubject.id).push({id:uniq(),text:text.slice(0,120),done:false});input.value='';save();renderTodo();input.focus()});
 $('addSubjectForm').addEventListener('submit',function(e){e.preventDefault();var name=$('newSubjectName').value.trim();if(!name)return;data.subjects.push({id:'custom-'+uniq(),name:name.slice(0,70),icon:'📖',exam:$('newSubjectDate').value||''});$('newSubjectName').value='';$('newSubjectDate').value='';save();renderCards();renderSubjectManager()});
 $('exportButton').addEventListener('click',function(){save();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='winter-revision-backup.json';document.body.append(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000)});
 $('importFile').addEventListener('change',async function(e){var file=e.target.files&&e.target.files[0];if(!file)return;try{var parsed=JSON.parse(await file.text());if(!validData(parsed)){alert('This backup does not match this version.');return}if(!confirm('Replace the current checklist and recorded time with this backup?'))return;data=parsed;save();renderRoute()}catch(err){alert('Could not read the backup.')}e.target.value=''});
@@ -566,7 +690,11 @@ window.addEventListener('hashchange',renderRoute);
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&shownSubject)renderStudy()});
 try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(err){setTheme('light')}
 renderCards(); renderSubjectManager(); renderDayLabels(); renderRoute();
-setInterval(function(){ if(shownSubject) renderStudy(); }, 10000);
+setInterval(function(){
+ var changed=ensureDailyRollover();
+ if(changed)viewedDate=currentDate();
+ if(shownSubject){if(changed)renderTodo();renderStudy();}
+},10000);
 })();
 </script>
 </body>

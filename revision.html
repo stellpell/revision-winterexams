@@ -279,14 +279,8 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
   <section id="studyView" hidden>
     <div class="date-navigation">
       <button type="button" class="btn tiny quiet" id="backToExams">← All exams</button>
-      <div class="date-nav-actions" aria-label="Browse saved study days">
-        <button type="button" class="btn tiny" id="previousDay" aria-label="Previous day">‹</button>
-        <input id="viewDate" type="date" aria-label="Date to view">
-        <button type="button" class="btn tiny" id="nextDay" aria-label="Next day">›</button>
-        <button type="button" class="btn tiny" id="returnToday">Today</button>
-      </div>
+      <div class="end-edit" style="margin-top:0"><label for="dayEnd">End study day</label><input id="dayEnd" type="time" value="21:00"></div>
     </div>
-    <p class="history-note" id="historyNotice" hidden>Viewing a saved day. Its checklist and recorded hours are preserved.</p>
     <section class="hero" style="margin-top:0">
       <div>
         <span class="eyebrow">revision plan</span>
@@ -396,10 +390,12 @@ function storageRead(key){try{return JSON.parse(localStorage.getItem(key)||'null
 function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function dayTime(d){return d.getHours()*60+d.getMinutes()+d.getSeconds()/60+d.getMilliseconds()/60000}
 function sessionKey(subject,day){return day+'|'+subject}
-function stampEnd(day){var bits=day.split('-').map(Number);return new Date(bits[0],bits[1]-1,bits[2],21,0,0,0).getTime()}
+function stopTime(day){return (data.endTimes&&data.endTimes[day])||'21:00'}
+function stopMinute(day){return blockMin(stopTime(day))}
+function stampEnd(day){var bits=day.split('-').map(Number),m=stopMinute(day);return new Date(bits[0],bits[1]-1,bits[2],Math.floor(m/60),m%60,0,0).getTime()}
 function formatClock(ms){var total=Math.max(0,Math.floor(ms/60000));return Math.floor(total/60)+'h '+String(total%60).padStart(2,'0')+'m'}
 function hoursUntilStop(now){
- var stop=new Date(now.getFullYear(),now.getMonth(),now.getDate(),21,0,0,0);
+ var stop=new Date(stampEnd(dateKey(now)));
  var minutes=Math.max(0,Math.ceil((stop.getTime()-now.getTime())/60000));
  return Math.floor(minutes/60)+'h '+String(minutes%60).padStart(2,'0')+'m';
 }
@@ -470,7 +466,7 @@ function validateBlock(candidate,blocks,ignoreId){
  if(!validBlockTime(candidate.start)||!validBlockTime(candidate.end))return 'Use 24-hour times such as 09:30.';
  var start=blockMin(candidate.start),end=blockMin(candidate.end);
  if(end<=start)return 'End time must be later than start time.';
- if(end>1260)return 'Plan blocks must finish by 21:00.';
+ if(end>stopMinute(currentDate()))return 'Plan blocks must finish by '+stopTime(currentDate())+'.';
  if(!['study','break','problems'].includes(candidate.kind))return 'Choose a valid block type.';
  if(blocks.some(function(b){return b.id!==ignoreId&&start<blockMin(b.end)&&end>blockMin(b.start)}))
   return 'That time overlaps another block. Adjust the times first.';
@@ -531,7 +527,7 @@ function ensureDailyRollover(){
 migrateDailyChecklists();
 ensureDailyRollover();
 var viewedDate=currentDate();
-function isViewingHistory(){return viewedDate!==currentDate()}
+function isViewingHistory(){return false}
 function currentDate(){return dateKey(new Date())}
 function currentSubject(){var match=location.hash.match(/^#\/exam\/([^/?#]+)/);if(!match)return null;var id;try{id=decodeURIComponent(match[1])}catch(err){return null}return data.subjects.find(function(s){return s.id===id})||null}
 function getDay(sub,date){var key=sessionKey(sub,date);if(!data.days[key])data.days[key]={studiedMs:0,breakMs:0,mode:'idle',clockStart:null};return data.days[key]}
@@ -542,23 +538,24 @@ resolveOldDays(Date.now());save();
 var shownSubject=null;
 function statusFor(now){
  var minute=dayTime(now),ceil=function(x){return Math.max(0,Math.ceil(x-minute))};
- if(minute>=1260)return {name:'Done',left:null,description:'Schedule finished',from:1260,to:1260,active:null};
+ var stop=stopMinute(currentDate());
+ if(minute>=stop)return {name:'Done',left:null,description:'Schedule finished',from:stop,to:stop,active:null};
  var blocks=shownSubject?getPlan(shownSubject.id,viewedDate).blocks:[];
  for(var i=0;i<blocks.length;i++){
   var b=blocks[i],start=blockMin(b.start),end=blockMin(b.end);
   if(minute>=start&&minute<end){
    return {name:b.kind==='study'?(b.title||'Revise'):labelForKind(b.kind),
-    left:ceil(end),description:b.kind==='break'?'minutes left in '+(b.title||'break'):b.kind==='problems'?'minutes left for exam problems':'minutes left in this block',
-    from:start,to:end,active:b.id};
+    left:ceil(Math.min(end,stop)),description:b.kind==='break'?'minutes left in '+(b.title||'break'):b.kind==='problems'?'minutes left for exam problems':'minutes left in this block',
+    from:start,to:Math.min(end,stop),active:b.id};
   }
   if(minute<start){
    var prev=i?blockMin(blocks[i-1].end):0;
-   return {name:'Revise',left:ceil(start),description:'minutes until '+(b.title||labelForKind(b.kind)),
-    from:prev,to:start,active:null};
+   return {name:'Revise',left:ceil(Math.min(start,stop)),description:'minutes until '+(b.title||labelForKind(b.kind)),
+    from:prev,to:Math.min(start,stop),active:null};
   }
  }
- return {name:'Revise',left:ceil(1260),description:'minutes until stop',
-  from:blocks.length?blockMin(blocks[blocks.length-1].end):0,to:1260,active:null};
+ return {name:'Revise',left:ceil(stop),description:'minutes until stop',
+  from:blocks.length?blockMin(blocks[blocks.length-1].end):0,to:stop,active:null};
 }
 function renderSchedule(now){
  if(!shownSubject)return;
@@ -683,19 +680,9 @@ function renderTotals(now){
  $('breakButton').textContent=history?'Take a break':$('breakButton').textContent;
 }
 function renderDateNav(){
- var today=currentDate(),past=isViewingHistory();
- $('viewDate').value=viewedDate;
- $('viewDate').min='2026-11-23';
- $('viewDate').max=today;
- $('previousDay').disabled=viewedDate<='2026-11-23';
- $('nextDay').disabled=viewedDate>=today;
- $('returnToday').disabled=!past;
- $('historyNotice').hidden=!past;
- $('planEditor').hidden=past;
- $('todoForm').hidden=past;
- $('todoHeading').textContent=past?'To-do · saved day':'To-do';
- $('stopTitle').textContent=past?'Saved day':'hours until stop';
- $('stopDetail').textContent=past?'Previous revision record':'Until 21:00 today';
+ var today=currentDate();
+ if(document.activeElement!==$('dayEnd'))$('dayEnd').value=stopTime(today);
+ $('stopDetail').textContent='Until '+stopTime(today)+' today';
 }
 function renderStudy(){
  if(!shownSubject)return;
@@ -782,7 +769,8 @@ function setTheme(value){
 }
 function renderDayLabels(){
  $('stopRemaining').textContent=hoursUntilStop(new Date());
- $('dateLabel').textContent='WINTER 2026 / 27';
+ $('dateLabel').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+ $('stopDetail').textContent='Until '+stopTime(currentDate())+' today';
 }
 function renderRoute(){
  shownSubject=currentSubject();
@@ -798,18 +786,12 @@ function renderRoute(){
 }
 $('themeButton').addEventListener('click',function(){setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
 $('backToExams').addEventListener('click',function(){location.hash='#/'});
-function openSavedDate(date){
- if(!isValidDate(date)||date<'2026-11-23'||date>currentDate())return;
- viewedDate=date;
- showPlanError('');
- renderTodo();
- renderPlanEditor();
- renderStudy();
-}
-$('previousDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,-1))});
-$('nextDay').addEventListener('click',function(){openSavedDate(dateShift(viewedDate,1))});
-$('returnToday').addEventListener('click',function(){openSavedDate(currentDate())});
-$('viewDate').addEventListener('change',function(){openSavedDate($('viewDate').value)});
+$('dayEnd').addEventListener('change',function(){
+ var value=$('dayEnd').value;if(!validBlockTime(value))return;
+ var today=currentDate(),now=Date.now();resolveOldDays(now);
+ data.endTimes=data.endTimes||{};data.endTimes[today]=value;
+ resolveOldDays(now);save();renderStudy();
+});
 $('addPlanForm').addEventListener('submit',function(event){
  event.preventDefault();
  if(!shownSubject||isViewingHistory())return;
@@ -822,7 +804,7 @@ $('addPlanForm').addEventListener('submit',function(event){
  showPlanError('');
  $('newPlanTitle').value='';
  $('newPlanStart').value=candidate.end;
- var endM=Math.min(1260,blockMin(candidate.end)+30);
+ var endM=Math.min(stopMinute(currentDate()),blockMin(candidate.end)+30);
  $('newPlanEnd').value=String(Math.floor(endM/60)).padStart(2,'0')+':'+String(endM%60).padStart(2,'0');
  renderPlanEditor();renderStudy();
 });
@@ -842,7 +824,7 @@ try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(err){setTheme('ligh
 renderCards(); renderSubjectManager(); renderDayLabels(); renderRoute();
 setInterval(function(){
  var changed=ensureDailyRollover();
- if(changed)viewedDate=currentDate();
+ if(changed){viewedDate=currentDate();renderDayLabels();}
  if(shownSubject){if(changed){renderTodo();renderPlanEditor()}renderStudy();}
 },10000);
 })();

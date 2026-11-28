@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#faf8f4">
-<title>Winter exams · revision dashboard</title>
+<title>Today's Study Plan</title>
 <script>
 try { document.documentElement.dataset.theme = localStorage.getItem('cm-dashboard-theme') || 'light'; }
 catch(e){ document.documentElement.dataset.theme = 'light'; }
@@ -234,22 +234,10 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
 <body>
 <div class="wrap">
   <header>
-    <div class="brand"><span class="brand-logo" id="brandLogo">❄</span><span>winter exams<br>revision dashboard</span></div>
+    <div class="brand"><span class="brand-logo" id="brandLogo">❄</span><span>study<br>dashboard</span></div>
     <div class="headright"><span class="smallcaps" id="dateLabel">WINTER 2026 / 27</span><button class="btn tiny" id="themeButton" type="button">Dark mode</button></div>
   </header>
 
-  <section class="hero" id="homeHero">
-    <div>
-      <span class="eyebrow">winter study space</span>
-      <h1>winter exams <em>revision dashboard</em></h1>
-      <p class="tagline">ngl physics is kinda cool</p>
-    </div>
-    <div class="hero-stamp">
-      <div class="eyebrow">next exam</div>
-      <strong id="nextExamText">—</strong>
-      <p id="nextExamDetail">Your exam calendar</p>
-    </div>
-  </section>
 
   <div class="warn" id="dayWarning"></div>
 
@@ -259,33 +247,14 @@ summary{cursor:pointer;font-size:.79rem;font-weight:700;color:var(--ink)}
     <div class="stat"><div class="eyebrow" id="stopTitle">hours until stop</div><strong id="stopRemaining">—</strong><small id="stopDetail">Until 21:00 today</small></div>
   </section>
 
-  <section id="homeView">
-    <div class="panel">
-      <h2>Your subjects</h2>
-      <p class="muted">Open a subject to enter its revision page.</p>
-      <div class="exam-cards" id="examCards"></div>
-      <details style="margin-top:14px">
-        <summary>Edit subjects</summary>
-        <div id="examEditor"></div>
-        <form id="addSubjectForm" class="control-row">
-          <input type="text" id="newSubjectName" placeholder="Subject name" maxlength="70" required>
-          <input type="date" id="newSubjectDate">
-          <button class="btn tiny" type="submit">Add subject</button>
-        </form>
-      </details>
-    </div>
-  </section>
 
-  <section id="studyView" hidden>
+  <section id="studyView">
     <div class="date-navigation">
-      <button type="button" class="btn tiny quiet" id="backToExams">← All exams</button>
       <div class="end-edit" style="margin-top:0"><label for="dayEnd">End study day</label><input id="dayEnd" type="time" value="21:00"></div>
     </div>
     <section class="hero" style="margin-top:0">
       <div>
-        <span class="eyebrow">revision plan</span>
-        <h1 id="subjectTitle">Classical Mechanics <em>revision plan</em></h1>
-        <p class="tagline">ngl physics is kinda cool</p>
+        <h1 id="subjectTitle">Today's Study Plan</h1>
       </div>
     </section>
     <div class="main-grid">
@@ -507,10 +476,7 @@ function ensureDailyRollover(){
  var today=currentDate(),previous=data.lastDailyDate;
  if(!isValidDate(previous)){data.lastDailyDate=today;save();return false}
  if(previous>=today)return false;
- var subjects=new Set(data.subjects.map(function(s){return s.id}));
- Object.keys(data.dailyLists).forEach(function(key){
-  if(key.indexOf(previous+'|')===0)subjects.add(key.slice(previous.length+1));
- });
+ var subjects=new Set(data.unifiedDashboard?['daily']:data.subjects.map(function(s){return s.id}));
  subjects.forEach(function(sub){
   var old=data.dailyLists[sessionKey(sub,previous)]||[];
   var key=sessionKey(sub,today);
@@ -526,10 +492,26 @@ function ensureDailyRollover(){
 }
 migrateDailyChecklists();
 ensureDailyRollover();
+function migrateUnifiedDay(){
+ var date=currentDate(),key=sessionKey('daily',date);
+ if(data.unifiedDashboard)return;
+ resolveOldDays(Date.now());
+ var sources=data.subjects.map(function(s){return sessionKey(s.id,date)});
+ var tasks=[],blocks=[],study=0,rest=0;
+ sources.forEach(function(k){
+  var d=data.days[k];if(d){settle(d,date,Date.now());d.mode='idle';study+=safeNumber(d.studiedMs);rest+=safeNumber(d.breakMs)}
+  (data.dailyLists[k]||[]).forEach(function(t){if(!tasks.some(function(x){return x.text===t.text&&x.done===t.done}))tasks.push(Object.assign({},t,{id:uniq()}))});
+  ((data.dailyPlans[k]||{}).blocks||[]).forEach(function(b){if(!blocks.some(function(x){return blockMin(b.start)<blockMin(x.end)&&blockMin(b.end)>blockMin(x.start)}))blocks.push(Object.assign({},b,{id:uniq()}))});
+ });
+ if(!data.days[key])data.days[key]={studiedMs:study,breakMs:rest,mode:'idle',clockStart:null};
+ if(!data.dailyLists[key])data.dailyLists[key]=tasks;
+ if(!data.dailyPlans[key]){sortPlan(blocks);data.dailyPlans[key]={blocks:blocks}}
+ data.unifiedDashboard=true;save();
+}
 var viewedDate=currentDate();
 function isViewingHistory(){return false}
 function currentDate(){return dateKey(new Date())}
-function currentSubject(){var match=location.hash.match(/^#\/exam\/([^/?#]+)/);if(!match)return null;var id;try{id=decodeURIComponent(match[1])}catch(err){return null}return data.subjects.find(function(s){return s.id===id})||null}
+function currentSubject(){return {id:'daily',name:"Today's Study Plan"}}
 function getDay(sub,date){var key=sessionKey(sub,date);if(!data.days[key])data.days[key]={studiedMs:0,breakMs:0,mode:'idle',clockStart:null};return data.days[key]}
 function timeSinceStarted(day,date,now){if(!day.clockStart||day.mode==='idle')return 0;return Math.max(0,Math.min(now,stampEnd(date))-day.clockStart)}
 function settle(day,date,now){var ms=timeSinceStarted(day,date,now);if(day.mode==='study')day.studiedMs=safeNumber(day.studiedMs)+ms;if(day.mode==='break')day.breakMs=safeNumber(day.breakMs)+ms;day.clockStart=null;return ms}
@@ -706,40 +688,6 @@ function renderStudy(){
  $('stopRemaining').textContent=isViewingHistory()?viewedDate.slice(5):hoursUntilStop(now);
  save();
 }
-function renderNextExam(){
- var future=data.subjects.filter(function(s){return /^\d{4}-\d{2}-\d{2}$/.test(s.exam||'')}).slice().sort(function(a,b){return a.exam.localeCompare(b.exam)});
- if(!future.length){$('nextExamText').textContent='No exam set';$('nextExamDetail').textContent='Edit your subjects to add dates';return}
- var next=future[0],bits=next.exam.split('-').map(Number),d=new Date(bits[0],bits[1]-1,bits[2]);
- $('nextExamText').textContent=next.name;
- $('nextExamDetail').textContent=d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-}
-function renderCards(){
- var root=$('examCards');root.replaceChildren();
- data.subjects.forEach(function(s){
-  var card=document.createElement('button');card.type='button';card.className='exam-card';
-  var left=document.createElement('div');left.className='icon';left.textContent=s.icon||'📖';
-  var right=document.createElement('div');
-  var strong=document.createElement('strong');strong.textContent=s.name;
-  var small=document.createElement('small');
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s.exam||'')){var bits=s.exam.split('-').map(Number);small.textContent=new Date(bits[0],bits[1]-1,bits[2]).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
-  var open=document.createElement('span');open.textContent='Open study space';
-  right.append(strong,small,open); card.append(left,right);
-  card.addEventListener('click',function(){location.hash='#/exam/'+encodeURIComponent(s.id)});
-  root.append(card);
- });
- renderNextExam();
-}
-function renderSubjectManager(){
- var root=$('examEditor');root.replaceChildren();
- data.subjects.forEach(function(s){
-  var row=document.createElement('div');row.className='manage-line';
-  var name=document.createElement('input');name.type='text';name.value=s.name;name.maxLength=70;
-  var date=document.createElement('input');date.type='date';date.value=s.exam||'';
-  name.addEventListener('change',function(){s.name=name.value.trim()||s.name;save();renderCards();if(shownSubject&&shownSubject.id===s.id)renderRoute()});
-  date.addEventListener('change',function(){s.exam=date.value;save();renderCards();renderRoute()});
-  row.append(name,date);root.append(row);
- });
-}
 function tasksFor(sub,date){
  var key=sessionKey(sub,date||viewedDate);
  if(!Array.isArray(data.dailyLists[key]))data.dailyLists[key]=[];
@@ -773,19 +721,12 @@ function renderDayLabels(){
  $('stopDetail').textContent='Until '+stopTime(currentDate())+' today';
 }
 function renderRoute(){
- shownSubject=currentSubject();
- viewedDate=currentDate();
- ensureDailyRollover();
- var onStudy=!!shownSubject;
- $('homeView').hidden=onStudy;
- $('studyView').hidden=!onStudy;
- $('homeHero').hidden=onStudy;
- if(onStudy){$('subjectTitle').textContent=shownSubject.name+' revision plan';document.title=shownSubject.name+' · revision plan';renderTodo();renderPlanEditor();renderStudy();}
- else {document.title='Winter exams · revision dashboard';renderCards();renderSubjectManager();}
- renderDayLabels();
+ initDailyPlans();migrateDailyChecklists();ensureDailyRollover();
+ shownSubject=currentSubject();viewedDate=currentDate();
+ migrateUnifiedDay();
+ renderTodo();renderPlanEditor();renderStudy();renderDayLabels();
 }
 $('themeButton').addEventListener('click',function(){setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')});
-$('backToExams').addEventListener('click',function(){location.hash='#/'});
 $('dayEnd').addEventListener('change',function(){
  var value=$('dayEnd').value;if(!validBlockTime(value))return;
  var today=currentDate(),now=Date.now();resolveOldDays(now);
@@ -815,13 +756,12 @@ $('removeStudy').addEventListener('click',function(){editMinutes('study',-1)});
 $('addBreak').addEventListener('click',function(){editMinutes('break',1)});
 $('removeBreak').addEventListener('click',function(){editMinutes('break',-1)});
 $('todoForm').addEventListener('submit',function(e){e.preventDefault();if(!shownSubject||isViewingHistory())return;var input=$('todoInput'),text=input.value.trim();if(!text)return;tasksFor(shownSubject.id).push({id:uniq(),text:text.slice(0,120),done:false});input.value='';save();renderTodo();input.focus()});
-$('addSubjectForm').addEventListener('submit',function(e){e.preventDefault();var name=$('newSubjectName').value.trim();if(!name)return;data.subjects.push({id:'custom-'+uniq(),name:name.slice(0,70),icon:'📖',exam:$('newSubjectDate').value||''});$('newSubjectName').value='';$('newSubjectDate').value='';save();renderCards();renderSubjectManager()});
 $('exportButton').addEventListener('click',function(){save();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='winter-revision-backup.json';document.body.append(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},2000)});
 $('importFile').addEventListener('change',async function(e){var file=e.target.files&&e.target.files[0];if(!file)return;try{var parsed=JSON.parse(await file.text());if(!validData(parsed)){alert('This backup does not match this version.');return}if(!confirm('Replace the current checklist and recorded time with this backup?'))return;data=parsed;save();renderRoute()}catch(err){alert('Could not read the backup.')}e.target.value=''});
 window.addEventListener('hashchange',renderRoute);
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&shownSubject)renderStudy()});
 try{setTheme(localStorage.getItem(THEME_KEY)||'light')}catch(err){setTheme('light')}
-renderCards(); renderSubjectManager(); renderDayLabels(); renderRoute();
+renderRoute();
 setInterval(function(){
  var changed=ensureDailyRollover();
  if(changed){viewedDate=currentDate();renderDayLabels();}
